@@ -1,0 +1,24 @@
+# 依赖与产物
+node_modules
+dist
+dist-ssr
+coverage
+
+# 本地环境与密钥（规范 §12：禁止前端明文存储密钥/Token）
+.env
+.env.*
+!.env.example
+
+# 编辑器与系统
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# 日志
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# 构建缓存
+*.tsbuildinfo
