@@ -24,6 +24,12 @@ export interface IDemandType {
   deliverables: string[];
   requiresCertifiedOpc: boolean;
   bidCount: number;
+  /** 需求详情页展示：被浏览次数 */
+  viewCount?: number;
+  /** 需求详情页展示：企业历史发布数 */
+  enterpriseDemandCount?: number;
+  /** 需求详情页展示：技能匹配要求 */
+  requiredSkills?: string[];
   publishedAt: string;
   status: DemandStatusType;
 }

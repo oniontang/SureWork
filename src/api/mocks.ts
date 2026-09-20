@@ -75,6 +75,7 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 680000, budgetMode: 'range', budgetRangeLabel: '区间 ¥6,000–8,000',
     cycleDays: 21, acceptance: ['主视觉通过店内实拍验证', '菜单覆盖早/晚市两套价目', '源文件含分层工程与字体授权'],
     deliverables: ['源文件', '使用规范'], requiresCertifiedOpc: false, bidCount: 2,
+    viewCount: 186, enterpriseDemandCount: 5, requiredSkills: ['品牌VI', '菜单/物料', '印刷规范'],
     publishedAt: '2026-09-19T12:00:00+08:00', status: 'matching',
   },
   {
@@ -84,7 +85,8 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 240000, budgetMode: 'fixed', budgetRangeLabel: '一口价',
     cycleDays: 10, acceptance: ['6 款插画风格统一', '提供印刷三色稿'],
     deliverables: ['源文件', '印刷文件'], requiresCertifiedOpc: false, bidCount: 4,
-    publishedAt: '2026-09-19T09:00:00+08:00', status: 'matching',
+        viewCount: 94, enterpriseDemandCount: 2, requiredSkills: ['包装插画', '印刷规范', '手绘'],
+publishedAt: '2026-09-19T09:00:00+08:00', status: 'matching',
   },
   {
     id: 'd-3', enterpriseId: 'e-3', enterpriseName: '咖啡品牌', isEnterpriseVerified: true,
@@ -93,7 +95,8 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 1350000, budgetMode: 'range', budgetRangeLabel: '区间 ¥12,000–15,000',
     cycleDays: 42, acceptance: ['页面还原设计稿', '联调通过', '源码与部署文档交付'],
     deliverables: ['源码', '部署文档'], requiresCertifiedOpc: false, bidCount: 1,
-    publishedAt: '2026-09-18T15:00:00+08:00', status: 'matching',
+        viewCount: 212, enterpriseDemandCount: 8, requiredSkills: ['小程序', '前端', '联调'],
+publishedAt: '2026-09-18T15:00:00+08:00', status: 'matching',
   },
   {
     id: 'd-4', enterpriseId: 'e-4', enterpriseName: '连锁茶饮', isEnterpriseVerified: true,
@@ -102,7 +105,8 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 6000000, budgetMode: 'range', budgetRangeLabel: '区间价',
     cycleDays: 365, acceptance: ['季度 GMV 目标', '内容排期表', '月度复盘报告'],
     deliverables: ['运营报告'], requiresCertifiedOpc: true, bidCount: 3,
-    publishedAt: '2026-09-16T11:00:00+08:00', status: 'matching',
+        viewCount: 348, enterpriseDemandCount: 26, requiredSkills: ['内容矩阵', '投放', '数据复盘'],
+publishedAt: '2026-09-16T11:00:00+08:00', status: 'matching',
   },
   {
     id: 'd-5', enterpriseId: 'e-5', enterpriseName: '连锁健身房', isEnterpriseVerified: false,
@@ -111,7 +115,8 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 900000, budgetMode: 'fixed', budgetRangeLabel: '一口价',
     cycleDays: 28, acceptance: ['样片先行确认风格', '竖版 1080×1920', '每条 2 轮修改'],
     deliverables: ['成片', '脚本文档'], requiresCertifiedOpc: true, bidCount: 5,
-    publishedAt: '2026-09-19T14:30:00+08:00', status: 'matching',
+        viewCount: 157, enterpriseDemandCount: 4, requiredSkills: ['短视频', '口播', '混剪'],
+publishedAt: '2026-09-19T14:30:00+08:00', status: 'matching',
   },
   {
     id: 'd-6', enterpriseId: 'e-6', enterpriseName: '植研所', isEnterpriseVerified: false,
@@ -120,7 +125,8 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 350000, budgetMode: 'fixed', budgetRangeLabel: '一口价',
     cycleDays: 14, acceptance: ['术语一致性表', '双语对照稿'],
     deliverables: ['双语稿'], requiresCertifiedOpc: false, bidCount: 0,
-    publishedAt: '2026-09-19T16:00:00+08:00', status: 'open',
+        viewCount: 63, enterpriseDemandCount: 3, requiredSkills: ['中英翻译', '品牌文案', '术语表'],
+publishedAt: '2026-09-19T16:00:00+08:00', status: 'open',
   },
   {
     id: 'd-7', enterpriseId: 'e-7', enterpriseName: '茶饮空间', isEnterpriseVerified: true,
@@ -129,7 +135,8 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 480000, budgetMode: 'fixed', budgetRangeLabel: '一口价',
     cycleDays: 20, acceptance: ['施工尺寸图', '材质工艺标注'],
     deliverables: ['源文件', '施工文件'], requiresCertifiedOpc: false, bidCount: 1,
-    publishedAt: '2026-09-19T16:40:00+08:00', status: 'open',
+        viewCount: 41, enterpriseDemandCount: 6, requiredSkills: ['导视系统', '施工文件', 'VI规范'],
+publishedAt: '2026-09-19T16:40:00+08:00', status: 'open',
   },
   {
     id: 'd-8', enterpriseId: 'e-8', enterpriseName: '植研所', isEnterpriseVerified: true,
@@ -138,7 +145,8 @@ export const DEMANDS: IDemandType[] = [
     budgetCents: 1600000, budgetMode: 'range', budgetRangeLabel: '区间 ¥15,000–18,000',
     cycleDays: 45, acceptance: ['接口联调通过', '压测报告', '源码交付'],
     deliverables: ['源码', '接口文档'], requiresCertifiedOpc: false, bidCount: 0,
-    publishedAt: '2026-09-19T16:20:00+08:00', status: 'open',
+        viewCount: 78, enterpriseDemandCount: 3, requiredSkills: ['Node', '接口设计', '压测'],
+publishedAt: '2026-09-19T16:20:00+08:00', status: 'open',
   },
 ];
 

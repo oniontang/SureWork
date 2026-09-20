@@ -63,6 +63,12 @@ const routes: RouteRecordRaw[] = [
         meta: { title: '抢单大厅' },
       },
       {
+        path: 'demands/:id',
+        name: 'provider-demand-detail',
+        component: () => import('@/pages/provider/DemandDetailPage.vue'),
+        meta: { title: '需求详情' },
+      },
+      {
         path: 'jobs',
         name: 'provider-jobs',
         component: () => import('@/pages/provider/JobListPage.vue'),

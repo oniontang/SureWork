@@ -40,6 +40,17 @@ export function fetchDemands(): Promise<IDemandType[]> {
   return request(() => DEMANDS);
 }
 
+/** 需求详情（从业者投标前查看完整需求、验收标准与企业画像） */
+export function fetchDemandDetail(demandId: string): Promise<IDemandType> {
+  return request(() => {
+    const target = DEMANDS.find((item) => item.id === demandId);
+    if (!target) {
+      throw new Error('该需求已下架或不存在');
+    }
+    return target;
+  });
+}
+
 export function fetchBidsByDemand(demandId: string): Promise<IBidType[]> {
   return request(() => BIDS.filter((bid) => bid.demandId === demandId));
 }
