@@ -1,0 +1,68 @@
+@use './variables' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px; // rem 基准
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100vh;
+  background: $color-page;
+  color: $color-ink-1;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei',
+    sans-serif;
+  font-size: $fs-base;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+// 无障碍：键盘焦点可见（规范 §11/§12 可访问性底线）
+:focus-visible {
+  outline: 0.125rem solid $color-accent;
+  outline-offset: 0.125rem;
+}
+
+// 尊重系统减动效偏好
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

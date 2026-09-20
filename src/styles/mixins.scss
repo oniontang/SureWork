@@ -1,0 +1,49 @@
+@use './variables' as *;
+
+// 卡片表面
+@mixin surface {
+  background: $color-surface;
+  border: 0.0625rem solid $color-border;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+}
+
+// 页面容器
+@mixin page-shell {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+// 文本省略
+@mixin ellipsis($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// 按压反馈（规范：可点元素必须有交互状态）
+@mixin tap-feedback {
+  transition: transform $duration-fast $ease-out;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+// 表格行
+@mixin table-row {
+  cursor: pointer;
+  transition: background $duration-fast;
+
+  &:hover {
+    background: $color-panel;
+  }
+}

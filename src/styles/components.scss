@@ -1,0 +1,574 @@
+@use './variables' as *;
+@use './mixins' as *;
+
+// ============================================================
+// 全局组件样式（BEM + 短横线，规范 §4）
+// ============================================================
+
+.card {
+  @include surface;
+  padding: $space-5;
+}
+
+.card--flat {
+  box-shadow: none;
+  background: $color-panel;
+}
+
+.card--dashed {
+  border-style: dashed;
+  box-shadow: none;
+  background: $color-panel;
+}
+
+// —— 按钮 ——
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  height: 2.5rem;
+  padding: 0 $space-5;
+  border-radius: $radius-md;
+  font-weight: 700;
+  font-size: $fs-md;
+  white-space: nowrap;
+  @include tap-feedback;
+
+  &--primary {
+    background: $color-accent;
+    color: $color-on-accent;
+    box-shadow: $shadow-accent;
+
+    &:hover {
+      background: $color-accent-deep;
+    }
+  }
+
+  &--ghost {
+    background: $color-panel;
+    color: $color-ink-2;
+    border: 0.0625rem solid $color-border;
+
+    &:hover {
+      background: #f3ede3;
+    }
+  }
+
+  &--white {
+    background: rgba(255, 255, 255, 0.16);
+    color: $color-on-accent;
+  }
+
+  &--sm {
+    height: 2.125rem;
+    padding: 0 $space-4;
+    font-size: $fs-sm;
+    border-radius: $radius-sm;
+  }
+
+  &--lg {
+    height: 2.875rem;
+    padding: 0 $space-6;
+    font-size: $fs-base;
+    border-radius: $radius-md;
+  }
+
+  &--block {
+    width: 100%;
+  }
+
+  &--danger {
+    color: $color-danger;
+  }
+
+  &--loading {
+    opacity: 0.72;
+    pointer-events: none;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+}
+
+// —— 标签 ——
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  padding: 0.1875rem $space-3;
+  border-radius: 0.4375rem;
+  font-size: 0.71875rem;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &--accent {
+    background: $color-accent-soft;
+    color: $color-accent-deep;
+  }
+
+  &--success {
+    background: $color-success-soft;
+    color: $color-success;
+  }
+
+  &--warning {
+    background: $color-warning-soft;
+    color: $color-warning;
+  }
+
+  &--danger {
+    background: $color-danger-soft;
+    color: $color-danger;
+  }
+
+  &--teal {
+    background: $color-teal-soft;
+    color: $color-teal;
+  }
+
+  &--plain {
+    background: $color-panel;
+    color: $color-ink-2;
+    border: 0.0625rem solid $color-border;
+  }
+}
+
+// —— 筛选 chip ——
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: $space-2 $space-4;
+  border-radius: $radius-pill;
+  font-size: $fs-sm;
+  font-weight: 600;
+  background: $color-surface;
+  color: $color-ink-2;
+  border: 0.0625rem solid $color-border;
+  cursor: pointer;
+  transition: all $duration-fast $ease-out;
+
+  &:hover {
+    border-color: $color-accent;
+    color: $color-accent-deep;
+  }
+
+  &--on {
+    background: $color-accent;
+    color: $color-on-accent;
+    border-color: transparent;
+  }
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+// —— 文本 ——
+.muted {
+  color: $color-ink-3;
+  font-size: $fs-sm;
+}
+
+.price {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.page-title {
+  font-size: $fs-display;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.page-subtitle {
+  margin-top: $space-1;
+  font-size: $fs-sm;
+  color: $color-ink-3;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: $space-2;
+
+  b {
+    font-size: $fs-lg;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+}
+
+// —— 表格 ——
+.table {
+  width: 100%;
+
+  th {
+    padding: $space-3 $space-4;
+    border-bottom: 0.0625rem solid $color-border;
+    text-align: left;
+    font-size: $fs-xs;
+    font-weight: 600;
+    color: $color-ink-3;
+  }
+
+  td {
+    padding: $space-4;
+    border-bottom: 0.0625rem solid $color-border;
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    @include table-row;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.table__title {
+  font-weight: 700;
+  font-size: $fs-base;
+  letter-spacing: -0.01em;
+}
+
+// —— 表单 ——
+.field {
+  margin-bottom: $space-4;
+
+  label {
+    display: block;
+    margin-bottom: $space-2;
+    font-size: $fs-sm;
+    font-weight: 700;
+
+    em {
+      margin-left: $space-2;
+      font-style: normal;
+      font-weight: 400;
+      font-size: $fs-xs;
+      color: $color-accent-deep;
+    }
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: $space-3;
+    background: $color-surface;
+    border: 0.0625rem solid $color-border;
+    border-radius: $radius-md;
+    outline: none;
+    transition: border-color $duration-fast;
+
+    &:focus {
+      border-color: $color-accent;
+    }
+
+    &:disabled {
+      color: $color-ink-3;
+    }
+  }
+
+  textarea {
+    min-height: 5rem;
+    line-height: 1.65;
+    resize: vertical;
+  }
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-4;
+}
+
+.hint-box {
+  padding: $space-3 $space-4;
+  border-radius: $radius-md;
+  background: $color-panel;
+  font-size: $fs-sm;
+  line-height: 1.7;
+  color: $color-ink-3;
+}
+
+// —— 托管说明卡 ——
+.escrow-note {
+  display: flex;
+  gap: $space-3;
+  align-items: flex-start;
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: $color-teal-soft;
+  border: 0.0625rem solid rgba(46, 107, 99, 0.18);
+  color: $color-teal;
+  font-size: $fs-sm;
+  line-height: 1.7;
+}
+
+// —— 头像 ——
+.avatar {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  flex: none;
+  font-weight: 800;
+  color: $color-on-accent;
+}
+
+.av-1 {
+  background: linear-gradient(135deg, #e4572e, #c2431f);
+}
+
+.av-2 {
+  background: linear-gradient(135deg, #2e6b63, #1e4b45);
+}
+
+.av-3 {
+  background: linear-gradient(135deg, #b77a16, #8a5c0e);
+}
+
+.av-4 {
+  background: linear-gradient(135deg, #5a4c3f, #3b352d);
+}
+
+// —— 统计行 ——
+.stat-line {
+  display: flex;
+  text-align: center;
+
+  > div {
+    flex: 1;
+    padding: 0 $space-2;
+  }
+
+  > div + div {
+    border-left: 0.0625rem solid $color-border;
+  }
+
+  b {
+    display: block;
+    font-size: $fs-lg;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  span {
+    font-size: 0.71875rem;
+    color: $color-ink-3;
+  }
+}
+
+// —— 设置行 ——
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  padding: $space-4 0;
+
+  & + & {
+    border-top: 0.0625rem solid $color-border;
+  }
+
+  .setting-row__title {
+    font-size: $fs-base;
+    font-weight: 700;
+  }
+
+  .setting-row__desc {
+    margin-top: $space-1;
+    font-size: $fs-xs;
+    line-height: 1.6;
+    color: $color-ink-3;
+  }
+
+  .setting-row__end {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex: none;
+  }
+}
+
+// —— 开关 ——
+.switch {
+  position: relative;
+  flex: none;
+  width: 2.5rem;
+  height: 1.4375rem;
+  border-radius: $radius-pill;
+  background: #d8cfc0;
+  transition: background $duration-fast;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0.1875rem;
+    top: 0.1875rem;
+    width: 1.0625rem;
+    height: 1.0625rem;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.2);
+    transition: transform $duration-fast $ease-out;
+  }
+
+  &--on {
+    background: $color-success;
+
+    &::after {
+      transform: translateX(1.0625rem);
+    }
+  }
+}
+
+// —— 倒计时 ——
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  margin-top: $space-3;
+  padding: $space-2 $space-3;
+  border-radius: 0.5rem;
+  background: $color-warning-soft;
+  color: $color-warning;
+  font-size: $fs-xs;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+// —— 进度条 ——
+.progress {
+  height: 0.3125rem;
+  border-radius: $radius-pill;
+  background: $color-panel;
+  overflow: hidden;
+
+  i {
+    display: block;
+    height: 100%;
+    border-radius: $radius-pill;
+    background: $color-accent;
+    transition: width $duration-slow $ease-out;
+  }
+}
+
+// —— 骨架屏尺寸档 ——
+.skel-kpi {
+  height: 6rem;
+}
+
+.skel-banner {
+  height: 15rem;
+}
+
+.skel-card {
+  height: 8.125rem;
+}
+
+.skel-card-tall {
+  height: 18.75rem;
+}
+
+.skel-title {
+  height: 1.625rem;
+  width: 13.125rem;
+}
+
+.skel-bar {
+  height: 2.75rem;
+}
+
+.skel-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $space-4;
+}
+
+.skel-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-4;
+}
+
+.skel-stack {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+// —— 作品集渐变占位 ——
+.work-art {
+  position: relative;
+  height: 7.5rem;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 1.125rem;
+    bottom: -1.375rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+}
+
+.w1 {
+  background: linear-gradient(120deg, #e4572e, #f0a06b);
+
+  &::after {
+    background: #fff3e8;
+  }
+}
+
+.w2 {
+  background: linear-gradient(120deg, #2e6b63, #7fb5ad);
+
+  &::after {
+    background: #e8f2f0;
+  }
+}
+
+.w3 {
+  background: linear-gradient(120deg, #b77a16, #e8c687);
+
+  &::after {
+    background: #faf0da;
+  }
+}
+
+.w4 {
+  background: linear-gradient(120deg, #5a4c3f, #a39885);
+
+  &::after {
+    background: #efe9df;
+  }
+}
+
+.w5 {
+  background: linear-gradient(120deg, #c2431f, #e8956b);
+
+  &::after {
+    background: #ffe9dc;
+  }
+}
+
+.w6 {
+  background: linear-gradient(120deg, #1e4b45, #5f968d);
+
+  &::after {
+    background: #dcebe8;
+  }
+}

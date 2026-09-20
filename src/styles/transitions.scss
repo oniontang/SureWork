@@ -1,0 +1,69 @@
+@use './variables' as *;
+
+// 路由切换过渡
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition:
+    opacity $duration-base $ease-out,
+    transform $duration-base $ease-out;
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(0.5rem);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+}
+
+// 内容渐入（配合 useReveal 的 IntersectionObserver）
+.reveal {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition:
+    opacity $duration-slow $ease-out,
+    transform $duration-slow $ease-out;
+
+  &.reveal--in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// 骨架屏微光
+.skeleton {
+  border-radius: $radius-md;
+  background: linear-gradient(100deg, #ece4d6 40%, #f8f3ea 50%, #ece4d6 60%);
+  background-size: 220% 100%;
+  animation: skeleton-shimmer 1.1s linear infinite;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+// 按钮 spinner
+.spin {
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+  vertical-align: -0.125rem;
+  border: 0.125rem solid transparent;
+  border-top-color: currentcolor;
+  border-right-color: currentcolor;
+  border-radius: 50%;
+  animation: spin-rotate 0.7s linear infinite;
+}
+
+@keyframes spin-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
