@@ -220,6 +220,7 @@ onMounted(async () => {
 .hall__top {
   display: grid;
   grid-template-columns: 1.55fr 1fr;
+  align-items: stretch;
   gap: $space-4;
 }
 
@@ -227,6 +228,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: $space-4;
+  min-height: 0;
 }
 
 .hall__spotlight {

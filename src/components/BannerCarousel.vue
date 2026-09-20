@@ -43,24 +43,27 @@ onBeforeUnmount(() => {
 <template>
   <div class="banner-carousel">
     <div class="banner-carousel__stage">
-      <TransitionGroup name="banner">
-        <div
-          v-for="(banner, index) in banners"
-          v-show="index === activeIndex"
-          :key="banner.id"
-          class="banner-carousel__slide"
-        >
-          <span class="banner-carousel__eyebrow">{{ banner.eyebrow }}</span>
-          <h3 class="banner-carousel__title">{{ banner.title }}</h3>
-          <p class="banner-carousel__desc">{{ banner.description }}</p>
-          <div class="banner-carousel__row">
-            <button class="btn banner-carousel__btn" @click="handleAction(banner)">
-              {{ banner.actionLabel }}
-            </button>
-            <span class="banner-carousel__period">{{ banner.periodLabel }}</span>
-          </div>
+      <div
+        v-for="(banner, index) in banners"
+        :key="banner.id"
+        class="banner-carousel__slide"
+        :class="{ 'banner-carousel__slide--on': index === activeIndex }"
+        :aria-hidden="index !== activeIndex"
+      >
+        <span class="banner-carousel__eyebrow">{{ banner.eyebrow }}</span>
+        <h3 class="banner-carousel__title">{{ banner.title }}</h3>
+        <p class="banner-carousel__desc">{{ banner.description }}</p>
+        <div class="banner-carousel__row">
+          <button
+            class="btn banner-carousel__btn"
+            :tabindex="index === activeIndex ? 0 : -1"
+            @click="handleAction(banner)"
+          >
+            {{ banner.actionLabel }}
+          </button>
+          <span class="banner-carousel__period">{{ banner.periodLabel }}</span>
         </div>
-      </TransitionGroup>
+      </div>
 
       <div class="banner-carousel__dots" role="tablist" aria-label="Banner 切换">
         <button
@@ -80,8 +83,13 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 @use '@/styles/variables' as *;
 
+.banner-carousel {
+  height: 100%;
+}
+
 .banner-carousel__stage {
   position: relative;
+  height: 100%;
   min-height: 15.75rem;
   border-radius: $radius-lg;
   overflow: hidden;
@@ -121,6 +129,12 @@ onBeforeUnmount(() => {
   justify-content: center;
   gap: $space-2;
   padding: $space-8;
+  opacity: 0;
+  transition: opacity $duration-base $ease-out;
+
+  &--on {
+    opacity: 1;
+  }
 }
 
 .banner-carousel__eyebrow {
@@ -183,15 +197,5 @@ onBeforeUnmount(() => {
     width: 1.25rem;
     background: #fff;
   }
-}
-
-.banner-enter-active,
-.banner-leave-active {
-  transition: opacity $duration-base $ease-out;
-}
-
-.banner-enter-from,
-.banner-leave-to {
-  opacity: 0;
 }
 </style>
