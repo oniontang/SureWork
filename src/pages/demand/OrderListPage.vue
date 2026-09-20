@@ -4,9 +4,11 @@ import { useRouter } from 'vue-router';
 
 import { fetchDemanderOrders } from '@/api/order';
 import SkeletonBlock from '@/components/SkeletonBlock.vue';
+import TalentRecommendBoard from '@/components/TalentRecommendBoard.vue';
 import StatusTag from '@/components/StatusTag.vue';
 import UserAvatar from '@/components/UserAvatar.vue';
 import { useAsync } from '@/composables/useAsync';
+import { useToast } from '@/composables/useToast';
 import { formatCurrency } from '@/utils/format';
 import type { IOrderType } from '@/types/order';
 
@@ -14,6 +16,7 @@ const STATUS_TABS = ['全部', '进行中', '待验收', '已完成'] as const;
 
 const router = useRouter();
 const { isLoading, run } = useAsync();
+const toast = useToast();
 
 const orders = ref<IOrderType[]>([]);
 const activeTab = ref<(typeof STATUS_TABS)[number]>('全部');
@@ -46,9 +49,15 @@ onMounted(async () => {
 <template>
   <div class="page">
     <header>
-      <h1 class="page-title">我的订单</h1>
-      <p class="page-subtitle">共 {{ orders.length }} 笔 · 全程托管与留痕 · 状态变更自动通知</p>
+      <h1 class="page-title">我的发布</h1>
+      <p class="page-subtitle">
+        共 {{ orders.length }} 个发布项目 · 需求匹配与履约进度集中查看 · 全程托管与留痕
+      </p>
     </header>
+
+    <TalentRecommendBoard @view-all="toast('演示原型：打开优质 OPC 榜单')" />
+
+    <h2 class="page__list-title">发布项目与履约进度</h2>
 
     <div class="chip-row">
       <button
@@ -67,8 +76,8 @@ onMounted(async () => {
       <table class="table">
         <thead>
           <tr>
-            <th>订单</th>
-            <th>从业者</th>
+            <th>发布项目</th>
+            <th>承接方</th>
             <th>金额</th>
             <th>托管 / 放款</th>
             <th>状态</th>
@@ -117,6 +126,12 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: $space-4;
+}
+
+.page__list-title {
+  font-size: $fs-lg;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 .page__table {

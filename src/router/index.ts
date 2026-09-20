@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
         path: 'orders',
         name: 'demand-orders',
         component: () => import('@/pages/demand/OrderListPage.vue'),
-        meta: { title: '我的订单' },
+        meta: { title: '我的发布' },
       },
       {
         path: 'orders/:id',

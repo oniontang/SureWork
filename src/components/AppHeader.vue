@@ -15,7 +15,7 @@ interface INavItemType {
 
 const DEMANDER_NAV: INavItemType[] = [
   { label: '工作台', to: '/demand/workbench' },
-  { label: '我的订单', to: '/demand/orders' },
+  { label: '我的发布', to: '/demand/orders' },
   { label: '投标管理', to: '/demand/bids/d-9' },
 ];
 

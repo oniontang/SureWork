@@ -1,4 +1,5 @@
 import type { IBannerType, IBidType, IDemandType, INoticeType } from '@/types/demand';
+import type { ITalentItemType } from '@/types/talent';
 import type { IMessageItemType, IConversationType } from '@/types/message';
 import type { IOrderType } from '@/types/order';
 import type { ILedgerItemType, IWalletOverviewType, IWithdrawAccountType, ICertificationItemType } from '@/types/payment';
@@ -309,4 +310,40 @@ export const PROVIDER_STATS = [
   { id: 'ps-1', label: '本月已结算', value: '¥18,200', hint: '已扣服务费 · 个税已代征', isHighlight: true },
   { id: 'ps-2', label: '托管中', value: '¥4,284', hint: '2 单 · 验收后 T+0 分账' },
   { id: 'ps-3', label: '待交付里程碑', value: '2', hint: '最近截止 09/24' },
+];
+
+/** 优质 OPC / 团队推荐（需求方侧人才位） */
+export const RECOMMENDED_TALENTS: ITalentItemType[] = [
+  {
+    id: 't-1', name: '林一舟', letter: '林', avatarTone: 'av-1', kind: 'opc',
+    title: '品牌视觉设计师 · 7 年', certLabel: '认证OPC · L2', creditScore: 912,
+    skillTags: ['品牌VI', '菜单/物料', '包装'], priceLabel: '¥800–3,000/项',
+    completedCount: 47, goodRate: 0.98,
+    reason: '与你合作 3 次，本月还有 2 席档期，可直接定向邀约',
+    isRepurchase: true,
+  },
+  {
+    id: 't-2', name: '周小蔓', letter: '周', avatarTone: 'av-2', kind: 'opc',
+    title: '短视频剪辑与内容运营 · 4 年', certLabel: '认证OPC · L2', creditScore: 938,
+    skillTags: ['短视频', '脚本', '小红书'], priceLabel: '¥300–600/条',
+    completedCount: 62, goodRate: 0.99,
+    reason: '正在承接你的小红书代运营，开业季素材可一并排期',
+    isRepurchase: true,
+  },
+  {
+    id: 't-3', name: '拾光视觉工作室', letter: '拾', avatarTone: 'av-3', kind: 'team',
+    title: '设计 + 开发 + 内容 三人小队', certLabel: '认证团队 · L2', creditScore: 956,
+    skillTags: ['全案设计', '小程序', '品牌物料'], priceLabel: '¥1.2万起/项目',
+    completedCount: 128, goodRate: 0.97,
+    reason: '适合多店同步开业：视觉、菜单、线上一站承接，单一接口人对接',
+    isRepurchase: false,
+  },
+  {
+    id: 't-4', name: '陈默', letter: '陈', avatarTone: 'av-4', kind: 'opc',
+    title: '剪辑 + 包装 · 6 年', certLabel: '认证OPC · L2', creditScore: 871,
+    skillTags: ['剪辑包装', '投流素材', '动效'], priceLabel: '¥400–800/条',
+    completedCount: 118, goodRate: 0.97,
+    reason: '模板化产能高，同期已完成 3 个咖啡品牌开业季项目',
+    isRepurchase: false,
+  },
 ];

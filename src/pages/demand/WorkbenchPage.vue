@@ -119,7 +119,7 @@ onMounted(() => {
       <section class="page__section">
         <div class="section-head">
           <b>进行中的订单</b>
-          <RouterLink to="/demand/orders" class="muted page__link">全部订单 ›</RouterLink>
+          <RouterLink to="/demand/orders" class="muted page__link">全部发布 ›</RouterLink>
         </div>
 
         <div class="card page__table">
