@@ -38,8 +38,23 @@ export const MAX_BID_BUDGET_RATIO = 1.2;
 /** 大厅分页每页条数 */
 export const DEMAND_PAGE_SIZE = 6;
 
+/** 演示数据：默认进入投标管理的需求 ID（需与 src/api/mocks.ts 中的 DEMANDS 对齐） */
+export const DEFAULT_BID_MANAGE_DEMAND_ID = 'd-9';
+
 /** 骨架屏模拟时延区间（毫秒） */
 export const MOCK_LATENCY = { min: 420, max: 780 } as const;
+
+/** 提交审核的最低需求质量分 */
+export const QUALITY_SUBMIT_THRESHOLD = 60;
+
+/** 需求描述达到该字数后才出现「细化需求」入口 */
+export const AI_REFINE_MIN_TEXT_LENGTH = 20;
+
+/** 描述输入停止后的静默预分析防抖（毫秒） */
+export const AI_REFINE_DEBOUNCE_MS = 1200;
+
+/** 澄清问题数量上限（避免长问卷劝退） */
+export const MAX_CLARIFY_QUESTIONS = 5;
 
 /** 需求品类 */
 export const CATEGORIES = [

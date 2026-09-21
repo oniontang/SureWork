@@ -17,7 +17,7 @@ interface ISwitchRowType {
   isOn: boolean;
 }
 
-const { isLoading, isSubmitting, run, runAction } = useAsync();
+const { isLoading, isSubmitting, error, run, runAction } = useAsync();
 const toast = useToast();
 
 const profile = ref<IProviderProfileType | null>(null);
@@ -48,10 +48,12 @@ function toggleSkill(tag: string): void {
 }
 
 async function handleSave(): Promise<void> {
-  const isSaved = await runAction(() => saveProfile({ name: form.name, email: 'opc@surework.dev' }));
-  if (isSaved) {
-    toast('基本信息已保存，主页已同步更新', 'success');
+  const result = await runAction(() => saveProfile({ name: form.name, email: 'opc@surework.dev' }));
+  if (!result) {
+    toast(error.value ?? '保存失败，请稍后重试', 'error');
+    return;
   }
+  toast('基本信息已保存，主页已同步更新', 'success');
 }
 
 onMounted(async () => {

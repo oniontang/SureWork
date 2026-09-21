@@ -17,7 +17,7 @@ interface ISwitchRowType {
   isOn: boolean;
 }
 
-const { isLoading, isSubmitting, run, runAction } = useAsync();
+const { isLoading, isSubmitting, error, run, runAction } = useAsync();
 const toast = useToast();
 
 const profile = ref<IDemanderProfileType | null>(null);
@@ -39,10 +39,12 @@ async function handleSave(): Promise<void> {
     toast('邮箱格式不正确', 'error');
     return;
   }
-  const isSaved = await runAction(() => saveProfile({ name: form.name, email: form.email }));
-  if (isSaved) {
-    toast('基本信息已保存', 'success');
+  const result = await runAction(() => saveProfile({ name: form.name, email: form.email }));
+  if (!result) {
+    toast(error.value ?? '保存失败，请稍后重试', 'error');
+    return;
   }
+  toast('基本信息已保存', 'success');
 }
 
 onMounted(async () => {

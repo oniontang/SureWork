@@ -1,41 +1,62 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { fetchBidsByDemand } from '@/api/demand';
+import { fetchBidsByDemand, fetchDemandDetail } from '@/api/demand';
 import { selectBidder } from '@/api/order';
-import { DEMANDS } from '@/api/mocks';
 import EmptyState from '@/components/EmptyState.vue';
 import SkeletonBlock from '@/components/SkeletonBlock.vue';
 import StatusTag from '@/components/StatusTag.vue';
 import UserAvatar from '@/components/UserAvatar.vue';
+import { CATEGORIES, DEFAULT_BID_MANAGE_DEMAND_ID } from '@/constants';
 import { useAsync } from '@/composables/useAsync';
 import { useToast } from '@/composables/useToast';
 import { formatCurrency, formatPercent } from '@/utils/format';
-import type { IBidType } from '@/types/demand';
+import type { IBidType, IDemandType } from '@/types/demand';
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
-const { isLoading, run } = useAsync();
+const { isLoading, error, run, runAction } = useAsync();
 
-const demandId = String(route.params.demandId ?? 'd-9');
-const demand = DEMANDS.find((item) => item.id === 'd-1') ?? DEMANDS[0];
+const demandId = String(route.params.demandId ?? DEFAULT_BID_MANAGE_DEMAND_ID);
+const demand = ref<IDemandType | null>(null);
 const bids = ref<IBidType[]>([]);
 
+const categoryLabel = computed(
+  () => CATEGORIES.find((item) => item.value === demand.value?.category)?.label ?? '—',
+);
+
 async function handleSelect(bid: IBidType): Promise<void> {
-  await run(() => selectBidder(bid.id));
+  const result = await runAction(() => selectBidder(bid.id));
+  if (!result) {
+    toast(error.value ?? '选定投标人失败，请稍后重试', 'error');
+    return;
+  }
   toast(`已向 ${bid.opcName} 发起订单确认，对方接单后进入合同与托管付款`, 'success');
   router.push('/demand/workbench');
 }
 
 onMounted(async () => {
-  bids.value = (await run(() => fetchBidsByDemand(demandId))) ?? [];
+  const data = await run(async () => {
+    const [demandData, bidList] = await Promise.all([
+      fetchDemandDetail(demandId),
+      fetchBidsByDemand(demandId),
+    ]);
+    return { demandData, bidList };
+  });
+  demand.value = data?.demandData ?? null;
+  bids.value = data?.bidList ?? [];
 });
 </script>
 
 <template>
   <div class="page">
+    <SkeletonBlock v-if="isLoading" preset="table" />
+
+    <EmptyState v-else-if="!demand" text="该需求已下架或不存在" />
+
+    <template v-else>
     <header class="page__head">
       <div>
         <h1 class="page-title">{{ demand.title }}</h1>
@@ -54,9 +75,7 @@ onMounted(async () => {
           <span class="muted">按信用分排序 ▾</span>
         </div>
 
-        <SkeletonBlock v-if="isLoading" preset="table" />
-
-        <div v-else class="page__bids">
+        <div class="page__bids">
           <article v-for="bid in bids" :key="bid.id" class="card bid-card reveal">
             <UserAvatar :letter="bid.avatarLetter" :tone="bid.avatarTone" :size="2.75" />
             <div class="bid-card__main">
@@ -93,7 +112,7 @@ onMounted(async () => {
       <aside class="card page__aside">
         <b>需求卡</b>
         <p class="muted page__aside-meta">
-          品类：设计<br />
+          品类：{{ categoryLabel }}<br />
           预算：{{ formatCurrency(demand.budgetCents) }}（区间价）<br />
           周期：{{ demand.cycleDays }} 天<br />
           交付：{{ demand.deliverables.join(' / ') }}<br />
@@ -110,6 +129,7 @@ onMounted(async () => {
         </button>
       </aside>
     </div>
+    </template>
   </div>
 </template>
 

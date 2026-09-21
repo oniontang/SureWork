@@ -20,7 +20,7 @@ const REJECT_REASONS = ['与验收标准不符', '缺少约定交付物', '风�
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
-const { isLoading, isSubmitting, run, runAction } = useAsync();
+const { isLoading, isSubmitting, error, run, runAction } = useAsync();
 
 const order = ref<IOrderType | null>(null);
 const isVerifyOpen = ref(false);
@@ -51,8 +51,11 @@ async function handleAccept(): Promise<void> {
   if (!order.value || !activeMilestone.value) return;
   const orderId = order.value.id;
   const milestoneId = activeMilestone.value.id;
-  const isDone = await runAction(() => acceptMilestone(orderId, milestoneId));
-  if (!isDone) return;
+  const result = await runAction(() => acceptMilestone(orderId, milestoneId));
+  if (!result) {
+    toast(error.value ?? '验收处理失败，请稍后重试', 'error');
+    return;
+  }
   isVerifyOpen.value = false;
   toast(`验收通过！${formatCurrency(activeMilestone.value?.amountCents ?? 0)} 已放款分账`, 'success');
   await loadDetail();
@@ -60,11 +63,20 @@ async function handleAccept(): Promise<void> {
 
 async function handleReject(): Promise<void> {
   if (!order.value || !activeMilestone.value) return;
+  if (!rejectReason.value.trim()) {
+    toast('驳回必须填写具体整改要求', 'error');
+    return;
+  }
   const reason = `${selectedReason.value ? `${selectedReason.value}：` : ''}${rejectReason.value}`;
-  const isDone = await runAction(() => rejectMilestone(order.value!.id, activeMilestone.value!.id, reason));
-  if (!isDone) return;
+  const result = await runAction(() =>
+    rejectMilestone(order.value!.id, activeMilestone.value!.id, reason),
+  );
+  if (!result) {
+    toast(error.value ?? '驳回失败，请稍后重试', 'error');
+    return;
+  }
   isVerifyOpen.value = false;
-  toast(`已驳回并通知对方整改（1/${MAX_REJECT_COUNT}）`);
+  toast(`已驳回并通知对方整改（${result.rejectCount}/${MAX_REJECT_COUNT}）`);
   await loadDetail();
 }
 

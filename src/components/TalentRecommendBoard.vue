@@ -15,12 +15,16 @@ interface IPropsType {
 const props = withDefaults(defineProps<IPropsType>(), { limit: 4 });
 const emit = defineEmits<{ viewAll: [] }>();
 
-const { isLoading, run } = useAsync();
+const { isLoading, error, run, runAction } = useAsync();
 const toast = useToast();
 const talents = ref<ITalentItemType[]>([]);
 
 async function handleInvite(talent: ITalentItemType): Promise<void> {
-  await run(() => inviteTalent(talent.id), { skeleton: false });
+  const result = await runAction(() => inviteTalent(talent.id));
+  if (!result) {
+    toast(error.value ?? '邀约失败，请稍后重试', 'error');
+    return;
+  }
   toast(`已向 ${talent.name} 发出邀约，对方确认后可直接派单`, 'success');
 }
 

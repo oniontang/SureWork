@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { publishDemand } from '@/api/demand';
 import { fetchDemanderOrders, fetchDemanderStats } from '@/api/order';
+import AiRefinePanel from '@/components/AiRefinePanel.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import SkeletonBlock from '@/components/SkeletonBlock.vue';
 import StatCard from '@/components/StatCard.vue';
@@ -11,8 +12,16 @@ import StatusTag from '@/components/StatusTag.vue';
 import UserAvatar from '@/components/UserAvatar.vue';
 import { useAsync } from '@/composables/useAsync';
 import { useToast } from '@/composables/useToast';
-import { CATEGORIES } from '@/constants';
+import {
+  AI_REFINE_MIN_TEXT_LENGTH,
+  CATEGORIES,
+  DEFAULT_BID_MANAGE_DEMAND_ID,
+  QUALITY_SUBMIT_THRESHOLD,
+} from '@/constants';
 import { useUserStore } from '@/store/user';
+import { isValidAmount } from '@/utils/validate';
+import type { IRefineApplyType } from '@/types/ai';
+import type { IDemandDraftType } from '@/types/demand';
 import type { IStatItemType } from '@/types/common';
 import type { IOrderType } from '@/types/order';
 
@@ -20,30 +29,92 @@ interface IPublishFormType {
   category: string;
   title: string;
   description: string;
+  deliverables: string[];
   budgetYuan: number;
   cycleLabel: string;
   acceptance: string;
 }
 
+/** 周期文案 → 天数，供 AI 细化与质量评估使用 */
+const CYCLE_DAYS_MAP: Record<string, number> = {
+  '1 周内': 7,
+  '2–4 周': 21,
+  '1 个月以上': 45,
+};
+
+/** 未细化时，描述短于此长度视为信息量不足，提示先做 AI 细化 */
+const THIN_DESCRIPTION_LENGTH = 80;
+
 const route = useRoute();
 const router = useRouter();
 const user = useUserStore();
 const toast = useToast();
-const { isLoading, isSubmitting, run, runAction } = useAsync();
+const { isLoading, isSubmitting, error, run, runAction } = useAsync();
 
 const stats = ref<IStatItemType[]>([]);
 const orders = ref<IOrderType[]>([]);
 const isPublishOpen = ref(false);
+const isRefineOpen = ref(false);
+const qualityScore = ref<number | null>(null);
+const isRefineHintOn = ref(false);
 
 const form = reactive<IPublishFormType>({
   category: 'design',
   title: '品牌视觉升级 · 主视觉+菜单系统',
   description:
     '背景：山野咖啡 3 家新店 11 月开业。\n目标：Logo 微调升级 + 主视觉 + 三店通用菜单系统。\n参考资料：现有 VI 手册与新店空间照片已上传。',
+  deliverables: ['源文件', '使用规范'],
   budgetYuan: 6800,
   cycleLabel: '2–4 周',
   acceptance: '1. 主视觉通过店内实拍验证效果；\n2. 菜单系统覆盖早/晚市两套价目；\n3. 源文件含分层工程文件与字体授权清单。',
 });
+
+const isRefined = computed(() => qualityScore.value !== null);
+
+/** 已细化但仍未达提交质量线 */
+const isLowQuality = computed(
+  () => qualityScore.value !== null && qualityScore.value < QUALITY_SUBMIT_THRESHOLD,
+);
+
+/** 描述有足够内容后才出现「细化需求」入口，避免空表单点进去没东西可分析 */
+const canRefine = computed(
+  () => form.description.trim().length >= AI_REFINE_MIN_TEXT_LENGTH,
+);
+
+/** 传给细化面板的草稿快照 */
+const refineDraft = computed<IDemandDraftType>(() => ({
+  title: form.title,
+  description: form.description,
+  deliverables: [...form.deliverables],
+  acceptance: form.acceptance
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean),
+  budgetCents: Math.round(Number(form.budgetYuan) * 100),
+  cycleDays: CYCLE_DAYS_MAP[form.cycleLabel] ?? 21,
+  category: form.category,
+}));
+
+/** 把采纳结果写回表单（AI 不直接覆盖，只按用户采纳的条目回填） */
+function handleApplyRefine(payload: IRefineApplyType): void {
+  const { draft } = payload;
+  if (draft.description) {
+    form.description = draft.description;
+  }
+  if (draft.deliverables) {
+    form.deliverables = draft.deliverables;
+  }
+  if (draft.acceptance?.length) {
+    const existing = form.acceptance.trim();
+    form.acceptance = [existing, ...draft.acceptance].filter(Boolean).join('\n');
+  }
+  if (draft.budgetCents) {
+    form.budgetYuan = Math.round(draft.budgetCents / 100);
+  }
+  qualityScore.value = payload.qualityScore;
+  isRefineHintOn.value = false;
+  toast(`已应用 ${payload.acceptedCount} 条 AI 建议，需求质量分 ${payload.qualityScore}`, 'success');
+}
 
 const activeOrders = computed(() =>
   orders.value.filter((order) => ['ongoing', 'accepting'].includes(order.status)),
@@ -71,10 +142,37 @@ function openPublish(): void {
 }
 
 async function handlePublish(): Promise<void> {
-  const isSaved = await runAction(() =>
-    publishDemand({ title: form.title, budgetCents: Math.round(form.budgetYuan * 100) }),
+  if (!form.title.trim()) {
+    toast('请填写需求标题', 'error');
+    return;
+  }
+  if (!form.description.trim()) {
+    toast('请填写需求描述', 'error');
+    return;
+  }
+  if (!form.acceptance.trim()) {
+    toast('请填写验收标准', 'error');
+    return;
+  }
+  const budgetYuan = Number(form.budgetYuan);
+  if (!isValidAmount(budgetYuan, 100)) {
+    toast('预算需为不小于 100 元的有效金额', 'error');
+    return;
+  }
+  // 提交拦截：描述偏薄且未细化时，先给一次「去细化」的机会，不强制
+  if (
+    !isRefined.value &&
+    !isRefineHintOn.value &&
+    form.description.trim().length < THIN_DESCRIPTION_LENGTH
+  ) {
+    isRefineHintOn.value = true;
+    return;
+  }
+  const result = await runAction(() =>
+    publishDemand({ title: form.title, budgetCents: Math.round(budgetYuan * 100) }),
   );
-  if (!isSaved) {
+  if (!result) {
+    toast(error.value ?? '发布失败，请检查表单', 'error');
     return;
   }
   isPublishOpen.value = false;
@@ -175,7 +273,10 @@ onMounted(() => {
           <span class="muted">管理全部 ›</span>
         </div>
         <div class="page__demands">
-          <article class="card page__demand" @click="router.push('/demand/bids/d-9')">
+          <article
+            class="card page__demand"
+            @click="router.push(`/demand/bids/${DEFAULT_BID_MANAGE_DEMAND_ID}`)"
+          >
             <div class="page__demand-head">
               <b>抖音短视频 15 条 · 剪辑+脚本</b>
               <StatusTag label="选人中" tone="accent" />
@@ -225,8 +326,26 @@ onMounted(() => {
             <input v-model="form.title" placeholder="一句话说清要做什么" maxlength="60" />
           </div>
           <div class="field">
-            <label>需求描述 <em>完整度影响匹配质量评分</em></label>
-            <textarea v-model="form.description" rows="5" />
+            <label>
+              需求描述 <em>完整度影响匹配质量评分</em>
+              <span v-if="isRefined" class="tag tag--success field__score">
+                质量分 {{ qualityScore }}
+              </span>
+            </label>
+            <div class="field__textarea">
+              <textarea v-model="form.description" rows="6" placeholder="建议按「背景 / 目标 / 使用场景 / 优先级」分段写清" />
+              <button
+                v-if="canRefine"
+                class="refine-btn"
+                title="AI 会诊断模糊点并生成可采纳的补充建议"
+                @click="isRefineOpen = true"
+              >
+                ✦ 细化需求
+              </button>
+            </div>
+            <p v-if="!canRefine" class="muted field__hint">
+              再写 {{ AI_REFINE_MIN_TEXT_LENGTH - form.description.trim().length }} 字，即可让 AI 帮你补全场景与验收标准
+            </p>
           </div>
           <div class="field-row">
             <div class="field">
@@ -240,6 +359,12 @@ onMounted(() => {
                 <option>2–4 周</option>
                 <option>1 个月以上</option>
               </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>交付物清单 <em>可枚举，避免交付时扯皮</em></label>
+            <div class="chip-row">
+              <span v-for="item in form.deliverables" :key="item" class="tag tag--plain">{{ item }}</span>
             </div>
           </div>
           <div class="field field--last">
@@ -257,6 +382,21 @@ onMounted(() => {
             · 选定人选后平台生成电子合同并引导付款
           </p>
           <p class="hint-box">指导价参考：设计类 ¥800–3,000/项。过低预算会被限制上架。</p>
+
+          <div v-if="isRefineHintOn" class="refine-hint">
+            <b>描述偏简略，可能被压价或后期扯皮</b>
+            <p>
+              缺少使用场景与验收标准的需求，平均少收 2 份投标；让 AI 先帮你补全再提交。
+            </p>
+            <div class="refine-hint__ops">
+              <button class="btn btn--primary btn--sm" @click="isRefineOpen = true">去细化</button>
+              <button class="refine-hint__skip" @click="isRefineHintOn = false">仍要提交</button>
+            </div>
+          </div>
+
+          <p v-if="isLowQuality" class="muted">
+            当前质量分仍低于 {{ QUALITY_SUBMIT_THRESHOLD }}，建议再补充验收标准。
+          </p>
           <button
             class="btn btn--primary btn--block"
             :class="{ 'btn--loading': isSubmitting }"
@@ -269,6 +409,8 @@ onMounted(() => {
         </aside>
       </div>
     </BaseModal>
+
+    <AiRefinePanel v-model:open="isRefineOpen" :draft="refineDraft" @apply="handleApplyRefine" />
   </div>
 </template>
 
@@ -408,6 +550,80 @@ onMounted(() => {
 
 .field--last {
   margin-bottom: 0;
+}
+
+/* 描述框内的 AI 细化入口 */
+.field__textarea {
+  position: relative;
+}
+
+.field__textarea textarea {
+  padding-bottom: 2.75rem;
+}
+
+.refine-btn {
+  position: absolute;
+  right: 0.625rem;
+  bottom: 0.625rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: $radius-pill;
+  background: $color-accent-soft;
+  color: $color-accent-deep;
+  font-size: $fs-sm;
+  font-weight: 700;
+  border: 0.0625rem solid rgba(228, 87, 46, 0.22);
+  transition: all $duration-fast $ease-out;
+
+  &:hover {
+    background: $color-accent;
+    color: $color-on-accent;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.field__hint {
+  margin-top: $space-2;
+}
+
+.field__score {
+  float: right;
+}
+
+.refine-hint {
+  padding: $space-4;
+  border-radius: $radius-md;
+  background: $color-warning-soft;
+  color: $color-warning;
+  font-size: $fs-sm;
+  line-height: 1.65;
+
+  b {
+    display: block;
+    margin-bottom: $space-1;
+  }
+
+  p {
+    margin-bottom: $space-3;
+  }
+}
+
+.refine-hint__ops {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.refine-hint__skip {
+  font-size: $fs-sm;
+  color: $color-ink-3;
+  text-decoration: underline;
+
+  &:hover {
+    color: $color-ink-1;
+  }
 }
 
 @media (max-width: 62.5rem) {

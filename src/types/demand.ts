@@ -1,5 +1,17 @@
 import type { CategoryValue } from '@/types/common';
 
+/** 发布表单草稿（AI 细化的输入与回填载体） */
+export interface IDemandDraftType {
+  title: string;
+  description: string;
+  deliverables: string[];
+  acceptance: string[];
+  /** 单位：分 */
+  budgetCents: number;
+  cycleDays: number;
+  category: string;
+}
+
 /** 需求状态 */
 export type DemandStatusType = 'open' | 'matching' | 'ordered' | 'closed';
 

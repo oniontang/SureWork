@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import UserAvatar from '@/components/UserAvatar.vue';
-import { ROLE } from '@/constants';
+import { DEFAULT_BID_MANAGE_DEMAND_ID, ROLE } from '@/constants';
 import { useUiStore } from '@/store/ui';
 import { useUserStore } from '@/store/user';
 import type { RoleType } from '@/types/user';
@@ -16,7 +16,7 @@ interface INavItemType {
 const DEMANDER_NAV: INavItemType[] = [
   { label: '工作台', to: '/demand/workbench' },
   { label: '我的发布', to: '/demand/orders' },
-  { label: '投标管理', to: '/demand/bids/d-9' },
+  { label: '投标管理', to: `/demand/bids/${DEFAULT_BID_MANAGE_DEMAND_ID}` },
 ];
 
 const PROVIDER_NAV: INavItemType[] = [

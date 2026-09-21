@@ -17,7 +17,7 @@ import { useToast } from '@/composables/useToast';
 import type { IBannerType, IDemandType, INoticeType } from '@/types/demand';
 
 const router = useRouter();
-const { isLoading, run } = useAsync();
+const { isLoading, error, run } = useAsync();
 const toast = useToast();
 
 const allDemands = ref<IDemandType[]>([]);
@@ -59,6 +59,8 @@ async function handleLoadMore(): Promise<void> {
       Math.max(filtered.value.length - visibleCount.value + DEMAND_PAGE_SIZE, 1),
     );
     toast(`已为你加载 ${appended} 个新需求`);
+  } else {
+    toast(error.value ?? '加载更多失败，请稍后重试', 'error');
   }
 }
 

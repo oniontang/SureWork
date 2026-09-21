@@ -148,6 +148,16 @@ publishedAt: '2026-09-19T16:40:00+08:00', status: 'open',
         viewCount: 78, enterpriseDemandCount: 3, requiredSkills: ['Node', '接口设计', '压测'],
 publishedAt: '2026-09-19T16:20:00+08:00', status: 'open',
   },
+  {
+    id: 'd-9', enterpriseId: 'e-1', enterpriseName: '山野咖啡', isEnterpriseVerified: true,
+    category: 'video', title: '抖音短视频 15 条 · 剪辑+脚本',
+    description: '开业季抖音投放素材：脚本先行确认，成片含字幕+调色，竖版为主，需出 1 条样片后批量生产。',
+    budgetCents: 500000, budgetMode: 'range', budgetRangeLabel: '区间 ¥4,000–6,000',
+    cycleDays: 21, acceptance: ['脚本先行确认', '成片含字幕+调色', '15 条竖版按期交付'],
+    deliverables: ['成片', '脚本文档'], requiresCertifiedOpc: false, bidCount: 3,
+        viewCount: 86, enterpriseDemandCount: 5, requiredSkills: ['短视频', '脚本', '剪辑'],
+publishedAt: '2026-09-19T10:00:00+08:00', status: 'matching',
+  },
 ];
 
 export const BIDS: IBidType[] = [

@@ -8,9 +8,10 @@ import StatusTag from '@/components/StatusTag.vue';
 import { useAsync } from '@/composables/useAsync';
 import { useToast } from '@/composables/useToast';
 import { formatCurrency, formatDate } from '@/utils/format';
+import { isValidAmount } from '@/utils/validate';
 import type { ILedgerItemType, IWalletOverviewType, IWithdrawAccountType } from '@/types/payment';
 
-const { isLoading, isSubmitting, run, runAction } = useAsync();
+const { isLoading, isSubmitting, error, run, runAction } = useAsync();
 const toast = useToast();
 
 const overview = ref<IWalletOverviewType | null>(null);
@@ -20,9 +21,14 @@ const isWithdrawOpen = ref(false);
 const amountYuan = ref(0);
 
 async function handleWithdraw(): Promise<void> {
-  const isDone = await runAction(() => applyWithdraw(Math.round(amountYuan.value * 100)));
-  if (!isDone) {
-    toast(`提现失败：${formatCurrency(Math.round(amountYuan.value * 100))} 超出可提现余额`, 'error');
+  const amount = Number(amountYuan.value);
+  if (!isValidAmount(amount, 1)) {
+    toast('提现金额需为不小于 1 元的有效金额', 'error');
+    return;
+  }
+  const result = await runAction(() => applyWithdraw(Math.round(amount * 100)));
+  if (!result) {
+    toast(error.value ?? '提现失败，请稍后重试', 'error');
     return;
   }
   isWithdrawOpen.value = false;

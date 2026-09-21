@@ -69,6 +69,9 @@ export function publishDemand(payload: { title: string; budgetCents: number }): 
     if (!payload.title.trim()) {
       throw new Error('需求标题不能为空');
     }
+    if (!Number.isFinite(payload.budgetCents) || payload.budgetCents <= 0) {
+      throw new Error('预算金额无效，请填写大于 0 的预算');
+    }
     return { demandId: `d-${Date.now()}` };
   }, 700);
 }
@@ -77,6 +80,9 @@ export function publishDemand(payload: { title: string; budgetCents: number }): 
 export function submitBid(demandId: string, priceCents: number): Promise<{ bidId: string }> {
   return request(() => {
     const target = DEMANDS.find((item) => item.id === demandId);
+    if (!Number.isFinite(priceCents) || priceCents <= 0) {
+      throw new Error('报价金额无效，请填写大于 0 的报价');
+    }
     if (target && priceCents > target.budgetCents * MAX_BID_BUDGET_RATIO) {
       throw new Error('报价超出需求预算上限，请核对后重新提交');
     }

@@ -17,6 +17,11 @@ export function normalizeText(input: string, maxLength: number): string {
   return input.trim().slice(0, maxLength);
 }
 
+/** 金额（元或分）是否为有限数且不小于下限 */
+export function isValidAmount(value: number, min = 0): boolean {
+  return Number.isFinite(value) && value >= min;
+}
+
 /** 手机号（中国大陆）格式校验 */
 export function isValidPhoneNumber(input: string): boolean {
   return /^1[3-9]\d{9}$/.test(input);

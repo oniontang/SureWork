@@ -12,6 +12,7 @@ import { CATEGORIES, MILESTONE_SPLIT } from '@/constants';
 import { useAsync } from '@/composables/useAsync';
 import { useToast } from '@/composables/useToast';
 import { formatCurrency, formatDate, formatHoursToDays } from '@/utils/format';
+import { isValidAmount } from '@/utils/validate';
 import type { IDemandType } from '@/types/demand';
 
 interface IBidFormType {
@@ -26,7 +27,7 @@ const BID_REPLY_WINDOW_HOURS = 48;
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
-const { isLoading, isSubmitting, run, runAction } = useAsync();
+const { isLoading, isSubmitting, error, run, runAction } = useAsync();
 
 const demand = ref<IDemandType | null>(null);
 const isBidOpen = ref(false);
@@ -68,10 +69,19 @@ async function handleSubmitBid(): Promise<void> {
   if (!demand.value) {
     return;
   }
+  const priceYuan = Number(form.priceYuan);
+  if (!isValidAmount(priceYuan, 100)) {
+    toast('报价需为不小于 100 元的有效金额', 'error');
+    return;
+  }
+  if (!form.proposal.trim()) {
+    toast('请填写方案摘要', 'error');
+    return;
+  }
   const demandId = demand.value.id;
-  const isDone = await runAction(() => submitBid(demandId, Math.round(form.priceYuan * 100)));
-  if (!isDone) {
-    toast('投标未提交，请检查报价与方案', 'error');
+  const result = await runAction(() => submitBid(demandId, Math.round(priceYuan * 100)));
+  if (!result) {
+    toast(error.value ?? '投标未提交，请检查报价与方案', 'error');
     return;
   }
   isBidOpen.value = false;

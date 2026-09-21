@@ -12,7 +12,7 @@ import { useToast } from '@/composables/useToast';
 import { formatDateTime } from '@/utils/format';
 import type { IConversationType, IMessageItemType } from '@/types/message';
 
-const { isLoading, run } = useAsync();
+const { isLoading, isSubmitting, error, run, runAction } = useAsync();
 const toast = useToast();
 
 const conversations = ref<IConversationType[]>([]);
@@ -21,6 +21,7 @@ const messages = ref<IMessageItemType[]>([]);
 const draft = ref('');
 const isPeerTyping = ref(false);
 const messageBox = ref<HTMLElement | null>(null);
+let conversationLoadToken = 0;
 
 async function scrollToEnd(): Promise<void> {
   await nextTick();
@@ -30,20 +31,33 @@ async function scrollToEnd(): Promise<void> {
 }
 
 async function loadConversation(conversation: IConversationType): Promise<void> {
+  const token = ++conversationLoadToken;
   activeConversation.value = conversation;
-  messages.value = (await run(() => fetchMessages(conversation.id))) ?? [];
+  isPeerTyping.value = false;
+  const list = await run(() => fetchMessages(conversation.id));
+  if (token !== conversationLoadToken) {
+    return;
+  }
+  messages.value = list ?? [];
   await scrollToEnd();
 }
 
 async function handleSend(): Promise<void> {
-  const content = draft.value;
-  if (!activeConversation.value || !content.trim()) {
+  if (isSubmitting.value) {
     return;
   }
-  const conversationId = activeConversation.value.id;
-  const sent = await run(() => sendMessage(conversationId, content), { skeleton: false });
+  const content = draft.value.trim();
+  if (!activeConversation.value || !content) {
+    return;
+  }
+  const conversation = activeConversation.value;
+  const conversationId = conversation.id;
+  const sent = await runAction(() => sendMessage(conversationId, content));
   if (!sent) {
-    toast('消息包含联系方式，已被平台风控拦截', 'error');
+    toast(error.value ?? '消息发送失败，请稍后重试', 'error');
+    return;
+  }
+  if (activeConversation.value?.id !== conversationId) {
     return;
   }
   messages.value = [...messages.value, sent];
@@ -53,7 +67,7 @@ async function handleSend(): Promise<void> {
   isPeerTyping.value = true;
   const reply = await run(() => fetchPeerReply(conversationId), { skeleton: false });
   isPeerTyping.value = false;
-  if (reply) {
+  if (reply && activeConversation.value?.id === conversationId) {
     messages.value = [...messages.value, reply];
     await scrollToEnd();
   }
@@ -125,9 +139,18 @@ onMounted(async () => {
             v-model="draft"
             placeholder="发送消息…（回车发送）"
             maxlength="500"
+            :disabled="isSubmitting"
             @keydown.enter.prevent="handleSend"
           />
-          <button class="btn btn--primary" @click="handleSend">发送</button>
+          <button
+            class="btn btn--primary"
+            :class="{ 'btn--loading': isSubmitting }"
+            :disabled="isSubmitting"
+            @click="handleSend"
+          >
+            <span v-if="isSubmitting" class="spin" />
+            {{ isSubmitting ? '发送中…' : '发送' }}
+          </button>
         </footer>
       </section>
     </div>
