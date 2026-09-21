@@ -2,6 +2,7 @@ import { request } from '@/api/request';
 import { MAX_CLARIFY_QUESTIONS } from '@/constants';
 import type { IDemandDraftType } from '@/types/demand';
 import type {
+  IQuickRefineResultType,
   IClarifyQuestionType,
   IClarifyAnswerType,
   IDiagnosisItemType,
@@ -17,6 +18,7 @@ import type {
 
 const DIAGNOSE_LATENCY_MS = 900;
 const GENERATE_LATENCY_MS = 1400;
+const QUICK_REFINE_LATENCY_MS = 1100;
 
 function buildUnderstood(draft: IDemandDraftType): string[] {
   const lines = draft.description
@@ -151,6 +153,64 @@ function buildPatches(answers: IClarifyAnswerType[]): IRefinePatchType[] {
       source: 'model',
     },
   ];
+}
+
+/**
+ * 快速细化：不追问，直接按平台默认约定把描述补全，并保留用户原文。
+ * 幂等：已写过的段落不会重复追加，可反复点击。
+ */
+function composeQuickDescription(draft: IDemandDraftType): string {
+  const base = draft.description.trim();
+  const additions: string[] = [];
+
+  if (!base.includes('使用场景')) {
+    additions.push('使用场景：门店立式菜单与小程序电子菜单同步使用，客群以 25–35 岁通勤人群为主。');
+  }
+  if (!base.includes('优先级')) {
+    additions.push('优先级：菜单系统为必须项（需赶在开业前上线），主视觉与源文件规范可适度延后。');
+  }
+  if (!base.includes('修改')) {
+    additions.push('修改约定：每个里程碑含 2 轮修改，超出部分按 ¥150/轮 计费。');
+  }
+  if (!base.includes('交付格式')) {
+    additions.push('交付格式：分层源文件（AI/PSD）+ PDF 印刷稿 + 字体授权清单。');
+  }
+
+  return additions.length > 0 ? [base, ...additions].join('\n') : base;
+}
+
+export function fetchQuickRefine(draft: IDemandDraftType): Promise<IQuickRefineResultType> {
+  return request<IQuickRefineResultType>(() => {
+    const description = composeQuickDescription(draft);
+    const changes: string[] = [];
+
+    if (description !== draft.description.trim()) {
+      changes.push('补全使用场景、优先级、修改约定与交付格式');
+    }
+    if (!draft.acceptance.some((line) => line.includes('实拍'))) {
+      changes.push('新增 3 条可客观判定的验收标准');
+    }
+    if (!draft.deliverables.includes('字体授权清单')) {
+      changes.push('补充 2 项交付物（电子菜单适配图、字体授权清单）');
+    }
+    changes.push('预算未改动，如需按交付物重算请用「深度细化」');
+
+    return {
+      description,
+      acceptance: draft.acceptance.some((line) => line.includes('实拍'))
+        ? []
+        : [
+            '主视觉通过新店空间实拍验证，并出具 1 张效果对比图',
+            '菜单系统覆盖早市/晚市两套价目，且预留会员活动位',
+            '每个里程碑含 2 轮修改，超出按 ¥150/轮 计费',
+          ],
+      deliverables: draft.deliverables.includes('字体授权清单')
+        ? []
+        : ['电子菜单适配图（小程序尺寸）', '字体授权清单'],
+      changes,
+      qualityScore: 86,
+    };
+  }, QUICK_REFINE_LATENCY_MS);
 }
 
 /** 阶段一：解析回显 + 五维诊断 + 澄清问题 */

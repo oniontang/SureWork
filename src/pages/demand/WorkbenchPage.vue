@@ -2,6 +2,7 @@
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import { fetchQuickRefine } from '@/api/ai';
 import { publishDemand } from '@/api/demand';
 import { fetchDemanderOrders, fetchDemanderStats } from '@/api/order';
 import AiRefinePanel from '@/components/AiRefinePanel.vue';
@@ -20,7 +21,7 @@ import {
 } from '@/constants';
 import { useUserStore } from '@/store/user';
 import { isValidAmount } from '@/utils/validate';
-import type { IRefineApplyType } from '@/types/ai';
+import type { IRefineApplyType, IQuickRefineResultType } from '@/types/ai';
 import type { IDemandDraftType } from '@/types/demand';
 import type { IStatItemType } from '@/types/common';
 import type { IOrderType } from '@/types/order';
@@ -57,6 +58,17 @@ const isPublishOpen = ref(false);
 const isRefineOpen = ref(false);
 const qualityScore = ref<number | null>(null);
 const isRefineHintOn = ref(false);
+const isRefining = ref(false);
+const refineResult = ref<IQuickRefineResultType | null>(null);
+const isDiffOpen = ref(false);
+
+/** 细化前的原文快照，用于撤销与 diff 对照 */
+interface IDraftSnapshotType {
+  description: string;
+  deliverables: string[];
+  acceptance: string;
+}
+const originalSnapshot = ref<IDraftSnapshotType | null>(null);
 
 const form = reactive<IPublishFormType>({
   category: 'design',
@@ -95,9 +107,69 @@ const refineDraft = computed<IDemandDraftType>(() => ({
   category: form.category,
 }));
 
+/** 主路径：AI 补全用户已写的内容，直接填回原输入框 */
+async function handleQuickRefine(): Promise<void> {
+  if (isRefining.value) {
+    return;
+  }
+  isRefining.value = true;
+  const snapshot: IDraftSnapshotType = {
+    description: form.description,
+    deliverables: [...form.deliverables],
+    acceptance: form.acceptance,
+  };
+  const result = await run(() => fetchQuickRefine(refineDraft.value), { skeleton: false });
+  isRefining.value = false;
+
+  if (!result) {
+    toast(error.value ?? '细化失败，请稍后重试', 'error');
+    return;
+  }
+
+  // 只保留最早的一份原文，重复细化后撤销仍能回到用户手写内容
+  if (!originalSnapshot.value) {
+    originalSnapshot.value = snapshot;
+  }
+  form.description = result.description;
+  result.deliverables.forEach((item) => {
+    if (!form.deliverables.includes(item)) {
+      form.deliverables.push(item);
+    }
+  });
+  if (result.acceptance.length > 0) {
+    form.acceptance = [form.acceptance.trim(), ...result.acceptance].filter(Boolean).join('\n');
+  }
+  refineResult.value = result;
+  qualityScore.value = result.qualityScore;
+  isRefineHintOn.value = false;
+  toast('AI 已完善需求内容并填入输入框', 'success');
+}
+
+function handleUndoRefine(): void {
+  const snapshot = originalSnapshot.value;
+  if (!snapshot) {
+    return;
+  }
+  form.description = snapshot.description;
+  form.deliverables = [...snapshot.deliverables];
+  form.acceptance = snapshot.acceptance;
+  originalSnapshot.value = null;
+  refineResult.value = null;
+  qualityScore.value = null;
+  isDiffOpen.value = false;
+  toast('已恢复到细化前的内容');
+}
+
 /** 把采纳结果写回表单（AI 不直接覆盖，只按用户采纳的条目回填） */
 function handleApplyRefine(payload: IRefineApplyType): void {
   const { draft } = payload;
+  if (!originalSnapshot.value) {
+    originalSnapshot.value = {
+      description: form.description,
+      deliverables: [...form.deliverables],
+      acceptance: form.acceptance,
+    };
+  }
   if (draft.description) {
     form.description = draft.description;
   }
@@ -112,6 +184,13 @@ function handleApplyRefine(payload: IRefineApplyType): void {
     form.budgetYuan = Math.round(draft.budgetCents / 100);
   }
   qualityScore.value = payload.qualityScore;
+  refineResult.value = {
+    description: form.description,
+    acceptance: [],
+    deliverables: [],
+    changes: [`已按你的选择应用 ${payload.acceptedCount} 条建议`],
+    qualityScore: payload.qualityScore,
+  };
   isRefineHintOn.value = false;
   toast(`已应用 ${payload.acceptedCount} 条 AI 建议，需求质量分 ${payload.qualityScore}`, 'success');
 }
@@ -337,12 +416,29 @@ onMounted(() => {
               <button
                 v-if="canRefine"
                 class="refine-btn"
-                title="AI 会诊断模糊点并生成可采纳的补充建议"
-                @click="isRefineOpen = true"
+                :class="{ 'refine-btn--loading': isRefining }"
+                title="AI 会补全你写的内容并直接填回输入框"
+                @click="handleQuickRefine"
               >
-                ✦ 细化需求
+                <span v-if="isRefining" class="spin" />
+                {{ isRefining ? '完善中…' : '✦ 细化需求' }}
               </button>
             </div>
+            <div v-if="refineResult" class="refine-bar">
+              <header class="refine-bar__head">
+                <b>✓ AI 已完善并填入输入框</b>
+                <span class="tag tag--success">质量分 {{ qualityScore }}</span>
+              </header>
+              <ul class="refine-bar__list">
+                <li v-for="item in refineResult.changes" :key="item">{{ item }}</li>
+              </ul>
+              <div class="refine-bar__ops">
+                <button class="btn btn--ghost btn--sm" @click="isDiffOpen = true">查看改动</button>
+                <button class="btn btn--ghost btn--sm" @click="isRefineOpen = true">继续追问细化</button>
+                <button class="refine-bar__undo" @click="handleUndoRefine">撤销</button>
+              </div>
+            </div>
+
             <p v-if="!canRefine" class="muted field__hint">
               再写 {{ AI_REFINE_MIN_TEXT_LENGTH - form.description.trim().length }} 字，即可让 AI 帮你补全场景与验收标准
             </p>
@@ -389,7 +485,10 @@ onMounted(() => {
               缺少使用场景与验收标准的需求，平均少收 2 份投标；让 AI 先帮你补全再提交。
             </p>
             <div class="refine-hint__ops">
-              <button class="btn btn--primary btn--sm" @click="isRefineOpen = true">去细化</button>
+              <button class="btn btn--primary btn--sm" :disabled="!canRefine" @click="handleQuickRefine">
+                一键补全
+              </button>
+              <button class="btn btn--ghost btn--sm" @click="isRefineOpen = true">逐步细化</button>
               <button class="refine-hint__skip" @click="isRefineHintOn = false">仍要提交</button>
             </div>
           </div>
@@ -411,6 +510,29 @@ onMounted(() => {
     </BaseModal>
 
     <AiRefinePanel v-model:open="isRefineOpen" :draft="refineDraft" @apply="handleApplyRefine" />
+
+    <BaseModal
+      :open="isDiffOpen"
+      title="改动对照"
+      subtitle="左侧为你原来的描述，右侧为 AI 补全后的内容"
+      wide
+      @close="isDiffOpen = false"
+    >
+      <div class="diff">
+        <section class="diff__col">
+          <header><span class="tag tag--plain">细化前</span></header>
+          <pre class="diff__text diff__text--before">{{ originalSnapshot?.description ?? '（无快照）' }}</pre>
+        </section>
+        <section class="diff__col">
+          <header><span class="tag tag--success">已填入输入框</span></header>
+          <pre class="diff__text diff__text--after">{{ form.description }}</pre>
+        </section>
+      </div>
+      <template #footer>
+        <button class="btn btn--ghost" @click="handleUndoRefine">撤销并恢复原文</button>
+        <button class="btn btn--primary" @click="isDiffOpen = false">保留这版</button>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
@@ -559,6 +681,86 @@ onMounted(() => {
 
 .field__textarea textarea {
   padding-bottom: 2.75rem;
+}
+
+.refine-bar {
+  margin-top: $space-3;
+  padding: $space-4;
+  border-radius: $radius-md;
+  border: 0.0625rem solid rgba(46, 125, 91, 0.28);
+  background: rgba(46, 125, 91, 0.06);
+}
+
+.refine-bar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+
+  b {
+    font-size: $fs-base;
+    color: $color-success;
+  }
+}
+
+.refine-bar__list {
+  margin: $space-3 0;
+  padding-left: 1.125rem;
+  list-style: disc;
+  font-size: $fs-sm;
+  line-height: 1.8;
+  color: $color-ink-2;
+}
+
+.refine-bar__ops {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.refine-bar__undo {
+  font-size: $fs-sm;
+  color: $color-ink-3;
+  text-decoration: underline;
+
+  &:hover {
+    color: $color-danger;
+  }
+}
+
+.diff {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-4;
+}
+
+.diff__col {
+  header {
+    margin-bottom: $space-3;
+  }
+}
+
+.diff__text {
+  margin: 0;
+  padding: $space-4;
+  border-radius: $radius-md;
+  font-family: inherit;
+  font-size: $fs-sm;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 22rem;
+  overflow-y: auto;
+
+  &--before {
+    background: $color-panel;
+    color: $color-ink-3;
+  }
+
+  &--after {
+    background: rgba(46, 125, 91, 0.08);
+    color: $color-ink-1;
+  }
 }
 
 .refine-btn {

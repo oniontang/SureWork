@@ -79,3 +79,16 @@ export interface IRefineApplyType {
   qualityScore: number;
   acceptedCount: number;
 }
+
+/** 快速细化结果：直接回填原输入框的完善内容 */
+export interface IQuickRefineResultType {
+  /** 完善后的需求描述（保留用户原文，追加缺失段落） */
+  description: string;
+  /** 建议补充的验收标准条目 */
+  acceptance: string[];
+  /** 建议补充的交付物 */
+  deliverables: string[];
+  /** 本次做了哪些补全，用于结果条展示 */
+  changes: string[];
+  qualityScore: number;
+}
