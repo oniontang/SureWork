@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f1ea">
+<title>如约 SureWork · 企业 × OPC 接单平台 · PC版原型</title>
+<style>
+/* finesse · register=product · A=warm-paper+flame#E4572E · B=system-800/400
+ * C=topnav+KPI-tiles+two-col+tables · D=modal+stagger-rise · E=双端接单平台PC工作台
+ * SOUL=6 SPECTACLE=2 DENSITY=8 */
+:root{
+  --page:#f5f1ea; --bg:#fffdf9; --panel-2:#faf6f0; --border:rgba(43,28,16,.09);
+  --ink-1:#221812; --ink-2:#5a4c3f; --ink-3:#8d7c69;
+  --accent:#E4572E; --accent-deep:#C2431F; --accent-soft:rgba(228,87,46,.10);
+  --on-accent:#fff; --glow:rgba(228,87,46,.30);
+  --up:#2E7D5B; --up-soft:rgba(46,125,91,.12);
+  --down:#9C3B2E; --down-soft:rgba(156,59,46,.10);
+  --warn:#B77A16; --warn-soft:rgba(183,122,22,.12);
+  --teal:#2E6B63; --teal-soft:rgba(46,107,99,.10);
+  --shadow:0 1px 3px rgba(60,38,20,.05);
+  --shadow-lg:0 24px 60px -30px rgba(60,38,20,.30);
+  --ease:cubic-bezier(.32,.86,.28,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:clip}
+body{background:var(--page);color:var(--ink-1);min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;border:0;background:none;color:inherit;cursor:pointer;font-size:14px}
+input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink-1)}
+a{color:inherit;text-decoration:none;cursor:pointer}
+
+/* ===== 顶部导航 ===== */
+.topnav{position:sticky;top:0;z-index:50;height:64px;
+  background:rgba(255,252,246,.92);backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid var(--border)}
+.nav-in{max-width:1200px;margin:0 auto;height:100%;padding:0 32px;
+  display:flex;align-items:center;gap:28px}
+.logo{font-size:20px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+.logo i{width:26px;height:26px;border-radius:9px;background:linear-gradient(135deg,#E4572E,#C2431F);
+  display:grid;place-items:center;font-style:normal;color:#fff;font-size:14px;font-weight:800}
+.logo span em{font-style:normal;font-size:10.5px;color:var(--ink-3);font-weight:500;display:block;line-height:1;margin-top:2px}
+.navlinks{display:flex;gap:4px;flex:1}
+.navlinks a{padding:8px 14px;border-radius:10px;font-weight:600;color:var(--ink-2);transition:all .2s var(--ease);display:none}
+.navlinks a:hover{background:var(--panel-2);color:var(--ink-1)}
+.navlinks a.on{background:var(--accent-soft);color:var(--accent-deep)}
+body[data-role=d] .nl-d{display:inline-block}
+body[data-role=p] .nl-p{display:inline-block}
+.nav-right{display:flex;align-items:center;gap:14px}
+.roleseg{display:flex;background:var(--panel-2);border:1px solid var(--border);border-radius:99px;padding:3px;gap:2px}
+.roleseg button{padding:6px 14px;border-radius:99px;font-size:12.5px;font-weight:600;color:var(--ink-3);transition:all .22s var(--ease)}
+.roleseg button.on{background:var(--accent);color:#fff;box-shadow:0 4px 10px -3px var(--glow)}
+.roleseg button:not(.on):hover{color:var(--ink-1)}
+
+/* ===== 布局与通用 ===== */
+.wrap{max-width:1200px;margin:0 auto;padding:28px 32px 80px}
+.view{display:none;scroll-margin-top:88px}
+.view.active{display:block}
+.view.active>*{animation:rise .55s var(--ease) both calc(var(--i,0)*60ms)}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.card{background:var(--bg);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+.pad{padding:20px 22px}
+h2.pg-t{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.pg-sub{font-size:13px;color:var(--ink-3);margin-top:4px}
+.h-row{display:flex;align-items:baseline;justify-content:space-between;margin:26px 2px 12px}
+.h-row b{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.h-row span{font-size:12.5px;color:var(--ink-3);cursor:pointer}
+.h-row span:hover{color:var(--accent-deep)}
+.cols{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 18px;
+  border-radius:11px;font-weight:700;font-size:13.5px;white-space:nowrap;
+  transition:transform .16s var(--ease),filter .16s}
+.btn:active{transform:scale(.97);filter:brightness(.93)}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:0 8px 18px -8px var(--glow)}
+.btn.primary:hover{background:var(--accent-deep)}
+.btn.ghost{background:var(--panel-2);color:var(--ink-2);border:1px solid var(--border)}
+.btn.ghost:hover{background:#f3ede3}
+.btn.lg{height:46px;padding:0 26px;font-size:15px;border-radius:13px}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:7px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.tag.acc{background:var(--accent-soft);color:var(--accent-deep)}
+.tag.up{background:var(--up-soft);color:var(--up)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.teal{background:var(--teal-soft);color:var(--teal)}
+.tag.plain{background:var(--panel-2);color:var(--ink-2);border:1px solid var(--border)}
+.chip{display:inline-flex;align-items:center;padding:6px 14px;border-radius:99px;font-size:12.5px;font-weight:600;
+  background:var(--bg);color:var(--ink-2);border:1px solid var(--border);cursor:pointer;transition:all .18s var(--ease)}
+.chip:hover{border-color:var(--accent);color:var(--accent-deep)}
+.chip.on{background:var(--accent);color:#fff;border-color:transparent}
+.chiprow{display:flex;gap:8px;flex-wrap:wrap}
+.price{font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3);font-size:12.5px}
+.avatar{border-radius:50%;display:grid;place-items:center;flex:none;font-weight:800;color:#fff}
+.av-1{background:linear-gradient(135deg,#E4572E,#C2431F)}
+.av-2{background:linear-gradient(135deg,#2E6B63,#1E4B45)}
+.av-3{background:linear-gradient(135deg,#B77A16,#8a5c0e)}
+.av-4{background:linear-gradient(135deg,#5a4c3f,#3b352d)}
+
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{padding:18px 20px}
+.kpi .l{font-size:12.5px;color:var(--ink-3);display:flex;align-items:center;justify-content:space-between}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:12px;margin-top:4px;color:var(--ink-3)}
+.kpi .d b{color:var(--up);font-weight:700}
+.kpi.hl{background:linear-gradient(135deg,#E4572E,#C2431F);border:none;color:#fff}
+.kpi.hl .l,.kpi.hl .d{color:rgba(255,240,230,.8)}
+.kpi.hl .d b{color:#ffd9c4}
+
+/* 表格 */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:12px;font-weight:600;color:var(--ink-3);text-align:left;padding:12px 14px;border-bottom:1px solid var(--border)}
+.tbl td{padding:15px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr{transition:background .15s;cursor:pointer}
+.tbl tbody tr:hover{background:var(--panel-2)}
+.tbl .t{font-weight:700;font-size:13.5px;letter-spacing:-.01em}
+
+/* 里程碑时间线 */
+.ms{position:relative;padding:0 0 24px 30px}
+.ms::before{content:"";position:absolute;left:8px;top:20px;bottom:-4px;width:2px;background:var(--border)}
+.ms:last-child::before{display:none}
+.ms .nd{position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:var(--bg)}
+.ms.done .nd{background:var(--up);border-color:var(--up)}
+.ms.now .nd{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.ms .tt{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ms .st{font-size:12.5px;margin-top:4px;color:var(--ink-3)}
+.ms.now .st{color:var(--accent-deep);font-weight:600}
+.countdown{display:inline-flex;align-items:center;gap:5px;background:var(--warn-soft);color:var(--warn);
+  font-weight:700;font-size:12px;padding:4px 11px;border-radius:8px;margin-top:9px;font-variant-numeric:tabular-nums}
+
+/* 托管说明 */
+.escrow{display:flex;gap:12px;align-items:flex-start;background:var(--teal-soft);
+  border:1px solid rgba(46,107,99,.18);border-radius:14px;padding:15px 16px}
+.escrow svg{width:22px;height:22px;flex:none;stroke:var(--teal);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.escrow p{font-size:12.5px;color:var(--teal);line-height:1.7}
+.escrow b{color:var(--teal)}
+
+/* 表单 */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.field label em{font-style:normal;color:var(--accent-deep);font-weight:400;font-size:12px;margin-left:6px}
+.field input,.field textarea,.field select{width:100%;background:var(--bg);border:1px solid var(--border);
+  border-radius:11px;padding:11px 13px;outline:none;transition:border .2s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{min-height:80px;resize:vertical;line-height:1.65}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hintbox{background:var(--panel-2);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--ink-3);line-height:1.7}
+
+/* 信用环 */
+.ring{position:relative;width:110px;height:110px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring .val{position:absolute;inset:0;display:grid;place-items:center}
+.ring .val div{text-align:center}
+.ring .val b{font-size:28px;font-weight:800;letter-spacing:-.02em;display:block;line-height:1.1}
+.ring .val span{font-size:11px;color:var(--ink-3)}
+
+/* 作品集 */
+.works{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.work{border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--bg);transition:transform .2s var(--ease),box-shadow .2s}
+.work:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.work .art{height:120px;position:relative}
+.work .art::after{content:"";position:absolute;right:18px;bottom:-22px;width:64px;height:64px;border-radius:50%;opacity:.5}
+.work .cap{padding:11px 14px;font-size:13.5px;font-weight:700}
+.work .cap span{display:block;font-size:11.5px;color:var(--ink-3);font-weight:500;margin-top:2px}
+.w1 .art{background:linear-gradient(120deg,#E4572E,#F0A06B)}.w1 .art::after{background:#fff3e8}
+.w2 .art{background:linear-gradient(120deg,#2E6B63,#7FB5AD)}.w2 .art::after{background:#e8f2f0}
+.w3 .art{background:linear-gradient(120deg,#B77A16,#E8C687)}.w3 .art::after{background:#faf0da}
+.w4 .art{background:linear-gradient(120deg,#5a4c3f,#A39885)}.w4 .art::after{background:#efe9df}
+.w5 .art{background:linear-gradient(120deg,#C2431F,#E8956B)}.w5 .art::after{background:#ffe9dc}
+.w6 .art{background:linear-gradient(120deg,#1E4B45,#5F968D)}.w6 .art::after{background:#dcebe8}
+
+/* 统计行 */
+.statline{display:flex;text-align:center}
+.statline>div{flex:1;padding:0 8px}
+.statline>div+div{border-left:1px solid var(--border)}
+.statline b{font-size:18px;font-weight:800;display:block;letter-spacing:-.02em}
+.statline span{font-size:11.5px;color:var(--ink-3)}
+
+/* 消息中心 */
+.im{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:stretch;height:calc(100vh - 210px);min-height:520px}
+.im-list{overflow-y:auto;padding:8px}
+.conv{display:flex;gap:11px;align-items:center;padding:12px 14px;border-radius:12px;cursor:pointer;transition:background .15s}
+.conv:hover{background:var(--panel-2)}
+.conv.on{background:var(--accent-soft)}
+.conv .avatar{width:40px;height:40px;font-size:14px}
+.conv .t{font-size:13.5px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.conv .t time{font-size:11px;color:var(--ink-3);font-weight:500}
+.conv .m{font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.im-chat{display:flex;flex-direction:column;overflow:hidden}
+.chat-hd{flex:none;display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border)}
+.chat-hd .avatar{width:38px;height:38px;font-size:13px}
+.chat-hd b{font-size:15px}
+.msgs{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:14px;background:var(--panel-2)}
+.msg{display:flex;gap:10px;max-width:68%}
+.msg .avatar{width:32px;height:32px;font-size:11.5px}
+.msg .bub{background:var(--bg);border:1px solid var(--border);border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:13.5px;line-height:1.6}
+.msg.me{align-self:flex-end;flex-direction:row-reverse}
+.msg.me .bub{background:var(--accent);color:#fff;border-color:transparent;border-radius:14px 4px 14px 14px}
+.syscard{align-self:center;max-width:80%;background:var(--bg);border:1px dashed var(--border);
+  border-radius:11px;padding:9px 15px;font-size:12px;color:var(--ink-3);text-align:center;line-height:1.6}
+.msgcard{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 15px;min-width:240px}
+.msgcard .t{font-size:13.5px;font-weight:700}
+.msgcard .m{font-size:12px;color:var(--ink-3);margin-top:5px;display:flex;gap:12px;flex-wrap:wrap}
+.chat-bar{flex:none;display:flex;gap:10px;padding:13px 18px;border-top:1px solid var(--border);background:var(--bg)}
+.chat-bar input{flex:1;height:42px;border-radius:11px;border:1px solid var(--border);background:var(--page);padding:0 15px;outline:none}
+.chat-bar input:focus{border-color:var(--accent)}
+
+/* 大厅需求卡片 */
+.btn.sm{height:34px;padding:0 14px;font-size:12.5px;border-radius:9px}
+.hallgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dcard{display:flex;flex-direction:column;padding:18px 20px;
+  transition:transform .2s var(--ease),box-shadow .2s;cursor:default}
+.dcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.dcard .t{font-size:15px;font-weight:800;letter-spacing:-.01em;line-height:1.5}
+.dcard .meta{display:flex;gap:12px;margin-top:9px;font-size:12px;color:var(--ink-3);flex-wrap:wrap}
+.dcard .desc{margin-top:10px;font-size:13px;color:var(--ink-2);line-height:1.65;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.dcard .ft{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-top:14px;padding-top:13px;border-top:1px solid var(--border)}
+.dcard .ft .price{font-size:18px}
+.dcard .ft .price em{font-style:normal;font-size:11px;color:var(--ink-3);font-weight:500;margin-left:4px}
+.dcard.lock{background:var(--panel-2);border-style:dashed;box-shadow:none}
+.dcard.lock .desc{color:var(--ink-3)}
+
+/* 大厅推荐位 */
+.halltop{display:grid;grid-template-columns:1.55fr 1fr;align-items:stretch;gap:14px}
+.hallside{display:flex;flex-direction:column;gap:14px;min-height:0}
+.banner-main{position:relative;height:100%;border-radius:18px;overflow:hidden;color:#fff;min-height:252px;
+  background:linear-gradient(118deg,#B93A18 0%,#E4572E 48%,#EE8A52 100%);
+  box-shadow:0 18px 40px -18px var(--glow)}
+.banner-main::before{content:"";position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.10)}
+.banner-main::after{content:"";position:absolute;right:40px;bottom:-90px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.08)}
+.banner-slide{position:absolute;inset:0;padding:32px 36px;display:flex;flex-direction:column;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .45s var(--ease);z-index:2}
+.banner-slide.on{opacity:1;pointer-events:auto}
+.b-eyebrow{display:inline-flex;align-items:center;gap:7px;width:fit-content;font-size:12px;font-weight:700;
+  background:rgba(255,255,255,.18);padding:5px 13px;border-radius:99px}
+.banner-slide h3{font-size:29px;font-weight:800;letter-spacing:-.02em;margin-top:14px;line-height:1.22}
+.banner-slide p{font-size:13px;margin-top:9px;opacity:.92;max-width:470px;line-height:1.7}
+.brow{display:flex;gap:12px;align-items:center;margin-top:16px}
+.brow .btn{background:#fff;color:var(--accent-deep);box-shadow:none}
+.brow .bdate{font-size:12px;opacity:.85}
+.banner-dots{position:absolute;right:24px;bottom:18px;display:flex;gap:6px;z-index:5}
+.banner-dots button{width:7px;height:7px;border-radius:99px;background:rgba(255,255,255,.45);padding:0;transition:all .25s}
+.banner-dots button.on{width:20px;background:#fff}
+.banner-sub{position:relative;border-radius:18px;overflow:hidden;color:#fff;padding:20px 22px;
+  background:radial-gradient(130% 170% at 88% -10%,#5a2c17 0%,#241812 55%,#17100c 100%);
+  border:1px solid rgba(255,230,210,.10)}
+.banner-sub .bmark{width:34px;height:34px;border-radius:10px;background:var(--accent);display:grid;place-items:center;font-weight:800;font-size:15px;margin-bottom:12px}
+.banner-sub h4{font-size:17px;font-weight:800;letter-spacing:-.01em}
+.banner-sub p{font-size:12px;color:rgba(255,235,220,.72);margin-top:6px;line-height:1.6}
+.banner-sub .brow{margin-top:12px}
+.banner-sub .brow .btn{background:rgba(255,255,255,.14);color:#fff}
+.noticecard{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:18px;padding:15px 20px;box-shadow:var(--shadow)}
+.noticecard .nh{display:flex;justify-content:space-between;align-items:center;padding-bottom:4px}
+.noticecard .nh b{font-size:14.5px}
+.noticecard .nh span{font-size:12px;color:var(--ink-3);cursor:pointer}
+.noticecard .nh span:hover{color:var(--accent-deep)}
+.noticeitem{display:flex;gap:9px;align-items:center;padding:11px 0}
+.noticeitem+.noticeitem{border-top:1px solid var(--border)}
+.noticeitem .ntext{flex:1;min-width:0;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.noticeitem .ntext:hover{color:var(--accent-deep)}
+.noticeitem time{flex:none;font-size:11.5px;color:var(--ink-3)}
+
+/* 可组合筛选栏 */
+.fhead{display:flex;align-items:center;gap:10px}
+.fhead .ftitle{font-size:14.5px;font-weight:800;letter-spacing:-.01em}
+.fhead .ftags{flex:1;min-width:0}
+.fswitch{flex:none;font-size:12.5px;font-weight:600;color:var(--accent-deep);background:var(--accent-soft);
+  padding:7px 14px;border-radius:99px;transition:all .18s var(--ease)}
+.fswitch:hover{background:rgba(228,87,46,.18)}
+.filterbar.folded .fbody{display:none}
+.filterbar{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.fgroup{display:flex;align-items:flex-start;gap:12px}
+.fgroup+.fgroup{border-top:1px dashed var(--border);padding-top:10px}
+.flabel{flex:none;font-size:12px;font-weight:600;color:var(--ink-3);width:36px;line-height:31px}
+.fgroup .chiprow{gap:8px}
+.fresult{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:12.5px;color:var(--ink-3);flex-wrap:wrap}
+.ftags{display:inline-flex;gap:8px;flex-wrap:wrap}
+.ftag{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent-deep);
+  font-weight:600;font-size:12px;padding:3px 11px;border-radius:99px}
+.ftag button{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(194,67,31,.16);color:var(--accent-deep);font-size:9px;line-height:1;padding:0}
+.ftag button:hover{background:rgba(194,67,31,.3)}
+.fclear{font-size:12px;color:var(--ink-3);text-decoration:underline dotted;cursor:pointer}
+.fclear:hover{color:var(--accent-deep)}
+.fcount{margin-left:auto}
+.fcount b{color:var(--accent-deep);font-size:14px}
+.fsort{flex:none;margin-left:auto}
+.fsort select{border:1px solid var(--border);border-radius:9px;padding:7px 10px;background:var(--bg);
+  font-size:12.5px;color:var(--ink-2);outline:none;cursor:pointer}
+
+/* 人才推荐位（我的发布） */
+.talent-wrap{border-radius:18px;padding:18px 20px;border:1px solid var(--border);
+  background:linear-gradient(160deg,rgba(228,87,46,.09) 0%,rgba(228,87,46,.03) 42%,transparent 78%)}
+.talent-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.talent-head b{font-size:15.5px;font-weight:800;letter-spacing:-.01em}
+.talent-head p{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.talent-head span{font-size:12.5px;font-weight:600;color:var(--accent-deep);cursor:pointer;white-space:nowrap}
+.talent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.talent{display:flex;flex-direction:column;gap:9px;padding:16px;transition:transform .2s var(--ease),box-shadow .2s}
+.talent:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.talent .who{display:flex;gap:10px;align-items:center}
+.talent .who b{font-size:14.5px}
+.talent .tags{display:flex;gap:6px;flex-wrap:wrap}
+.talent .reason{font-size:12.5px;line-height:1.65;color:var(--ink-2);flex:1;margin:0}
+.talent .metrics{display:flex;gap:14px;padding-top:10px;border-top:1px solid var(--border);margin:0}
+.talent .metrics div{display:flex;flex-direction:column}
+.talent .metrics dt{font-size:10.5px;color:var(--ink-3)}
+.talent .metrics dd{font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.talent .ops{display:flex;gap:8px}
+
+/* 弹窗 */
+.scrim{position:fixed;inset:0;z-index:90;background:rgba(24,15,8,.45);backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .28s ease}
+.scrim.on{opacity:1;pointer-events:auto}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.97);z-index:95;
+  width:min(880px,92vw);max-height:88vh;overflow-y:auto;background:var(--bg);border-radius:20px;
+  box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all .3s var(--ease);scrollbar-width:none}
+.modal::-webkit-scrollbar{width:0}
+.modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.modal.narrow{width:min(520px,92vw)}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 26px 0}
+.modal-hd h3{font-size:18px;font-weight:800;letter-spacing:-.01em}
+.modal-hd .sub{font-size:12.5px;color:var(--ink-3);margin-top:3px}
+.modal-hd .x{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--panel-2);color:var(--ink-3);transition:all .18s}
+.modal-hd .x:hover{background:var(--accent-soft);color:var(--accent-deep)}
+.modal-bd{padding:20px 26px 26px}
+.modal-ft{display:flex;gap:12px;justify-content:flex-end;padding:0 26px 26px}
+.modal.two{display:grid;grid-template-columns:1fr 300px}
+.modal.two .aside{background:var(--panel-2);border-left:1px solid var(--border);padding:20px 22px;border-radius:0 20px 20px 0}
+
+/* 星级 */
+.starrow{display:flex;align-items:center;justify-content:space-between;padding:11px 0}
+.starrow+.starrow{border-top:1px solid var(--border)}
+.starrow span{font-size:13.5px;font-weight:600}
+.stars{display:flex;gap:5px}
+.stars button{width:28px;height:28px;display:grid;place-items:center;transition:transform .15s}
+.stars button:hover{transform:scale(1.15)}
+.stars svg{width:20px;height:20px}
+.st-off svg{fill:var(--panel-2);stroke:var(--ink-3)}
+.st-on svg{fill:var(--accent);stroke:var(--accent)}
+
+/* Toast */
+.toast{position:fixed;left:50%;top:78px;transform:translate(-50%,-10px);z-index:120;
+  background:rgba(34,24,18,.92);color:#fff;font-size:13px;font-weight:600;padding:11px 22px;border-radius:12px;
+  opacity:0;pointer-events:none;transition:all .3s var(--ease);max-width:70vw}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* CTA横幅 */
+.banner{display:flex;align-items:center;justify-content:space-between;border-radius:18px;padding:22px 26px;color:#fff;
+  background:linear-gradient(120deg,#E4572E 0%,#D14A22 55%,#B93A18 100%);box-shadow:0 16px 36px -16px var(--glow)}
+.banner b{font-size:19px;font-weight:800;letter-spacing:-.01em;display:block}
+.banner p{font-size:12.5px;opacity:.86;margin-top:5px}
+.banner .btn{background:rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(4px)}
+.banner .btn:hover{background:rgba(255,255,255,.28)}
+
+/* 头像下拉与账号设置 */
+.avatar-wrap{position:relative}
+.avatar-btn{border-radius:50%;transition:transform .18s var(--ease)}
+.avatar-btn:active{transform:scale(.92)}
+.menu{position:absolute;right:0;top:calc(100% + 10px);width:230px;background:var(--bg);
+  border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);
+  padding:8px;opacity:0;pointer-events:none;transform:translateY(-6px);transition:all .22s var(--ease);z-index:60}
+.menu.on{opacity:1;pointer-events:auto;transform:none}
+.menu-hd{padding:9px 12px 10px;border-bottom:1px solid var(--border);margin-bottom:6px;display:flex;gap:10px;align-items:center}
+.menu-hd .avatar{width:34px;height:34px;font-size:12px}
+.menu-hd b{font-size:13.5px;display:block;line-height:1.3}
+.menu-hd span{font-size:11px;color:var(--ink-3)}
+.menu-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:9px;
+  font-size:13.5px;font-weight:600;color:var(--ink-2);text-align:left;transition:background .15s}
+.menu-item:hover{background:var(--panel-2);color:var(--ink-1)}
+.menu-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.menu-item.danger{color:var(--down)}
+.menu-item.danger:hover{background:var(--down-soft)}
+.menu .m-d,.menu .m-p{display:none}
+body[data-role=d] .menu .m-d{display:flex}
+body[data-role=p] .menu .m-p{display:flex}
+.menu-sep{height:1px;background:var(--border);margin:6px 4px}
+/* 开关 */
+.switch{width:40px;height:23px;border-radius:99px;background:#d8cfc0;position:relative;flex:none;transition:background .2s;cursor:pointer;border:0;padding:0}
+.switch::after{content:"";position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .22s var(--ease)}
+.switch.on{background:var(--up)}
+.switch.on::after{transform:translateX(17px)}
+/* 设置行 */
+.setrow{display:flex;align-items:center;gap:14px;padding:15px 0}
+.setrow+.setrow{border-top:1px solid var(--border)}
+.setrow .t{font-size:13.5px;font-weight:700}
+.setrow .m{font-size:12px;color:var(--ink-3);margin-top:2px;line-height:1.6}
+.setrow .end{margin-left:auto;display:flex;align-items:center;gap:10px;flex:none}
+.tag.ok{background:var(--up-soft);color:var(--up)}
+.setgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+
+/* 骨架屏与加载态 */
+.view.loading>*:not(.skel){opacity:0!important;animation:none!important}
+.skel{display:flex;flex-direction:column;gap:14px;min-height:400px}
+.sk{border-radius:12px;background:linear-gradient(100deg,#ece4d6 40%,#f8f3ea 50%,#ece4d6 60%);
+  background-size:220% 100%;animation:shimmer 1.1s linear infinite}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-100% 0}}
+.sk.kpi{height:96px}.sk.banner{height:240px}.sk.card{height:130px}.sk.card.tall{height:300px}
+.sk.t{height:26px;width:210px;margin:6px 0}.sk.bar{height:44px}
+.skgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.skgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* 滚动渐入 */
+.io{opacity:0;transform:translateY(16px);transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.io.inview{opacity:1;transform:none}
+.dcard.io.inview{transition:opacity .55s var(--ease),transform .22s var(--ease),box-shadow .2s}
+/* 按钮 loading */
+.btn.loading{opacity:.72;pointer-events:none}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid transparent;border-top-color:currentColor;
+  border-right-color:currentColor;display:inline-block;vertical-align:-2px;animation:rot .7s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+/* 聊天输入中 */
+.typing{display:inline-flex;gap:4px;align-items:center;min-width:60px}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--ink-3);animation:blink 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,70%,100%{opacity:.3;transform:translateY(0)}35%{opacity:1;transform:translateY(-3px)}}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important;animation-delay:0ms!important}
+}
+</style>
+</head>
+<body data-role="d">
+
+<header class="topnav">
+  <div class="nav-in">
+    <a class="logo"><i>约</i><span>如约<em>SureWork · OPC 接单平台</em></span></a>
+    <nav class="navlinks">
+      <a class="nl-d on" data-nav="d-home" onclick="showView('d-home')">工作台</a>
+      <a class="nl-d" data-nav="d-orders" onclick="showView('d-orders')">我的发布</a>
+      <a class="nl-d" data-nav="d-bids" onclick="showView('d-bids')">投标管理</a>
+      <a class="nl-p" data-nav="p-hall" onclick="showView('p-hall')">抢单大厅</a>
+      <a class="nl-p" data-nav="p-orders" onclick="showView('p-orders')">接单管理</a>
+      <a class="nl-p" data-nav="p-me" onclick="showView('p-me')">我的主页</a>
+      <a class="nl-p" data-nav="p-wallet" onclick="showView('p-wallet')">钱包</a>
+      <a data-nav="chat" onclick="showView('chat')">消息</a>
+    </nav>
+    <div class="nav-right">
+      <button class="btn primary" id="pubBtn" onclick="openModal('m-publish')">＋ 发布需求</button>
+      <div class="roleseg">
+        <button id="rs-d" class="on" onclick="setRole('d')">需求方</button>
+        <button id="rs-p" onclick="setRole('p')">从业者</button>
+      </div>
+      <div class="avatar-wrap">
+        <button class="avatar av-1 avatar-btn" style="width:36px;height:36px;font-size:13px" onclick="toggleMenu(event)" aria-label="个人中心">唐</button>
+        <div class="menu" id="userMenu">
+          <div class="menu-hd">
+            <span class="avatar av-1">唐</span>
+            <div class="m-d"><b>唐总 · 山野咖啡品牌部</b><span>认证企业 · L2</span></div>
+            <div class="m-p"><b>林一舟 · 品牌视觉设计师</b><span>认证OPC · L2 · 信用 912</span></div>
+          </div>
+          <button class="menu-item m-d" onclick="closeMenu();showView('d-settings')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>账号设置与认证</button>
+          <button class="menu-item m-d" onclick="closeMenu();showView('d-wallet')"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>资金工作台</button>
+          <button class="menu-item m-p" onclick="closeMenu();showView('p-settings')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>账号设置与认证</button>
+          <button class="menu-item m-p" onclick="closeMenu();showView('p-me')"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>编辑我的主页</button>
+          <button class="menu-item m-p" onclick="closeMenu();showView('p-wallet')"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>我的钱包</button>
+          <div class="menu-sep"></div>
+          <button class="menu-item" onclick="toast('演示原型：通知偏好设置')"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>通知偏好</button>
+          <button class="menu-item danger" onclick="closeMenu();toast('演示原型：退出登录（需二次确认）')"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>退出登录</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===== 需求方 · 工作台 ===== -->
+  <section class="view active" id="d-home">
+    <div style="--i:0;display:flex;align-items:flex-end;justify-content:space-between">
+      <div><h2 class="pg-t">下午好，唐总</h2><p class="pg-sub">山野咖啡品牌部 · <span class="tag acc">认证企业</span> · 3 家新店 11 月开业</p></div>
+      <span class="muted">上次登录 09/19 14:20 · 安全状态正常</span>
+    </div>
+    <div class="kpis" style="--i:1;margin-top:20px">
+      <div class="card kpi hl"><div class="l">进行中订单</div><div class="v">2</div><div class="d">1 个里程碑待你验收</div></div>
+      <div class="card kpi"><div class="l">托管中资金</div><div class="v">¥6,800</div><div class="d">持牌机构托管 · 验收后放款</div></div>
+      <div class="card kpi"><div class="l">本月支出</div><div class="v">¥12,400</div><div class="d">较上月 <b>+18%</b></div></div>
+      <div class="card kpi"><div class="l">待处理</div><div class="v">3</div><div class="d">验收 1 · 投标筛选 1 · 合同 1</div></div>
+    </div>
+    <div class="banner" style="--i:2;margin-top:20px">
+      <div><b>把下一个需求交给认证 OPC</b><p>结构化发单 · 机审+人审约 2 小时 · 平均当日收到 5+ 份投标 · 全程资金托管</p></div>
+      <button class="btn lg" onclick="openModal('m-publish')">发布需求 →</button>
+    </div>
+    <div class="h-row" style="--i:3"><b>进行中的订单</b><span onclick="showView('d-orders')">全部发布 ›</span></div>
+    <div class="card" style="--i:4;overflow:hidden">
+      <table class="tbl">
+        <thead><tr><th>订单</th><th>从业者</th><th>金额</th><th>进度</th><th>状态</th><th></th></tr></thead>
+        <tbody>
+          <tr onclick="showView('d-order')">
+            <td><div class="t">品牌视觉升级 · 主视觉+菜单系统</div><div class="muted">编号 RW-2609-0187 · 里程碑 2/3</div></td>
+            <td><div style="display:flex;gap:9px;align-items:center"><span class="avatar av-1" style="width:30px;height:30px;font-size:11px">林</span>林一舟 <span class="tag acc">认证OPC</span></div></td>
+            <td class="price">¥6,800</td>
+            <td style="width:160px"><div style="height:6px;border-radius:99px;background:var(--panel-2);overflow:hidden"><i style="display:block;width:66%;height:100%;background:var(--accent);border-radius:99px"></i></div><div class="muted" style="margin-top:5px">66% · M2 待验收</div></td>
+            <td><span class="tag warn">待验收</span></td>
+            <td><button class="btn primary" onclick="event.stopPropagation();showView('d-order')">去验收</button></td>
+          </tr>
+          <tr onclick="toast('演示原型：打开小红书代运营订单')">
+            <td><div class="t">小红书图文代运营 · 月度</div><div class="muted">编号 RW-2609-0142 · 里程碑 1/4</div></td>
+            <td><div style="display:flex;gap:9px;align-items:center"><span class="avatar av-2" style="width:30px;height:30px;font-size:11px">周</span>周小蔓 <span class="tag acc">认证OPC</span></div></td>
+            <td class="price">¥8,000</td>
+            <td><div style="height:6px;border-radius:99px;background:var(--panel-2);overflow:hidden"><i style="display:block;width:25%;height:100%;background:var(--accent);border-radius:99px"></i></div><div class="muted" style="margin-top:5px">25% · M1 进行中</div></td>
+            <td><span class="tag teal">进行中</span></td>
+            <td><button class="btn ghost" onclick="event.stopPropagation()">查看</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="h-row" style="--i:5"><b>我的需求</b><span>管理全部 ›</span></div>
+    <div style="--i:6;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="card pad" onclick="showView('d-bids')" style="cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b style="font-size:14.5px">抖音短视频 15 条 · 剪辑+脚本</b><span class="tag acc">选人中</span>
+        </div>
+        <div class="muted" style="margin-top:7px">预算 ¥4,000–6,000 · 周期 3 周 · 已收 5 份投标，48 小时答复窗口剩 31 小时</div>
+      </div>
+      <div class="card pad" style="cursor:pointer" onclick="toast('演示原型：打开已完成需求')">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <b style="font-size:14.5px">门店菜单重设计</b><span class="tag up">已完成</span>
+        </div>
+        <div class="muted" style="margin-top:7px">成交价 ¥1,800 · 双方已互评 · 14 天售后窗口剩余 6 天</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 需求方 · 订单列表 ===== -->
+  <section class="view" id="d-orders">
+    <div style="--i:0"><h2 class="pg-t">我的发布</h2><p class="pg-sub">共 4 个发布项目 · 需求匹配与履约进度集中查看 · 全程托管与留痕</p></div>
+    <div class="talent-wrap" style="--i:1;margin-top:16px">
+      <div class="talent-head">
+        <div>
+          <b>为你推荐的优质 OPC 与团队</b>
+          <p>按你的品类、预算档与历史合作智能匹配 · 邀约后走同一份电子合同与资金托管</p>
+        </div>
+        <span onclick="toast('演示原型：打开优质 OPC 榜单')">查看全部榜单 ›</span>
+      </div>
+      <div class="talent-grid">
+      <article class="card talent">
+        <div class="who"><span class="avatar av-1" style="width:40px;height:40px;font-size:14px">林</span>
+          <div><div style="display:flex;gap:6px;align-items:center"><b>林一舟</b><span class="tag up">复购</span></div><div class="muted">品牌视觉设计师 · 7 年</div></div></div>
+        <div class="tags"><span class="tag acc">认证OPC · L2</span><span class="tag plain">独立从业者</span><span class="tag up">信用 912</span></div>
+        <div class="tags"><span class="tag plain">品牌VI</span><span class="tag plain">菜单/物料</span><span class="tag plain">包装</span></div>
+        <p class="reason">与你合作 3 次，本月还有 2 席档期，可直接定向邀约。</p>
+        <dl class="metrics"><div><dt>完单</dt><dd>47</dd></div><div><dt>好评率</dt><dd>98%</dd></div><div><dt>报价</dt><dd>¥800–3,000/项</dd></div></dl>
+        <div class="ops"><button class="btn primary sm" onclick="toast('已向 林一舟 发出邀约，对方确认后可直接派单')">邀约接单</button><button class="btn ghost sm" onclick="toast('已收藏，可在收藏的 OPC 中一键派单')">收藏</button></div>
+      </article>
+      <article class="card talent">
+        <div class="who"><span class="avatar av-2" style="width:40px;height:40px;font-size:14px">周</span>
+          <div><div style="display:flex;gap:6px;align-items:center"><b>周小蔓</b><span class="tag up">复购</span></div><div class="muted">短视频剪辑与内容运营 · 4 年</div></div></div>
+        <div class="tags"><span class="tag acc">认证OPC · L2</span><span class="tag plain">独立从业者</span><span class="tag up">信用 938</span></div>
+        <div class="tags"><span class="tag plain">短视频</span><span class="tag plain">脚本</span><span class="tag plain">小红书</span></div>
+        <p class="reason">正在承接你的小红书代运营，开业季素材可一并排期。</p>
+        <dl class="metrics"><div><dt>完单</dt><dd>62</dd></div><div><dt>好评率</dt><dd>99%</dd></div><div><dt>报价</dt><dd>¥300–600/条</dd></div></dl>
+        <div class="ops"><button class="btn primary sm" onclick="toast('已向 周小蔓 发出邀约，对方确认后可直接派单')">邀约接单</button><button class="btn ghost sm" onclick="toast('已收藏，可在收藏的 OPC 中一键派单')">收藏</button></div>
+      </article>
+      <article class="card talent">
+        <div class="who"><span class="avatar av-3" style="width:40px;height:40px;font-size:14px">拾</span>
+          <div><div style="display:flex;gap:6px;align-items:center"><b>拾光视觉工作室</b></div><div class="muted">设计 + 开发 + 内容 三人小队</div></div></div>
+        <div class="tags"><span class="tag acc">认证团队 · L2</span><span class="tag teal">团队</span><span class="tag up">信用 956</span></div>
+        <div class="tags"><span class="tag plain">全案设计</span><span class="tag plain">小程序</span><span class="tag plain">品牌物料</span></div>
+        <p class="reason">适合多店同步开业：视觉、菜单、线上一站承接，单一接口人对接。</p>
+        <dl class="metrics"><div><dt>完单</dt><dd>128</dd></div><div><dt>好评率</dt><dd>97%</dd></div><div><dt>报价</dt><dd>¥1.2万起/项目</dd></div></dl>
+        <div class="ops"><button class="btn primary sm" onclick="toast('已向 拾光视觉工作室 发出邀约，对方确认后可直接派单')">邀约接单</button><button class="btn ghost sm" onclick="toast('已收藏，可在收藏的 OPC 中一键派单')">收藏</button></div>
+      </article>
+      <article class="card talent">
+        <div class="who"><span class="avatar av-4" style="width:40px;height:40px;font-size:14px">陈</span>
+          <div><div style="display:flex;gap:6px;align-items:center"><b>陈默</b></div><div class="muted">剪辑 + 包装 · 6 年</div></div></div>
+        <div class="tags"><span class="tag acc">认证OPC · L2</span><span class="tag plain">独立从业者</span><span class="tag up">信用 871</span></div>
+        <div class="tags"><span class="tag plain">剪辑包装</span><span class="tag plain">投流素材</span><span class="tag plain">动效</span></div>
+        <p class="reason">模板化产能高，同期已完成 3 个咖啡品牌开业季项目。</p>
+        <dl class="metrics"><div><dt>完单</dt><dd>118</dd></div><div><dt>好评率</dt><dd>97%</dd></div><div><dt>报价</dt><dd>¥400–800/条</dd></div></dl>
+        <div class="ops"><button class="btn primary sm" onclick="toast('已向 陈默 发出邀约，对方确认后可直接派单')">邀约接单</button><button class="btn ghost sm" onclick="toast('已收藏，可在收藏的 OPC 中一键派单')">收藏</button></div>
+      </article>
+      </div>
+    </div>
+    <div class="h-row" style="--i:2"><b>发布项目与履约进度</b></div>
+    <div class="chiprow" style="--i:3;margin:0 0 16px">
+      <span class="chip on">全部</span><span class="chip">进行中</span><span class="chip">待验收</span><span class="chip">售后中</span><span class="chip">已完成</span>
+    </div>
+    <div class="card" style="--i:4;overflow:hidden">
+      <table class="tbl">
+        <thead><tr><th>发布项目</th><th>承接方</th><th>金额</th><th>托管/放款</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr onclick="showView('d-order')">
+            <td><div class="t">品牌视觉升级 · 主视觉+菜单系统</div><div class="muted">RW-2609-0187 · 09/01 创建</div></td>
+            <td>林一舟</td><td class="price">¥6,800</td>
+            <td><span class="muted">托管 ¥4,760</span> · <span style="color:var(--up);font-weight:600">放款 ¥2,040</span></td>
+            <td><span class="tag warn">M2 待验收</span></td>
+            <td><button class="btn primary" onclick="event.stopPropagation();showView('d-order')">详情</button></td>
+          </tr>
+          <tr onclick="toast('演示原型：打开订单详情')">
+            <td><div class="t">小红书图文代运营 · 月度</div><div class="muted">RW-2609-0142 · 09/10 创建</div></td>
+            <td>周小蔓</td><td class="price">¥8,000</td>
+            <td><span class="muted">托管 ¥6,000</span> · <span style="color:var(--up);font-weight:600">放款 ¥2,000</span></td>
+            <td><span class="tag teal">进行中</span></td>
+            <td><button class="btn ghost" onclick="event.stopPropagation()">详情</button></td>
+          </tr>
+          <tr onclick="toast('演示原型：打开已完成订单')">
+            <td><div class="t">门店菜单重设计</div><div class="muted">RW-2608-0093 · 08/12 结算</div></td>
+            <td>林一舟</td><td class="price">¥1,800</td>
+            <td><span class="muted">已全额放款 · 已开票</span></td>
+            <td><span class="tag up">已完成</span></td>
+            <td><button class="btn ghost" onclick="event.stopPropagation()">详情</button></td>
+          </tr>
+          <tr onclick="showView('d-bids')">
+            <td><div class="t">抖音短视频 15 条 · 剪辑+脚本</div><div class="muted">需求匹配中 · 未下单未托管</div></td>
+            <td>—</td><td class="price">¥4,000–6,000</td>
+            <td><span class="muted">未托管</span></td>
+            <td><span class="tag acc">选人中</span></td>
+            <td><button class="btn ghost" onclick="event.stopPropagation();showView('d-bids')">选人</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== 需求方 · 投标管理 ===== -->
+  <section class="view" id="d-bids">
+    <div style="--i:0;display:flex;justify-content:space-between;align-items:flex-start">
+      <div><h2 class="pg-t">抖音短视频 15 条 · 剪辑+脚本</h2>
+      <p class="pg-sub">预算 ¥4,000–6,000 · 周期 3 周 · 验收标准已填写 · <span class="tag teal">机审+人审已通过</span></p></div>
+      <span class="tag warn">48 小时答复窗口 · 剩 31 小时</span>
+    </div>
+    <div class="cols" style="--i:1;margin-top:20px">
+      <div>
+        <div class="h-row" style="margin-top:0"><b>投标候选 · 5</b><span>按信用分排序 ▾</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card pad">
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span class="avatar av-2" style="width:44px;height:44px;font-size:15px">周</span>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <b style="font-size:15px">周小蔓</b><span class="tag acc">认证OPC</span><span class="tag up">信用 938</span><span class="muted">完单 62 · 好评 99%</span>
+                </div>
+                <div class="muted" style="margin-top:6px;line-height:1.65">方案：脚本 3 天/批、粗剪 1 天/条、精剪含字幕+调色；先出 1 条样片再批量，节点对齐门店开业节奏。</div>
+                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                  <span class="tag plain">排期 3 周</span><span class="tag plain">可出样片</span><span class="tag plain">2 次历史合作</span>
+                </div>
+              </div>
+              <div style="text-align:right;flex:none">
+                <div class="price" style="font-size:20px">¥5,600</div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="btn ghost" onclick="toast('演示原型：打开周小蔓主页')">主页</button>
+                  <button class="btn primary" onclick="pickBid('周小蔓')">选定 TA</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card pad">
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span class="avatar av-3" style="width:44px;height:44px;font-size:15px">陈</span>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <b style="font-size:15px">陈默</b><span class="tag acc">认证OPC</span><span class="tag up">信用 871</span><span class="muted">完单 118 · 好评 97%</span>
+                </div>
+                <div class="muted" style="margin-top:6px;line-height:1.65">方案：全套模板化生产，成片风格统一；附赠 3 条 15s 竖版切片，适合投流。</div>
+                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                  <span class="tag plain">排期 2.5 周</span><span class="tag plain">附赠切片</span>
+                </div>
+              </div>
+              <div style="text-align:right;flex:none">
+                <div class="price" style="font-size:20px">¥5,900</div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="btn ghost" onclick="toast('演示原型：打开陈默主页')">主页</button>
+                  <button class="btn primary" onclick="pickBid('陈默')">选定 TA</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card pad">
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span class="avatar av-4" style="width:44px;height:44px;font-size:15px">吴</span>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <b style="font-size:15px">吴优</b><span class="tag teal">实名L1</span><span class="tag up">信用 802</span><span class="muted">完单 19 · 好评 100%</span>
+                </div>
+                <div class="muted" style="margin-top:6px;line-height:1.65">方案：性价比路线，单条 1 轮修改；无样片，可先做首条验收再继续。</div>
+                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                  <span class="tag plain">排期 4 周</span>
+                </div>
+              </div>
+              <div style="text-align:right;flex:none">
+                <div class="price" style="font-size:20px">¥4,200</div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="btn ghost" onclick="toast('演示原型：打开吴优主页')">主页</button>
+                  <button class="btn primary" onclick="pickBid('吴优')">选定 TA</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hintbox" style="margin-top:16px">落选的投标人会收到你勾选的原因（价格 / 作品风格 / 排期），帮助从业者迭代方案；选定后平台生成电子合同并引导托管付款。</div>
+      </div>
+      <div class="card pad" style="position:sticky;top:88px">
+        <b style="font-size:15px">需求卡</b>
+        <div class="muted" style="margin-top:10px;line-height:1.8">
+          品类：内容剪辑<br>
+          预算：¥4,000–6,000（区间价）<br>
+          周期：3 周<br>
+          交付：15 条成片 + 脚本文档<br>
+          发布：09/17 · 浏览 86 · 投标 5
+        </div>
+        <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+          <b style="font-size:13.5px">验收标准</b>
+          <div class="muted" style="margin-top:8px;line-height:1.8">1. 前 3 条样片通过后批量生产<br>2. 单条竖版 1080×1920，含字幕<br>3. 每条支持 2 轮修改</div>
+        </div>
+        <button class="btn ghost block" style="width:100%;margin-top:16px" onclick="openModal('m-review')">关闭需求并互评</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 需求方 · 订单详情 ===== -->
+  <section class="view" id="d-order">
+    <div style="--i:0;display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2 class="pg-t">品牌视觉升级 · 主视觉+菜单系统</h2>
+        <p class="pg-sub">编号 RW-2609-0187 · 09/01 创建 · <span class="tag warn">M2 待验收</span></p>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn ghost" onclick="showView('chat')">联系对方</button>
+        <button class="btn ghost" onclick="toast('已申请平台介入，争议里程碑款项冻结中')">平台介入</button>
+      </div>
+    </div>
+    <div class="cols" style="--i:1;margin-top:20px">
+      <div>
+        <div class="card pad">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <b style="font-size:15.5px">里程碑进度 <span class="muted" style="font-weight:500">· 30% / 40% / 30%</span></b>
+            <span class="muted">驳回上限 3 次 · 第 3 次僵持自动进入仲裁</span>
+          </div>
+          <div style="margin-top:20px">
+            <div class="ms done">
+              <span class="nd"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <div class="tt">M1 品牌方向提案 <span class="tag up">已放款</span></div>
+              <div class="st">09/02 验收通过 · 放款 ¥2,040（分账至对方账户，服务费 ¥204）</div>
+            </div>
+            <div class="ms now">
+              <span class="nd"></span>
+              <div class="tt">M2 主视觉 + 菜单系统 <span class="tag warn">待验收</span></div>
+              <div class="st">09/16 已交付 · 6 个文件，预览含水印，验收通过后交付源文件</div>
+              <span class="countdown"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>剩余 6天23小时 · 逾期自动视为验收通过</span>
+              <div style="display:flex;gap:10px;margin-top:14px">
+                <button class="btn ghost" onclick="toast('演示原型：打开交付物预览（含水印）')">查看交付物</button>
+                <button class="btn primary lg" onclick="openModal('m-verify')">验收处理</button>
+              </div>
+            </div>
+            <div class="ms">
+              <span class="nd"></span>
+              <div class="tt">M3 全套源文件与使用规范</div>
+              <div class="st">待 M2 验收通过后开始 · ¥2,040</div>
+            </div>
+          </div>
+        </div>
+        <div class="escrow" style="margin-top:16px">
+          <svg viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6z"/><path d="m9 11.5 2.2 2.2L15.5 9"/></svg>
+          <p><b>资金由持牌支付机构托管</b>，平台不经手货款。验收通过后系统自动分账：90% 给从业者、10% 为平台服务费；争议期间款项冻结，由平台依订单留痕仲裁。退款原路退回。</p>
+        </div>
+      </div>
+      <div>
+        <div class="card pad" style="--i:0">
+          <div style="display:flex;gap:12px;align-items:center">
+            <span class="avatar av-1" style="width:46px;height:46px;font-size:16px">林</span>
+            <div style="min-width:0;flex:1">
+              <b style="font-size:15px">林一舟</b>
+              <div style="margin-top:3px"><span class="tag acc">认证OPC · L2</span></div>
+            </div>
+          </div>
+          <div class="statline" style="margin-top:14px;border-top:1px solid var(--border);padding-top:13px">
+            <div><b>912</b><span>信用分</span></div>
+            <div><b>47</b><span>完单</span></div>
+            <div><b>98%</b><span>好评率</span></div>
+          </div>
+          <div class="muted" style="margin-top:12px">品牌视觉设计师 · 7 年 · 杭州 · 与你合作 3 次，复购关系</div>
+        </div>
+        <div class="card pad" style="--i:1;margin-top:14px">
+          <b style="font-size:15px">订单资金</b>
+          <div class="statline" style="margin-top:12px">
+            <div><b>¥6,800</b><span>订单总额</span></div>
+            <div><b style="color:var(--teal)">¥4,760</b><span>托管中</span></div>
+            <div><b style="color:var(--up)">¥2,040</b><span>已放款</span></div>
+          </div>
+          <div class="muted" style="margin-top:12px;line-height:1.7">支付方式：微信支付 · 托管流水可导出对账；本单服务费发票已开具 6% 增值税专票。</div>
+        </div>
+        <div class="card pad" style="--i:2;margin-top:14px">
+          <b style="font-size:15px">电子合同</b>
+          <div class="muted" style="margin-top:9px;line-height:1.8">《服务承揽协议》双方已签署 · e签宝存证<br>里程碑条款与验收标准已固化进合同附件</div>
+          <button class="btn ghost" style="margin-top:12px" onclick="toast('演示原型：下载合同 PDF')">下载合同</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 需求方 · 资金工作台 ===== -->
+  <section class="view" id="d-wallet">
+    <div style="--i:0"><h2 class="pg-t">资金工作台</h2><p class="pg-sub">资金全程走持牌支付机构托管与分账 · 平台不经手货款</p></div>
+    <div class="kpis" style="--i:1;margin-top:20px">
+      <div class="card kpi hl"><div class="l">托管中（未验收）</div><div class="v">¥6,800</div><div class="d">2 笔订单 · 验收后自动放款</div></div>
+      <div class="card kpi"><div class="l">本月支出</div><div class="v">¥12,400</div><div class="d">含服务费 ¥1,124</div></div>
+      <div class="card kpi"><div class="l">累计支出</div><div class="v">¥23,600</div><div class="d">11 笔订单</div></div>
+      <div class="card kpi"><div class="l">已退款</div><div class="v">¥1,200</div><div class="d">超时未接单 · 原路退回</div></div>
+    </div>
+    <div class="h-row" style="--i:2"><b>资金流水</b><span>导出对账单 ›</span></div>
+    <div class="card" style="--i:3;overflow:hidden">
+      <table class="tbl">
+        <thead><tr><th>时间</th><th>事项</th><th>关联订单</th><th>金额</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td class="muted">09/16 14:20</td><td><div class="t">分账完成 · M1 提案验收</div><div class="muted">林一舟 ¥1,836 · 平台服务费 ¥204</div></td><td>RW-2609-0187</td><td class="price">-¥2,040</td><td><span class="tag up">已放款</span></td></tr>
+          <tr><td class="muted">09/10 10:02</td><td><div class="t">托管 · 小红书代运营 M1</div><div class="muted">周小蔓 · 4 里程碑 30/25/25/20</div></td><td>RW-2609-0142</td><td class="price">-¥2,000</td><td><span class="tag teal">托管冻结</span></td></tr>
+          <tr><td class="muted">09/01 09:31</td><td><div class="t">托管 · 品牌视觉升级全额</div><div class="muted">3 里程碑 30/40/30</div></td><td>RW-2609-0187</td><td class="price">-¥6,800</td><td><span class="tag teal">托管冻结</span></td></tr>
+          <tr><td class="muted">08/28 17:45</td><td><div class="t">原路退款 · 海报加急单</div><div class="muted">从业者超时未确认 · 自动退回微信支付</div></td><td>RW-2608-0071</td><td class="price" style="color:var(--up)">+¥1,200</td><td><span class="tag up">已到账</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="hintbox" style="--i:4;margin-top:16px">发票：平台就服务费开具 6% 增值税专用发票；从业者报酬经灵活用工平台代征个税，完税凭证可在对应订单详情下载。</div>
+  </section>
+
+  <!-- ===== 消息（双端共用） ===== -->
+  <section class="view" id="chat">
+    <div style="--i:0"><h2 class="pg-t">消息</h2><p class="pg-sub">会话与订单绑定 · 全程留痕 · 联系方式受平台保护</p></div>
+    <div class="im card" style="--i:1;margin-top:20px;overflow:hidden">
+      <div class="im-list" style="border-right:1px solid var(--border)">
+        <div class="conv on">
+          <span class="avatar av-1">林</span>
+          <div style="flex:1;min-width:0"><div class="t">林一舟 <time>14:20</time></div><div class="m">[交付物] M2 主视觉+菜单系统</div></div>
+        </div>
+        <div class="conv" onclick="toast('演示原型：切换会话')">
+          <span class="avatar av-2">周</span>
+          <div style="flex:1;min-width:0"><div class="t">周小蔓 <time>11:03</time></div><div class="m">M1 图文初稿已上传，请查收</div></div>
+        </div>
+        <div class="conv" onclick="toast('演示原型：切换会话')">
+          <span class="avatar av-3">系</span>
+          <div style="flex:1;min-width:0"><div class="t">平台仲裁 <time>昨天</time></div><div class="m">工单 #8817 已受理，1 个工作日内答复</div></div>
+        </div>
+      </div>
+      <div class="im-chat">
+        <div class="chat-hd">
+          <span class="avatar av-1">林</span>
+          <div style="flex:1"><b>林一舟</b><div class="muted" style="font-size:12px">认证OPC · 1.8h 内回复 · 订单 RW-2609-0187</div></div>
+          <span class="tag teal">🔒 联系方式保护中</span>
+          <button class="btn ghost" onclick="showView('d-order')">订单详情</button>
+        </div>
+        <div class="msgs">
+          <div class="syscard">订单已创建，聊天记录将作为履约与仲裁依据，请勿引导线下交易</div>
+          <div class="msg">
+            <span class="avatar av-1">苏</span>
+            <div class="msgcard"><div class="t">📋 需求卡 · 品牌视觉升级</div><div class="m"><span>¥6,800 · 3 里程碑</span><span>验收标准已确认</span></div></div>
+          </div>
+          <div class="msg"><span class="avatar av-1">苏</span><div class="bub">菜单系统想突出「山地豆源」的故事线，第二屏可以放豆卡吗？</div></div>
+          <div class="msg me"><span class="avatar av-1" style="background:linear-gradient(135deg,#2E6B63,#1E4B45)">林</span><div class="bub">可以，我排进 M2。菜单会做早晚市两套价目，豆卡放第二屏左滑进入。</div></div>
+          <div class="msg me"><span class="avatar av-1" style="background:linear-gradient(135deg,#2E6B63,#1E4B45)">林</span>
+            <div class="msgcard"><div class="t">📦 交付物 · M2 主视觉+菜单系统</div><div class="m"><span>6 个文件 · 预览含水印</span><span>09/16 14:20</span></div></div>
+          </div>
+          <div class="syscard">M2 已交付 · 请在 7 日内完成验收，逾期自动视为通过并放款 ¥2,448（税前）</div>
+        </div>
+        <div class="chat-bar">
+          <button class="btn ghost" onclick="toast('演示原型：支持文件 / 需求卡 / 交付卡')">附件</button>
+          <input placeholder="发送消息…" onkeydown="if(event.key==='Enter')sendMsg()"><button class="btn primary" onclick="sendMsg()">发送</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 从业者 · 抢单大厅 ===== -->
+  <section class="view" id="p-hall">
+    <div style="--i:0;display:flex;justify-content:space-between;align-items:flex-end">
+      <div><h2 class="pg-t">抢单大厅</h2><p class="pg-sub">林一舟 · <span class="tag acc">认证OPC</span> · 信用分 912 · 今日新增 12 个需求</p></div>
+      <span class="muted">投标限 1 次/需求 · 需求方 48 小时内答复</span>
+    </div>
+    <div class="halltop" style="--i:1;margin-top:16px">
+      <div class="banner-main">
+        <div class="banner-slide on">
+          <span class="b-eyebrow">第 3 期 · 创作者成长计划</span>
+          <h3>认证 OPC，前 3 单免平台服务费</h3>
+          <p>完成 L2 认证即享：优先派单池、曝光加权与新单佣金减免。信用分越高，接到的单越稳。</p>
+          <div class="brow"><button class="btn" onclick="toast('演示原型：跳转认证页')">立即认证</button><span class="bdate">09.20 – 10.31</span></div>
+        </div>
+        <div class="banner-slide">
+          <span class="b-eyebrow">企业首单礼</span>
+          <h3>首笔托管订单，服务费 5 折</h3>
+          <p>新认证企业首笔托管项目，平台服务费半价；里程碑验收不满意，托管资金全额退回。</p>
+          <div class="brow"><button class="btn" onclick="toast('演示原型：打开发布需求')">发布首个需求</button><span class="bdate">长期有效</span></div>
+        </div>
+        <div class="banner-dots">
+          <button class="on" onclick="bDot(0)" aria-label="第 1 帧"></button>
+          <button onclick="bDot(1)" aria-label="第 2 帧"></button>
+        </div>
+      </div>
+      <div class="hallside">
+        <div class="banner-sub">
+          <div class="bmark">约</div>
+          <h4>如约创作者周榜</h4>
+          <p>每周一更新 · 上榜作品获首页曝光位与优先派单权重</p>
+          <div class="brow"><button class="btn sm" onclick="toast('演示原型：打开周榜')">查看榜单</button></div>
+        </div>
+        <div class="noticecard">
+          <div class="nh"><b>社区公告</b><span onclick="toast('演示原型：打开公告列表')">查看更多 ›</span></div>
+          <div class="noticeitem"><span class="tag teal">升级</span><span class="ntext" onclick="toast('演示原型：打开公告详情')">支付宝预授权托管通道升级，冻结期延长至 90 天</span><time>09/18</time></div>
+          <div class="noticeitem"><span class="tag acc">规则</span><span class="ntext" onclick="toast('演示原型：打开公告详情')">仲裁公示页上线：裁决摘要脱敏后公开可查</span><time>09/15</time></div>
+          <div class="noticeitem"><span class="tag warn">活动</span><span class="ntext" onclick="toast('演示原型：打开公告详情')">国庆交付高峰：9/28–10/8 自动验收时钟顺延</span><time>09/12</time></div>
+        </div>
+      </div>
+    </div>
+    <div class="filterbar card" style="--i:2;margin-top:14px">
+      <div class="fhead">
+        <b class="ftitle">筛选</b>
+        <span class="ftags" id="fTags">无</span>
+        <button class="fclear" onclick="fClear()">清空全部</button>
+        <span class="fcount">共 <b id="fCount">6</b> 个需求</span>
+        <button class="fswitch" id="fSwitch" onclick="toggleFilter()">收起筛选 ▴</button>
+      </div>
+      <div class="fbody" id="fBody">
+      <div class="fgroup"><span class="flabel">品类</span>
+        <div class="chiprow">
+          <span class="chip" onclick="fToggle('cats',this,'设计')">设计</span>
+          <span class="chip" onclick="fToggle('cats',this,'内容剪辑')">内容剪辑</span>
+          <span class="chip" onclick="fToggle('cats',this,'开发')">开发</span>
+          <span class="chip" onclick="fToggle('cats',this,'营销')">营销投放</span>
+          <span class="chip" onclick="fToggle('cats',this,'咨询')">咨询/翻译</span>
+          <span class="muted" style="align-self:center">可多选，留空为全部品类</span>
+        </div>
+      </div>
+      <div class="fgroup"><span class="flabel">预算</span>
+        <div class="chiprow">
+          <span class="chip on" onclick="fToggle('budget',this,'all')">不限</span>
+          <span class="chip" onclick="fToggle('budget',this,'low')">≤ ¥3k</span>
+          <span class="chip" onclick="fToggle('budget',this,'mid')">¥3k – 10k</span>
+          <span class="chip" onclick="fToggle('budget',this,'high')">¥10k 以上</span>
+        </div>
+      </div>
+      <div class="fgroup"><span class="flabel">周期</span>
+        <div class="chiprow">
+          <span class="chip on" onclick="fToggle('cycle',this,'all')">不限</span>
+          <span class="chip" onclick="fToggle('cycle',this,'s')">≤ 2 周</span>
+          <span class="chip" onclick="fToggle('cycle',this,'m')">≤ 1 个月</span>
+        </div>
+      </div>
+      <div class="fgroup"><span class="flabel">门槛</span>
+        <div class="chiprow">
+          <span class="chip on" onclick="fToggle('cert',this,'all')">全部</span>
+          <span class="chip" onclick="fToggle('cert',this,'ent')">已认证企业发布</span>
+          <span class="chip" onclick="fToggle('cert',this,'lock')">可解锁的高预算单</span>
+        </div>
+      </div>
+      <div class="fgroup"><span class="flabel">排序</span>
+        <div class="fsort" style="margin-left:0">
+          <select onchange="fSort(this.value)">
+            <option value="new">最新发布</option>
+            <option value="amt">预算最高</option>
+            <option value="bids">投标最少</option>
+          </select>
+        </div>
+      </div>
+      </div><!-- /fbody -->
+    </div>
+    <div class="hallgrid" id="hallGrid" style="--i:3;margin-top:14px">
+      <div class="card dcard" data-cat="设计" data-amt="6800" data-days="21" data-cert="ent" data-bids="2" data-ts="5">
+        <div class="t">山野咖啡 · 品牌视觉升级（新店开业） <span class="tag acc">已认证企业</span></div>
+        <div class="meta"><span>设计</span><span>周期 3 周</span><span>已投 2 人</span><span>发布 2 小时前</span></div>
+        <div class="desc">Logo 升级 + 主视觉 + 三店通用菜单系统，需交付源文件与使用规范；验收标准已填写，附现有 VI 手册与空间照片。</div>
+        <div class="ft">
+          <div class="price">¥6,800<em>区间 ¥6,000–8,000</em></div>
+          <div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast('演示原型：收藏需求')">收藏</button><button class="btn primary sm" onclick="openModal('m-bid')">投标</button></div>
+        </div>
+      </div>
+      <div class="card dcard" data-cat="设计" data-amt="2400" data-days="10" data-cert="none" data-bids="4" data-ts="4">
+        <div class="t">烘焙工作室 · 包装插画 6 款</div>
+        <div class="meta"><span>设计</span><span>周期 10 天</span><span>已投 4 人</span><span>发布 5 小时前</span></div>
+        <div class="desc">牛角包/司康/贝果等 6 个单品的包装主插画，手绘风格，需源文件与印刷三色稿。</div>
+        <div class="ft">
+          <div class="price">¥2,400<em>一口价</em></div>
+          <div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast('演示原型：收藏需求')">收藏</button><button class="btn primary sm" onclick="openModal('m-bid')">投标</button></div>
+        </div>
+      </div>
+      <div class="card dcard" data-cat="开发" data-amt="13500" data-days="42" data-cert="ent" data-bids="1" data-ts="3">
+        <div class="t">咖啡品牌 · 小程序商城前端开发</div>
+        <div class="meta"><span>开发</span><span>周期 6 周</span><span>已投 1 人</span><span>发布昨天</span></div>
+        <div class="desc">商城小程序前端：商品/购物车/订单/会员积分，接口已就绪，按里程碑付款（30/40/30）。</div>
+        <div class="ft">
+          <div class="price">¥13,500<em>区间 ¥12,000–15,000</em></div>
+          <div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast('演示原型：收藏需求')">收藏</button><button class="btn primary sm" onclick="openModal('m-bid')">投标</button></div>
+        </div>
+      </div>
+      <div class="card dcard" data-cat="营销" data-amt="60000" data-days="365" data-cert="ent" data-bids="3" data-ts="2">
+        <div class="t">连锁茶饮 · 全案年度代运营 <span class="tag warn">仅认证OPC</span></div>
+        <div class="meta"><span>营销</span><span>周期 12 个月</span><span>已投 3 人</span><span>发布 3 天前</span></div>
+        <div class="desc">全案年度代运营：内容矩阵 + 投放陪跑，季度里程碑结算，要求有连锁餐饮案例。</div>
+        <div class="ft">
+          <div class="price">¥60,000+<em>区间价</em></div>
+          <div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast('演示原型：收藏需求')">收藏</button><button class="btn ghost sm" onclick="toast('演示原型：跳转认证页')">解锁</button></div>
+        </div>
+      </div>
+      <div class="card dcard lock" data-cat="内容剪辑" data-amt="9000" data-days="28" data-cert="none" data-bids="5" data-ts="6">
+        <div class="t">连锁健身房 · 开业季短视频 20 条 <span class="tag warn">仅认证OPC</span></div>
+        <div class="meta"><span>内容剪辑</span><span>周期 4 周</span><span>已投 5 人</span><span>发布今天</span></div>
+        <div class="desc">开业季投放素材：口播+探店混剪，竖版为主，需出样片后批量生产，验收标准已填写。</div>
+        <div class="ft">
+          <div class="price">¥9,000<em>一口价</em></div>
+          <div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast('演示原型：跳转认证页')">L2 解锁</button></div>
+        </div>
+      </div>
+      <div class="card dcard" data-cat="咨询" data-amt="3500" data-days="14" data-cert="none" data-bids="0" data-ts="7">
+        <div class="t">植研所 · 品牌手册中译英</div>
+        <div class="meta"><span>咨询/翻译</span><span>周期 2 周</span><span>已投 0 人</span><span>刚刚发布</span></div>
+        <div class="desc">品牌手册与产品目录中译英约 1.2 万字，要求有消费品牌经验，交付双语对照稿。</div>
+        <div class="ft">
+          <div class="price">¥3,500<em>一口价</em></div>
+          <div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast('演示原型：收藏需求')">收藏</button><button class="btn primary sm" onclick="openModal('m-bid')">投标</button></div>
+        </div>
+      </div>
+    </div>
+    <div style="--i:4;text-align:center;margin-top:16px">
+      <button class="btn ghost" id="loadMore" onclick="loadMore(this)">加载更多需求 ▾</button>
+    </div>
+  </section>
+
+  <!-- ===== 从业者 · 接单管理 ===== -->
+  <section class="view" id="p-orders">
+    <div style="--i:0"><h2 class="pg-t">接单管理</h2><p class="pg-sub">本月已结算 ¥18,200 · 托管中 ¥4,284 · 全部自动分账</p></div>
+    <div class="kpis" style="--i:1;margin-top:20px;grid-template-columns:repeat(3,1fr)">
+      <div class="card kpi hl"><div class="l">本月已结算</div><div class="v">¥18,200</div><div class="d">已扣服务费 · 个税已代征</div></div>
+      <div class="card kpi"><div class="l">托管中</div><div class="v">¥4,284</div><div class="d">2 单 · 验收后 T+0 分账</div></div>
+      <div class="card kpi"><div class="l">待交付里程碑</div><div class="v">2</div><div class="d">最近截止 09/24</div></div>
+    </div>
+    <div class="chiprow" style="--i:2;margin:20px 0 14px">
+      <span class="chip on">进行中</span><span class="chip">待交付</span><span class="chip">待验收款</span><span class="chip">已完成</span>
+    </div>
+    <div class="card" style="--i:3;overflow:hidden">
+      <table class="tbl">
+        <thead><tr><th>订单</th><th>需求方</th><th>预计收入</th><th>里程碑</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr onclick="showView('p-order')">
+            <td><div class="t">品牌视觉升级 · 山野咖啡</div><div class="muted">RW-2609-0187 · M2 已交付</div></td>
+            <td><div style="display:flex;gap:9px;align-items:center"><span class="avatar av-2" style="width:30px;height:30px;font-size:11px">苏</span>山野咖啡 <span class="tag acc">认证企业</span></div></td>
+            <td class="price">¥6,120</td>
+            <td><div style="height:6px;border-radius:99px;background:var(--panel-2);overflow:hidden"><i style="display:block;width:66%;height:100%;background:var(--accent);border-radius:99px"></i></div><div class="muted" style="margin-top:5px">2/3 · 待对方验收</div></td>
+            <td><span class="tag warn">待验收</span></td>
+            <td><button class="btn primary" onclick="event.stopPropagation();showView('p-order')">详情</button></td>
+          </tr>
+          <tr onclick="toast('演示原型：打开包装插画订单')">
+            <td><div class="t">烘焙工作室 · 包装插画 6 款</div><div class="muted">RW-2609-0201 · 今日开工</div></td>
+            <td>拾光烘焙</td><td class="price">¥2,160</td>
+            <td><div style="height:6px;border-radius:99px;background:var(--panel-2);overflow:hidden"><i style="display:block;width:8%;height:100%;background:var(--accent);border-radius:99px"></i></div><div class="muted" style="margin-top:5px">M1 提案中</div></td>
+            <td><span class="tag teal">进行中</span></td>
+            <td><button class="btn ghost" onclick="event.stopPropagation()">详情</button></td>
+          </tr>
+          <tr onclick="toast('演示原型：打开海报系列订单')">
+            <td><div class="t">健身房 · 开业海报系列</div><div class="muted">RW-2608-0119 · M3 已交付</div></td>
+            <td>铁馆健身</td><td class="price">¥3,420</td>
+            <td><div style="height:6px;border-radius:99px;background:var(--panel-2);overflow:hidden"><i style="display:block;width:90%;height:100%;background:var(--accent);border-radius:99px"></i></div><div class="muted" style="margin-top:5px">待放款</div></td>
+            <td><span class="tag acc">待放款</span></td>
+            <td><button class="btn ghost" onclick="event.stopPropagation();toast('演示原型：打开催验收消息模板')">催验收</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== 从业者 · 订单详情 ===== -->
+  <section class="view" id="p-order">
+    <div style="--i:0;display:flex;justify-content:space-between;align-items:flex-start">
+      <div><h2 class="pg-t">品牌视觉升级 · 山野咖啡</h2>
+      <p class="pg-sub">编号 RW-2609-0187 · 山野咖啡品牌部 · 第 3 次合作 · <span class="tag warn">M2 待对方验收</span></p></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn ghost" onclick="toast('演示原型：打开催验收消息模板')">催验收</button>
+        <button class="btn ghost" onclick="toast('已申请平台介入，款项冻结中')">平台介入</button>
+      </div>
+    </div>
+    <div class="cols" style="--i:1;margin-top:20px">
+      <div class="card pad">
+        <b style="font-size:15.5px">里程碑进度 <span class="muted" style="font-weight:500">· 30% / 40% / 30%</span></b>
+        <div style="margin-top:20px">
+          <div class="ms done">
+            <span class="nd"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <div class="tt">M1 品牌方向提案 <span class="tag up">已到账</span></div>
+            <div class="st">09/02 对方验收 · 09/03 分账到账 ¥1,836（含代征个税 ¥37）</div>
+          </div>
+          <div class="ms now">
+            <span class="nd"></span>
+            <div class="tt">M2 主视觉 + 菜单系统 <span class="tag warn">待验收</span></div>
+            <div class="st">你已于 09/16 交付 6 个文件 · 对方验收中</div>
+            <span class="countdown"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>对方 7 日未处理将自动放款 ¥2,448</span>
+            <div style="display:flex;gap:10px;margin-top:14px">
+              <button class="btn ghost" onclick="toast('演示原型：打开上传交付物')">补充交付</button>
+            </div>
+          </div>
+          <div class="ms">
+            <span class="nd"></span>
+            <div class="tt">M3 全套源文件与使用规范</div>
+            <div class="st">待 M2 验收后开始 · 预计收入 ¥1,836</div>
+          </div>
+        </div>
+        <div class="hintbox" style="margin-top:16px">履约提示：交付承诺以会话内结构化卡片为准；驳回不超过 3 次，僵持可申请平台介入，仲裁期间款项冻结。</div>
+      </div>
+      <div>
+        <div class="card pad" style="background:linear-gradient(135deg,#C2431F,#9a2f10);border:none;color:#fff">
+          <div style="font-size:12.5px;color:rgba(255,235,225,.85)">本单预计收入（已扣 10% 服务费）</div>
+          <div class="price" style="font-size:30px;margin-top:6px">¥6,120</div>
+          <div class="statline" style="margin-top:14px;border-top:1px solid rgba(255,240,220,.16);padding-top:12px">
+            <div><b style="color:#fff">¥1,836</b><span style="color:rgba(255,235,225,.8)">已到账</span></div>
+            <div><b style="color:#fff">¥4,284</b><span style="color:rgba(255,235,225,.8)">托管中</span></div>
+          </div>
+          <div style="font-size:11.5px;margin-top:12px;color:rgba(255,235,225,.75)">结算后个税由灵活用工平台代征，完税凭证自动归档</div>
+        </div>
+        <div class="card pad" style="--i:0;margin-top:14px">
+          <b style="font-size:15px">需求方 · 山野咖啡品牌部</b>
+          <div class="muted" style="margin-top:9px;line-height:1.8">认证企业 · 3 次合作 · 验收平均 1.2 天<br>付款爽快度 4.9 / 需求清晰度 4.7（历史互评）</div>
+          <button class="btn ghost" style="margin-top:12px;width:100%" onclick="showView('chat')">打开会话</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 从业者 · 我的主页 ===== -->
+  <section class="view" id="p-me">
+    <div class="card pad" style="--i:0">
+      <div style="display:flex;gap:22px;align-items:center">
+        <span class="avatar av-1" style="width:72px;height:72px;font-size:24px">林</span>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+            <b style="font-size:20px;letter-spacing:-.01em">林一舟</b>
+            <span class="tag acc">认证OPC · L2</span>
+          </div>
+          <div class="muted" style="margin-top:5px">品牌视觉设计师 · 7 年 · 杭州 · 主页被浏览 1,246 次 / 月</div>
+          <div class="chiprow" style="margin-top:11px">
+            <span class="chip" style="padding:4px 12px;font-size:12px">品牌VI</span>
+            <span class="chip" style="padding:4px 12px;font-size:12px">菜单/物料</span>
+            <span class="chip" style="padding:4px 12px;font-size:12px">包装</span>
+            <span class="chip" style="padding:4px 12px;font-size:12px">可接单 · 本月档期 2 席</span>
+          </div>
+        </div>
+        <div class="ring">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="48" fill="none" stroke="var(--panel-2)" stroke-width="9"/>
+            <circle cx="55" cy="55" r="48" fill="none" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="29"/>
+          </svg>
+          <div class="val"><div><b>912</b><span>信用分</span></div></div>
+        </div>
+      </div>
+      <div class="statline" style="margin-top:18px;border-top:1px solid var(--border);padding-top:16px">
+        <div><b>47</b><span>累计完单</span></div>
+        <div><b>98%</b><span>好评率</span></div>
+        <div><b>41%</b><span>复购率</span></div>
+        <div><b>1.8h</b><span>平均响应</span></div>
+        <div><b>0%</b><span>仲裁败诉率</span></div>
+      </div>
+    </div>
+    <div class="h-row" style="--i:1"><b>作品集 · 14 件</b><span>管理作品 ›</span></div>
+    <div class="works" style="--i:2">
+      <div class="work w1"><div class="art"></div><div class="cap">山野咖啡 VI<span>品牌全案 · 已完单 · 复购客户</span></div></div>
+      <div class="work w2"><div class="art"></div><div class="cap">拾光茶饮包装<span>包装设计 · 已完单</span></div></div>
+      <div class="work w3"><div class="art"></div><div class="cap">面包节主视觉<span>活动KV · 已完单</span></div></div>
+      <div class="work w4"><div class="art"></div><div class="cap">读库书店导视<span>空间物料 · 已完单</span></div></div>
+      <div class="work w5"><div class="art"></div><div class="cap">铁馆健身海报<span>系列海报 · 已完单</span></div></div>
+      <div class="work w6"><div class="art"></div><div class="cap">植研所瓶标<span>包装插画 · 已完单</span></div></div>
+    </div>
+    <div class="cols" style="--i:3;margin-top:20px;grid-template-columns:1fr 1fr">
+      <div class="card pad">
+        <b style="font-size:15px">认证进度 · 距 L3 金牌 OPC</b>
+        <div class="muted" style="margin-top:10px;line-height:2">
+          · 完单 47/50，还差 3 单<br>
+          · 仲裁败诉率 0%（要求 &lt;2%）✓ 已达标<br>
+          · 信用分 912（要求 ≥800）✓ 已达标
+        </div>
+        <span class="tag up" style="margin-top:8px">综合进度 87%</span>
+      </div>
+      <div class="card pad">
+        <b style="font-size:15px">最近评价</b>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px">
+          <div><div class="muted">山野咖啡 · 品牌视觉升级 <span style="color:var(--warn)">★★★★★</span></div>
+          <div style="font-size:13px;margin-top:4px;line-height:1.6">三个里程碑全部准时，M2 的菜单系统比预期多做了一版深夜档。</div></div>
+          <div><div class="muted">铁馆健身 · 海报系列 <span style="color:var(--warn)">★★★★★</span></div>
+          <div style="font-size:13px;margin-top:4px;line-height:1.6">改稿响应快，验收一次过，已经预约下一个项目。</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 从业者 · 钱包 ===== -->
+  <section class="view" id="p-wallet">
+    <div style="--i:0"><h2 class="pg-t">我的钱包</h2><p class="pg-sub">T+1 提现 · 免手续费 · 提现需完成实名并签署灵活用工结算协议</p></div>
+    <div class="cols" style="--i:1;margin-top:20px;grid-template-columns:400px 1fr">
+      <div>
+        <div class="card pad" style="background:linear-gradient(135deg,#C2431F,#9a2f10);border:none;color:#fff">
+          <div style="font-size:12.5px;color:rgba(255,235,225,.85)">可提现（已扣服务费与个税）</div>
+          <div class="price" style="font-size:34px;margin-top:6px">¥12,460</div>
+          <div style="display:flex;gap:10px;margin-top:16px">
+            <button class="btn lg" style="flex:1;background:rgba(255,255,255,.16);color:#fff" onclick="openModal('m-withdraw')">立即提现</button>
+            <button class="btn lg" style="flex:1;background:rgba(255,255,255,.16);color:#fff" onclick="toast('演示原型：打开完税凭证列表')">完税凭证</button>
+          </div>
+        </div>
+        <div class="card pad" style="--i:0;margin-top:14px">
+          <div class="statline">
+            <div><b>¥4,284</b><span>托管中</span></div>
+            <div><b>¥41,230</b><span>累计完税收入</span></div>
+            <div><b>¥612</b><span>本月代征个税</span></div>
+          </div>
+        </div>
+        <div class="escrow" style="--i:0;margin-top:14px">
+          <svg viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6z"/></svg>
+          <p>托管中 ¥4,284 · 验收后自动分账，<b>无需催款</b>；分账失败将转人工追偿并扣发信用分。</p>
+        </div>
+      </div>
+      <div class="card" style="overflow:hidden">
+        <table class="tbl">
+          <thead><tr><th>时间</th><th>事项</th><th>金额</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td class="muted">09/03</td><td><div class="t">分账入账 · M1 提案</div><div class="muted">山野咖啡 · 含代征个税 ¥37</div></td><td class="price" style="color:var(--up)">+¥1,836</td><td><span class="tag up">已到账</span></td></tr>
+            <tr><td class="muted">09/05</td><td><div class="t">提现成功</div><div class="muted">招商银行(6688) · T+1 到账</div></td><td class="price">-¥9,000</td><td><span class="tag up">已到账</span></td></tr>
+            <tr><td class="muted">09/02</td><td><div class="t">代征个税 · 8 月经营所得</div><div class="muted">灵活用工平台 · 凭证可下载</div></td><td class="price">-¥612</td><td><span class="tag teal">已完税</span></td></tr>
+            <tr><td class="muted">08/30</td><td><div class="t">分账入账 · M2 海报系列</div><div class="muted">铁馆健身 · 含代征个税 ¥68</div></td><td class="price" style="color:var(--up)">+¥3,420</td><td><span class="tag up">已到账</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <!-- ===== 需求方 · 账号设置与认证 ===== -->
+  <section class="view" id="d-settings">
+    <div style="--i:0"><h2 class="pg-t">账号设置与认证</h2><p class="pg-sub">山野咖啡品牌部 · 完善信息可提升需求匹配质量与投标转化</p></div>
+    <div class="setgrid" style="--i:1;margin-top:20px">
+      <div>
+        <div class="card pad">
+          <b style="font-size:15px">基本信息</b>
+          <div style="display:flex;gap:18px;margin-top:16px;align-items:center">
+            <span class="avatar av-1" style="width:56px;height:56px;font-size:19px">唐</span>
+            <div>
+              <button class="btn ghost" onclick="toast('演示原型：上传头像（支持 JPG/PNG，2MB 内）')">更换头像</button>
+              <div class="muted" style="margin-top:7px">建议使用企业 Logo，投标人更信任</div>
+            </div>
+          </div>
+          <div class="frow" style="margin-top:16px">
+            <div class="field"><label>联系人称呼</label><input value="唐总"></div>
+            <div class="field"><label>团队/部门名称</label><input value="山野咖啡品牌部"></div>
+          </div>
+          <div class="frow">
+            <div class="field"><label>联系手机 <em>对投标人全程打码</em></label><input value="138****6688" disabled style="color:var(--ink-3)"></div>
+            <div class="field"><label>常用邮箱（接单通知）</label><input value="brand@shanye.coffee"></div>
+          </div>
+          <div class="field" style="margin-bottom:0"><label>公司/业务简介 <em>展示在需求卡与主页</em></label>
+            <textarea style="min-height:64px">山野咖啡，云南山地豆源精品咖啡品牌，现有 2 家门店、3 家新店 11 月开业。</textarea></div>
+          <button class="btn primary" style="margin-top:14px" onclick="btnGo(this,'基本信息已保存')">保存修改</button>
+        </div>
+        <div class="card pad" style="margin-top:16px">
+          <b style="font-size:15px">安全与隐私</b>
+          <div style="margin-top:8px">
+            <div class="setrow"><div><div class="t">实名认证</div><div class="m">法人二要素 + 人脸活体 · 09/01 已核验</div></div><div class="end"><span class="tag ok">已实名</span></div></div>
+            <div class="setrow"><div><div class="t">联系方式保护</div><div class="m">站内沟通不暴露手机/微信，违规引导线下交易将触发风控</div></div><div class="end"><button class="switch on" onclick="toggleSwitch(this)" aria-label="联系方式保护"></button></div></div>
+            <div class="setrow"><div><div class="t">订单状态通知</div><div class="m">交付、验收、放款、售后节点 · 站内 + 短信</div></div><div class="end"><button class="switch on" onclick="toggleSwitch(this)"></button></div></div>
+            <div class="setrow"><div><div class="t">投标动态通知</div><div class="m">新投标、投标被拒原因反馈</div></div><div class="end"><button class="switch on" onclick="toggleSwitch(this)"></button></div></div>
+            <div class="setrow"><div><div class="t">平台公告</div><div class="m">规则更新、活动与新品类上线</div></div><div class="end"><button class="switch" onclick="toggleSwitch(this)"></button></div></div>
+            <div class="setrow"><div><div class="t">登录设备</div><div class="m">MacBook Pro（本机）· iPhone 15 · 异地登录将短信提醒</div></div><div class="end"><button class="btn ghost" onclick="toast('演示原型：管理登录设备')">管理</button></div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card pad">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <b style="font-size:15px">企业认证</b><span class="tag ok">已认证 · L2</span>
+          </div>
+          <div class="muted" style="margin-top:12px;line-height:1.9">
+            认证主体：山野咖啡品牌管理有限公司<br>
+            统一社会信用代码：9151****XXXXXX（脱敏展示）<br>
+            认证时间：2026/09/01 · 年审到期 2027/09/01<br>
+            权益：对公支付 · 企业标识 · 定向派单池 · 高预算需求发布
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <button class="btn ghost" onclick="toast('演示原型：更新营业执照/授权书')">更新认证材料</button>
+            <button class="btn ghost" onclick="toast('演示原型：更换认证主体（需重新审核）')">更换主体</button>
+          </div>
+        </div>
+        <div class="card pad" style="margin-top:16px">
+          <b style="font-size:15px">电子签章</b>
+          <div class="muted" style="margin-top:10px;line-height:1.9">e签宝企业章已激活 · 合同自动存证<br>经办人：唐总（已授权）</div>
+          <button class="btn ghost" style="margin-top:12px" onclick="toast('演示原型：打开签章管理')">管理签章</button>
+        </div>
+        <div class="card pad" style="margin-top:16px;border-style:dashed">
+          <b style="font-size:14px;color:var(--down)">注销账号</b>
+          <div class="muted" style="margin-top:8px;line-height:1.8">存在进行中订单或托管资金时不可注销；注销后交易记录按法规保留 3 年。</div>
+          <button class="btn ghost" style="margin-top:12px;color:var(--down)" onclick="toast('演示原型：注销需二次验证并冷静期 15 天')">申请注销</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 从业者 · 账号设置与认证 ===== -->
+  <section class="view" id="p-settings">
+    <div style="--i:0"><h2 class="pg-t">账号设置与认证</h2><p class="pg-sub">林一舟 · 完善资料与认证等级直接影响曝光排序与可接需求范围</p></div>
+    <div class="setgrid" style="--i:1;margin-top:20px">
+      <div>
+        <div class="card pad">
+          <b style="font-size:15px">基本信息（公开展示）</b>
+          <div style="display:flex;gap:18px;margin-top:16px;align-items:center">
+            <span class="avatar av-1" style="width:56px;height:56px;font-size:19px">林</span>
+            <div>
+              <button class="btn ghost" onclick="toast('演示原型：上传头像')">更换头像</button>
+              <div class="muted" style="margin-top:7px">头像是投标转化的第一印象，建议真人出镜或代表作品</div>
+            </div>
+          </div>
+          <div class="frow" style="margin-top:16px">
+            <div class="field"><label>昵称</label><input value="林一舟"></div>
+            <div class="field"><label>专业头衔</label><input value="品牌视觉设计师 · 7 年"></div>
+          </div>
+          <div class="field"><label>个人简介 <em>主页首屏文案</em></label>
+            <textarea style="min-height:64px">专注餐饮与零售品牌视觉，7 年服务 30+ 商业项目，擅长从 VI 到落地物料的完整交付。</textarea></div>
+          <div class="field"><label>技能标签 <em>匹配与推荐的依据</em></label>
+            <div class="chiprow"><span class="chip on">品牌VI</span><span class="chip on">菜单/物料</span><span class="chip on">包装</span><span class="chip">字体设计</span><span class="chip" onclick="toast('演示原型：添加标签')">＋ 添加</span></div></div>
+          <div class="frow">
+            <div class="field"><label>报价区间 <em>指导价参考设计类 ¥800–3,000/项</em></label><input value="¥800 – ¥3,000 / 项"></div>
+            <div class="field"><label>接单档期</label>
+              <div style="display:flex;gap:8px;padding-top:4px"><span class="chip on">本月 2 席</span><span class="chip">暂不接单</span></div></div>
+          </div>
+          <button class="btn primary" onclick="btnGo(this,'基本信息已保存，主页已同步更新')">保存修改</button>
+        </div>
+        <div class="card pad" style="margin-top:16px">
+          <b style="font-size:15px">安全与隐私</b>
+          <div style="margin-top:8px">
+            <div class="setrow"><div><div class="t">实名认证</div><div class="m">身份证二要素 + 人脸活体 · 08/18 已核验</div></div><div class="end"><span class="tag ok">已实名</span></div></div>
+            <div class="setrow"><div><div class="t">联系方式保护</div><div class="m">与需求方沟通不暴露联系方式，违规将扣信用分</div></div><div class="end"><button class="switch on" onclick="toggleSwitch(this)"></button></div></div>
+            <div class="setrow"><div><div class="t">新需求推荐通知</div><div class="m">按技能标签推送匹配需求 · 站内 + 微信服务通知</div></div><div class="end"><button class="switch on" onclick="toggleSwitch(this)"></button></div></div>
+            <div class="setrow"><div><div class="t">报价被拒原因反馈</div><div class="m">落选后收到需求方勾选的原因，帮助迭代方案</div></div><div class="end"><button class="switch on" onclick="toggleSwitch(this)"></button></div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card pad">
+          <b style="font-size:15px">认证内容管理</b>
+          <div style="margin-top:12px">
+            <div class="setrow"><div><div class="t">L1 实名认证</div><div class="m">身份证 + 人脸活体核验</div></div><div class="end"><span class="tag ok">已完成</span></div></div>
+            <div class="setrow"><div><div class="t">L2 认证 OPC</div><div class="m">作品集人工审核 08/20 通过 · 技能证明抽查已完成</div></div><div class="end"><span class="tag ok">已认证</span><button class="btn ghost" onclick="toast('演示原型：查看认证证书')">证书</button></div></div>
+            <div class="setrow"><div><div class="t">L3 金牌 OPC</div><div class="m">还差 3 单完单 · 信用分与仲裁败诉率已达标</div></div><div class="end"><span class="tag acc">进行中 87%</span></div></div>
+          </div>
+        </div>
+        <div class="card pad" style="margin-top:16px">
+          <b style="font-size:15px">认证材料</b>
+          <div style="margin-top:12px">
+            <div class="setrow"><div><div class="t">身份证明</div><div class="m">身份证正反面 · 已加密存储，平台脱敏展示</div></div><div class="end"><span class="tag ok">已核验</span></div></div>
+            <div class="setrow"><div><div class="t">作品集</div><div class="m">14 件 · 全部通过人工审核，最近审核 09/12</div></div><div class="end"><button class="btn ghost" onclick="showView('p-me')">管理</button></div></div>
+            <div class="setrow"><div><div class="t">技能/经历证明</div><div class="m">曾任职设计公司证明 · 从业资格证书</div></div><div class="end"><span class="tag ok">已上传</span><button class="btn ghost" onclick="toast('演示原型：更换材料')">更换</button></div></div>
+            <div class="setrow"><div><div class="t">个人作品原创承诺</div><div class="m">已签署 · 交付物版权纠纷将影响信用分与结算</div></div><div class="end"><span class="tag ok">已签署</span></div></div>
+          </div>
+        </div>
+        <div class="card pad" style="margin-top:16px">
+          <b style="font-size:15px">结算协议与收款账户</b>
+          <div style="margin-top:12px">
+            <div class="setrow"><div><div class="t">灵活用工结算协议</div><div class="m">09/02 已签署 · 代征个税主体：灵活用工平台</div></div><div class="end"><span class="tag ok">已签署</span><button class="btn ghost" onclick="toast('演示原型：查看协议')">查看</button></div></div>
+            <div class="setrow"><div><div class="t">提现账户</div><div class="m">招商银行 · 尾号 6688 · 与实名信息一致</div></div><div class="end"><button class="btn ghost" onclick="toast('演示原型：更换银行卡（需重新核验）')">更换</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== 弹窗：发布需求（宽·两栏） ===== -->
+<div class="scrim" onclick="closeModal()"></div>
+<div class="modal two" id="m-publish">
+  <div>
+    <div class="modal-hd"><div><h3>发布需求</h3><div class="sub">机审+人审约 2 小时 · 审核通过前不收费</div></div><button class="x" onclick="closeModal()">✕</button></div>
+    <div class="modal-bd">
+      <div class="field"><label>需求品类</label>
+        <div class="chiprow"><span class="chip on">设计</span><span class="chip">内容剪辑</span><span class="chip">开发</span><span class="chip">营销投放</span><span class="chip">咨询</span></div></div>
+      <div class="field"><label>需求标题</label><input value="品牌视觉升级 · 主视觉+菜单系统"></div>
+      <div class="field"><label>需求描述 <em>完整度影响匹配质量评分</em></label>
+        <textarea>背景：山野咖啡 3 家新店 11 月开业。
+目标：Logo 微调升级 + 主视觉 + 三店通用菜单系统。
+参考资料：现有 VI 手册与新店空间照片已上传。</textarea></div>
+      <div class="frow">
+        <div class="field"><label>预算方式与金额</label>
+          <div style="display:flex;gap:8px;margin-bottom:8px"><span class="chip on">固定价</span><span class="chip">区间价</span></div>
+          <input value="¥6,800"></div>
+        <div class="field"><label>期望周期</label>
+          <div style="display:flex;gap:8px;margin-bottom:8px"><span class="chip">1 周内</span><span class="chip on">2–4 周</span></div>
+          <select><option>2–4 周</option><option>1 周内</option><option>1 个月以上</option></select></div>
+      </div>
+      <div class="field"><label>交付物清单</label>
+        <div class="chiprow"><span class="chip on">源文件</span><span class="chip on">使用规范</span><span class="chip">印刷文件</span><span class="chip">社交媒体套图</span></div></div>
+      <div class="field" style="margin-bottom:0"><label>验收标准 <em>必填 · 纠纷仲裁的首要依据</em></label>
+        <textarea>1. 主视觉通过店内实拍验证效果；
+2. 菜单系统覆盖早/晚市两套价目；
+3. 源文件含分层工程文件与字体授权清单。</textarea></div>
+    </div>
+  </div>
+  <div class="aside">
+    <b style="font-size:14.5px">发布须知</b>
+    <div class="muted" style="margin-top:12px;line-height:1.9">
+      · 违禁品类与联系方式检测：机审拦截 + 人工复审<br>
+      · 高预算（≥2 万）与新账号首单必人工复审<br>
+      · 资金在你选定人选下单时才托管，发布免费<br>
+      · 选定人选后平台生成电子合同并引导付款
+    </div>
+    <div class="hintbox" style="margin-top:16px">指导价参考：设计类 ¥800–3,000/项。你的综合估价 ¥6,800 在合理区间，过低预算会被限制上架。</div>
+    <button class="btn primary lg" style="width:100%;margin-top:16px" onclick="btnGo(this,'已提交审核，预计 2 小时内上架抢单大厅',1)">提交审核</button>
+    <button class="btn ghost" style="width:100%;margin-top:10px" onclick="closeModal();toast('已存草稿')">存草稿</button>
+  </div>
+</div>
+
+<!-- ===== 弹窗：投标 ===== -->
+<div class="modal narrow" id="m-bid">
+  <div class="modal-hd"><div><h3>投标 · 品牌视觉升级</h3><div class="sub">每人限投 1 次 · 需求方将在 48 小时内答复</div></div><button class="x" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd">
+    <div class="field"><label>报价 <em>指导价区间 ¥6,000–8,000</em></label><input value="¥6,800"></div>
+    <div class="field"><label>预计排期</label>
+      <div class="chiprow"><span class="chip">1 周</span><span class="chip on">3 周</span><span class="chip">1 个月以上</span></div></div>
+    <div class="field" style="margin-bottom:0"><label>方案摘要</label>
+      <textarea>M1 出品牌方向 2 案；M2 主视觉+菜单系统并附店内实拍验证；M3 交付全套源文件与规范。先出情绪板对齐再深化。</textarea></div>
+  </div>
+  <div class="modal-ft"><button class="btn ghost" onclick="closeModal()">取消</button><button class="btn primary" onclick="btnGo(this,'投标成功！需求方将在 48 小时内答复',1)">提交投标</button></div>
+</div>
+
+<!-- ===== 弹窗：验收处理 ===== -->
+<div class="modal narrow" id="m-verify">
+  <div class="modal-hd"><div><h3>验收处理 · M2 主视觉+菜单系统</h3><div class="sub">通过后放款 ¥2,720（分账 ¥2,448 + 服务费 ¥272）</div></div><button class="x" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd">
+    <div class="hintbox" style="margin-bottom:16px">已交付 6 个文件（预览含水印）：主视觉 3 案、早晚市菜单、豆卡屏设计稿。验收通过后自动交付无水印源文件。</div>
+    <div class="field"><label>若驳回，必须填写整改要求 <em>仲裁依据</em></label>
+      <div class="chiprow" style="margin-bottom:10px"><span class="chip">与验收标准不符</span><span class="chip">缺少约定交付物</span><span class="chip">风格偏离确认稿</span></div>
+      <textarea placeholder="具体说明需要修改的内容与位置…"></textarea></div>
+  </div>
+  <div class="modal-ft"><button class="btn ghost" onclick="btnGo(this,'已驳回并通知对方整改（1/3）',1)">驳回整改</button><button class="btn primary" onclick="btnGo(this,'验收通过！¥2,720 已放款分账',1)">验收通过</button></div>
+</div>
+
+<!-- ===== 弹窗：提现 ===== -->
+<div class="modal narrow" id="m-withdraw">
+  <div class="modal-hd"><div><h3>提现</h3><div class="sub">可提现 ¥12,460 · T+1 到账 · 免手续费</div></div><button class="x" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd">
+    <div class="field"><label>提现金额</label><input value="¥12,460"></div>
+    <div class="field"><label>到账账户</label>
+      <div class="card pad" style="box-shadow:none;display:flex;gap:12px;align-items:center">
+        <span class="avatar av-1" style="width:36px;height:36px;font-size:13px;border-radius:10px">招</span>
+        <div><b style="font-size:13.5px">招商银行 · 尾号 6688</b><div class="muted">林一舟 · 与实名信息一致 ✓</div></div>
+      </div></div>
+    <div class="hintbox" style="margin-bottom:0">提现需完成实名认证并签署灵活用工结算协议；提现即视为确认当期收入完税。</div>
+  </div>
+  <div class="modal-ft"><button class="btn ghost" onclick="closeModal()">取消</button><button class="btn primary" onclick="btnGo(this,'提现申请成功，T+1 到账 ¥12,460',1)">确认提现</button></div>
+</div>
+
+<!-- ===== 弹窗：互评 ===== -->
+<div class="modal narrow" id="m-review">
+  <div class="modal-hd"><div><h3>订单互评</h3><div class="sub">双方都提交后同时公开 · 不完成互评无法开启下一单</div></div><button class="x" onclick="closeModal()">✕</button></div>
+  <div class="modal-bd">
+    <div class="card pad" style="box-shadow:none;padding:6px 18px;margin-bottom:16px">
+      <div class="starrow"><span>交付质量</span><div class="stars" data-rate="5">
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button></div></div>
+      <div class="starrow"><span>响应速度</span><div class="stars" data-rate="4">
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-off" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button></div></div>
+      <div class="starrow"><span>专业度</span><div class="stars" data-rate="5">
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button>
+        <button class="st-on" onclick="rate(this)"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></button></div></div>
+    </div>
+    <div class="field" style="margin-bottom:0"><label>评价内容</label>
+      <textarea placeholder="交付质量、沟通体验、是否愿意复购…">三个里程碑全部准时，M2 的菜单系统比预期多做了一版深夜档，后续菜单重设计直接又找了他。</textarea></div>
+  </div>
+  <div class="modal-ft"><button class="btn ghost" onclick="closeModal()">暂不评价</button><button class="btn primary" onclick="btnGo(this,'评价已提交，对方确认后公开',1)">提交评价</button></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* 角色切换 */
+function setRole(r){
+  document.body.dataset.role=r;
+  document.getElementById('rs-d').classList.toggle('on',r==='d');
+  document.getElementById('rs-p').classList.toggle('on',r==='p');
+  document.getElementById('pubBtn').style.display=r==='d'?'':'none';
+  const first=r==='d'?'d-home':'p-hall';
+  showView(first);
+}
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function showView(id){
+  const v=document.getElementById(id);if(!v)return;
+  closeMenu();
+  document.querySelectorAll('.view').forEach(x=>{
+    x.classList.remove('active');clearTimeout(x._t);
+    const s=x.querySelector(':scope>.skel');if(s){s.remove();x.classList.remove('loading')}
+  });
+  v.classList.add('active');
+  const reveal=()=>{v.classList.remove('active');void v.offsetWidth;v.classList.add('active')};
+  const sk=SKEL[id];
+  if(sk&&!RM){
+    v.classList.add('loading');
+    const s=document.createElement('div');s.className='skel';s.innerHTML=sk;v.prepend(s);
+    clearTimeout(v._t);
+    v._t=setTimeout(()=>{s.remove();v.classList.remove('loading');
+      if(v.classList.contains('active'))reveal();
+      ioScan();},480+Math.random()*300);
+  }else{reveal();ioScan();}
+  window.scrollTo({top:0,behavior:'instant'});
+  document.querySelectorAll('.navlinks a').forEach(a=>{
+    a.classList.toggle('on',a.dataset.nav===id)});
+}
+/* ===== 骨架屏模板 ===== */
+function skelDash(){return '<div class="skgrid">'+('<div class="sk kpi"></div>').repeat(4)+'</div><div class="sk banner"></div><div class="sk t"></div><div class="sk card"></div><div class="sk card"></div>'}
+function skelTable(){return '<div class="sk t"></div><div class="sk card tall"></div><div class="sk bar"></div>'}
+function skelCards(){return '<div class="sk banner"></div><div class="sk bar"></div><div class="skgrid2">'+('<div class="sk card"></div>').repeat(4)+'</div>'}
+function skelProfile(){return '<div class="sk card tall"></div><div class="sk t"></div><div class="skgrid2">'+('<div class="sk card"></div>').repeat(3)+'</div>'}
+const SKEL={'d-home':skelDash(),'d-orders':skelTable(),'d-bids':skelTable(),'d-wallet':skelTable(),
+  'p-orders':skelDash(),'p-wallet':skelTable(),'p-hall':skelCards(),'p-me':skelProfile(),
+  'd-order':skelTable(),'p-order':skelTable()};
+/* ===== 滚动渐入 ===== */
+const io=('IntersectionObserver' in window)&&!RM
+  ?new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('inview');io.unobserve(e.target)}})},{rootMargin:'80px 0px'}):null;
+function ioScan(){
+  if(!io){document.querySelectorAll('.view.active .io:not(.inview)').forEach(el=>el.classList.add('inview'));return}
+  document.querySelectorAll('.view.active .io:not(.inview)').forEach(el=>io.observe(el));
+}
+(function(){document.querySelectorAll('.works .work, #hallGrid .dcard').forEach(el=>el.classList.add('io'))})();
+/* ===== 按钮 loading 提交 ===== */
+function btnGo(btn,msg,close){
+  if(btn.classList.contains('loading'))return;
+  if(!btn.dataset.orig)btn.dataset.orig=btn.innerHTML;
+  btn.classList.add('loading');btn.innerHTML='<span class="spin"></span> 处理中…';
+  setTimeout(()=>{btn.classList.remove('loading');btn.innerHTML=btn.dataset.orig;
+    if(close)closeModal();toast(msg);},700);
+}
+/* ===== 大厅加载更多 ===== */
+const MORE=[
+ {t:'茶饮空间 · 门店导视系统设计',cat:'设计',amt:4800,days:20,cert:'ent',bids:1,ts:9,
+  meta:'设计 · 周期 20 天 · 已投 1 人 · 刚刚发布',
+  desc:'3 家新店导视系统：门头/灯箱/室内指示，需配合现有 VI 规范输出施工文件。',
+  price:'¥4,800',em:'一口价'},
+ {t:'植研所 · 会员小程序后端接口',cat:'开发',amt:16000,days:45,cert:'ent',bids:0,ts:8,
+  meta:'开发 · 周期 45 天 · 已投 0 人 · 刚刚发布',
+  desc:'会员/积分/券核销后端接口开发，Node 技术栈，接口文档已就绪，按里程碑付款。',
+  price:'¥16,000',em:'区间 ¥15,000–18,000'}];
+function loadMore(btn){
+  if(btn.dataset.done)return;
+  if(!btn.dataset.orig)btn.dataset.orig=btn.innerHTML;
+  btn.classList.add('loading');btn.innerHTML='<span class="spin"></span> 正在加载…';
+  setTimeout(()=>{
+    btn.classList.remove('loading');btn.innerHTML=btn.dataset.orig;
+    const grid=document.getElementById('hallGrid');
+    MORE.forEach(m=>{
+      const el=document.createElement('div');
+      el.className='card dcard io inview';
+      el.dataset.cat=m.cat;el.dataset.amt=m.amt;el.dataset.days=m.days;el.dataset.cert=m.cert;el.dataset.bids=m.bids;el.dataset.ts=m.ts;
+      el.innerHTML='<div class="t">'+m.t+'</div><div class="meta">'+m.meta.split(' · ').map(s=>'<span>'+s+'</span>').join('')+'</div><div class="desc">'+m.desc+'</div><div class="ft"><div class="price">'+m.price+'<em>'+m.em+'</em></div><div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast(\'演示原型：收藏需求\')">收藏</button><button class="btn primary sm" onclick="openModal(\'m-bid\')">投标</button></div></div>';
+      grid.appendChild(el);
+    });
+    applyFilter();
+    btn.dataset.done=1;btn.textContent='已加载今日全部 8 个需求';
+    btn.style.opacity=.55;btn.style.pointerEvents='none';
+    toast('已为你加载 2 个新需求');
+  },750);
+}
+/* ===== 聊天发送 + 输入中指示 ===== */
+function sendMsg(){
+  const input=document.querySelector('.chat-bar input');
+  const v=input.value.trim()||'这版进度同步一下～';
+  const box=document.querySelector('#chat .msgs');
+  const me=document.createElement('div');me.className='msg me';
+  me.innerHTML='<span class="avatar av-1" style="background:linear-gradient(135deg,#2E6B63,#1E4B45)">林</span><div class="bub"></div>';
+  me.querySelector('.bub').textContent=v;
+  box.appendChild(me);input.value='';box.scrollTop=box.scrollHeight;
+  const ty=document.createElement('div');ty.className='msg';
+  ty.innerHTML='<span class="avatar av-1">苏</span><div class="bub typing"><span></span><span></span><span></span></div>';
+  box.appendChild(ty);box.scrollTop=box.scrollHeight;
+  setTimeout(()=>{ty.remove();
+    const r=document.createElement('div');r.className='msg';
+    r.innerHTML='<span class="avatar av-1">苏</span><div class="bub">收到，我核对下排期，1 小时内给你答复。</div>';
+    box.appendChild(r);box.scrollTop=box.scrollHeight;},1500);
+}
+/* 头像下拉菜单 */
+function toggleMenu(e){e.stopPropagation();document.getElementById('userMenu').classList.toggle('on')}
+function closeMenu(){document.getElementById('userMenu').classList.remove('on')}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.avatar-wrap'))closeMenu();
+});
+/* 设置开关 */
+function toggleSwitch(el){el.classList.toggle('on')}
+/* 弹窗 */
+function openModal(id){
+  document.querySelector('.scrim').classList.add('on');
+  document.getElementById(id).classList.add('on');
+}
+function closeModal(){
+  document.querySelector('.scrim').classList.remove('on');
+  document.querySelectorAll('.modal.on').forEach(m=>m.classList.remove('on'));
+}
+addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+/* toast */
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('on'),2400);
+}
+function pickBid(name){showView('d-home');toast('已向 '+name+' 发起订单确认，对方接单后进入合同与托管付款')}
+function rate(btn){
+  const wrap=btn.parentElement,stars=[...wrap.children],idx=stars.indexOf(btn);
+  stars.forEach((s,i)=>{s.classList.toggle('st-on',i<=idx);s.classList.toggle('st-off',i>idx)});
+  wrap.dataset.rate=idx+1;
+}
+/* ===== 可组合筛选（抢单大厅） ===== */
+const F = {cats:new Set(), budget:'all', cycle:'all', cert:'all', sort:'new'};
+const FLABEL = {budget:{all:'预算不限',low:'预算 ≤¥3k',mid:'预算 ¥3k–10k',high:'预算 ¥10k+'},
+                cycle:{all:'周期不限',s:'周期 ≤2周',m:'周期 ≤1个月'},
+                cert:{all:'不限门槛',ent:'已认证企业',lock:'可解锁高预算单'}};
+function fToggle(group, el, val){
+  if(group==='cats'){
+    el.classList.toggle('on');
+    el.classList.contains('on') ? F.cats.add(val) : F.cats.delete(val);
+  }else{
+    F[group]=val;
+    el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    el.classList.add('on');
+  }
+  applyFilter();
+}
+function fSort(v){F.sort=v;applyFilter()}
+function fRemove(group){
+  if(group==='cats'){
+    F.cats.clear();
+    document.querySelectorAll('#p-hall .fgroup:first-child .chip').forEach(c=>c.classList.remove('on'));
+  }else{
+    F[group]='all';
+    const gIdx={budget:2,cycle:3,cert:4}[group];
+    const g=document.querySelectorAll('#p-hall .fgroup')[gIdx-1];
+    if(g)g.querySelectorAll('.chip').forEach((c,i)=>c.classList.toggle('on',i===0));
+  }
+  applyFilter();
+}
+function fClear(){
+  F.cats.clear();F.budget='all';F.cycle='all';F.cert='all';
+  const gs=document.querySelectorAll('#p-hall .fgroup');
+  gs[0].querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  [1,2,3].forEach(i=>gs[i].querySelectorAll('.chip').forEach((c,j)=>c.classList.toggle('on',j===0)));
+  document.querySelector('#p-hall .fsort select').value='new';F.sort='new';
+  applyFilter();
+}
+function renderTags(){
+  const box=document.getElementById('fTags');const tags=[];
+  F.cats.forEach(v=>tags.push(`<span class="ftag">品类：${v}<button onclick="fRemove('cats')" title="移除">✕</button></span>`));
+  if(F.budget!=='all')tags.push(`<span class="ftag">${FLABEL.budget[F.budget]}<button onclick="fRemove('budget')">✕</button></span>`);
+  if(F.cycle!=='all')tags.push(`<span class="ftag">${FLABEL.cycle[F.cycle]}<button onclick="fRemove('cycle')">✕</button></span>`);
+  if(F.cert!=='all')tags.push(`<span class="ftag">${FLABEL.cert[F.cert]}<button onclick="fRemove('cert')">✕</button></span>`);
+  box.innerHTML=tags.length?tags.join(''):'无';
+}
+function applyFilter(){
+  const cards=[...document.querySelectorAll('#hallGrid .dcard')];
+  let n=0;
+  cards.forEach(c=>{
+    const amt=+c.dataset.amt, days=+c.dataset.days;
+    const ok=(!F.cats.size||F.cats.has(c.dataset.cat))
+      &&(F.budget==='all'||(F.budget==='low'&&amt<=3000)||(F.budget==='mid'&&amt>3000&&amt<=10000)||(F.budget==='high'&&amt>10000))
+      &&(F.cycle==='all'||(F.cycle==='s'&&days<=14)||(F.cycle==='m'&&days<=31))
+      &&(F.cert==='all'||(F.cert==='ent'&&c.dataset.cert==='ent')||(F.cert==='lock'&&(c.classList.contains('lock')||amt>=10000)));
+    c.style.display=ok?'':'none'; if(ok)n++;
+  });
+  const grid=document.getElementById('hallGrid');
+  [...cards].sort((a,b)=>F.sort==='amt'?b.dataset.amt-a.dataset.amt:F.sort==='bids'?(a.dataset.bids-b.dataset.bids)||(b.dataset.ts-a.dataset.ts):b.dataset.ts-a.dataset.ts)
+    .forEach(c=>grid.appendChild(c));
+  document.getElementById('fCount').textContent=n;
+  renderTags();
+}
+
+/* 筛选折叠 / banner 轮播 */
+function toggleFilter(){
+  const bar=document.querySelector('#p-hall .filterbar');
+  bar.classList.toggle('folded');
+  document.getElementById('fSwitch').textContent=bar.classList.contains('folded')?'展开筛选 ▾':'收起筛选 ▴';
+}
+function bDot(i){
+  document.querySelectorAll('.banner-main .banner-slide').forEach((s,j)=>s.classList.toggle('on',j===i));
+  document.querySelectorAll('.banner-dots button').forEach((b,j)=>b.classList.toggle('on',j===i));
+}
+
+/* Hash 直达：#p-hall / #d-order / #chat … */
+(function(){
+  const h=location.hash.replace('#','');
+  if(!h)return;
+  const v=document.getElementById(h);
+  if(v&&v.classList.contains('view')){
+    setRole(h.startsWith('p-')?'p':'d');
+    showView(h);
+  }else if(h.startsWith('m-')){openModal(h)}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="HJfioDXDy8YsaaL8WeNL2X">
+<head data-page-node-id="tq6zUGqqoAu2qBAYOlnIcw">
+<meta charset="UTF-8" data-page-node-id="fDa9tZaYJY1CFEaLdqyULF">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="PocA9gxBVNimLl1faogg6V">
+<title>AXION V1 — 纯电超级跑车 | AXION MOTORS</title>
+<meta name="description" content="AXION V1 纯电超级跑车：四电机矢量驱动，900V 高压平台，0-100 km/h 仅需 1.9 秒，续航 720 km。" data-page-node-id="CccwCcZ6VK4DTckfetlmcV">
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="kFMIhDN3dUCIOXJOH14Op3">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="NYlgtYeJGcpxTL9Fq6475n">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Noto+Sans+SC:wght@200;300;400;500;700&display=swap" rel="stylesheet" data-page-node-id="AScFOM267c77CFasueLAjR">
+<style>
+/* ============ tokens ============ */
+:root{
+  --bg:#07080A;
+  --bg-2:#0B0D10;
+  --panel:#0E1013;
+  --line:rgba(255,255,255,.075);
+  --line-2:rgba(255,255,255,.14);
+  --red:#D3142E;
+  --red-bright:#FF2A45;
+  --red-deep:#7C0A1B;
+  --text:#F3F4F6;
+  --muted:#8A9099;
+  --muted-2:#5E646C;
+  --body-a:#545C65; --body-m:#2E353D; --body-b:#1C2026; --body-c:#0A0C0F;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --maxw:1360px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif;
+  font-weight:300;line-height:1.65;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img,svg{display:block;max-width:100%}
+::selection{background:var(--red);color:#fff}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:#050608}
+::-webkit-scrollbar-thumb{background:#22262C;border-radius:9px}
+::-webkit-scrollbar-thumb:hover{background:var(--red)}
+
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 40px}
+.eyebrow{
+  font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--red);
+  font-weight:500;display:flex;align-items:center;gap:14px;
+}
+.eyebrow::before{content:'';width:34px;height:1px;background:linear-gradient(90deg,var(--red),transparent)}
+.mono{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* ============ preloader ============ */
+#loader{
+  position:fixed;inset:0;z-index:9999;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  transition:opacity .7s var(--ease),visibility .7s;
+}
+#loader.done{opacity:0;visibility:hidden}
+.ld-logo{font-size:34px;font-weight:200;letter-spacing:.5em;text-indent:.5em;color:#fff}
+.ld-bar{width:200px;height:1px;background:rgba(255,255,255,.1);overflow:hidden}
+.ld-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red-deep),var(--red-bright));transition:width .3s linear}
+.ld-txt{font-size:10px;letter-spacing:.4em;color:var(--muted-2);text-transform:uppercase}
+
+/* ============ cursor ============ */
+#cursor{
+  position:fixed;width:26px;height:26px;border:1px solid rgba(211,20,46,.7);border-radius:50%;
+  pointer-events:none;z-index:9998;transform:translate(-50%,-50%);
+  transition:width .28s var(--ease),height .28s var(--ease),background .28s,border-color .28s;
+  mix-blend-mode:difference;display:none;
+}
+#cursor.on{display:block}
+#cursor.big{width:60px;height:60px;background:rgba(211,20,46,.18);border-color:var(--red-bright)}
+@media (hover:hover) and (pointer:fine){#cursor.on{display:block}}
+
+/* ============ nav ============ */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  padding:22px 0;transition:padding .4s var(--ease),background .4s,border-color .4s,backdrop-filter .4s;
+  border-bottom:1px solid transparent;
+}
+header.scrolled{
+  padding:14px 0;background:rgba(7,8,10,.82);backdrop-filter:blur(18px) saturate(160%);
+  border-bottom-color:var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.logo svg{width:120px;height:auto}
+.nav-links{display:flex;gap:38px;margin-left:auto;margin-right:38px}
+.nav-links a{
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+  position:relative;padding:4px 0;transition:color .3s;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--red);transition:width .35s var(--ease);
+}
+.nav-links a:hover{color:#fff}
+.nav-links a:hover::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:22px}
+.btn-line{
+  font-size:11px;letter-spacing:.24em;text-transform:uppercase;padding:11px 22px;
+  border:1px solid var(--line-2);color:#fff;transition:.35s var(--ease);white-space:nowrap;
+}
+.btn-line:hover{background:var(--red);border-color:var(--red);transform:translateY(-1px)}
+.burger{width:34px;height:18px;position:relative}
+.burger i{position:absolute;right:0;height:1.5px;background:#fff;transition:.4s var(--ease)}
+.burger i:nth-child(1){top:0;width:34px}
+.burger i:nth-child(2){top:8px;width:24px}
+.burger i:nth-child(3){top:16px;width:30px}
+.burger:hover i{background:var(--red-bright)}
+.burger:hover i:nth-child(2){width:34px}
+.burger:hover i:nth-child(3){width:34px}
+#menu{
+  position:fixed;inset:0;z-index:890;background:#050608;
+  clip-path:inset(0 0 100% 0);transition:clip-path .8s var(--ease);
+  display:flex;flex-direction:column;justify-content:center;padding:104px 40px 44px;
+}
+#menu.open{clip-path:inset(0 0 0 0)}
+#menu::before{
+  content:'';position:absolute;top:-10%;right:-10%;width:70vw;height:70vw;border-radius:50%;
+  background:radial-gradient(circle,rgba(211,20,46,.22),transparent 62%);pointer-events:none;
+}
+.menu-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:60px;max-width:var(--maxw);margin:0 auto;width:100%;position:relative;align-items:center}
+.menu-list{display:flex;flex-direction:column}
+.menu-list a{
+  font-size:clamp(24px,min(5.4vw,6.4vh),64px);font-weight:200;letter-spacing:.04em;padding:10px 0;
+  display:flex;align-items:baseline;gap:22px;color:#fff;opacity:.55;
+  border-bottom:1px solid var(--line);transition:.45s var(--ease);
+}
+.menu-list a span{font-size:11px;letter-spacing:.3em;color:var(--red-bright);opacity:1;font-weight:400}
+.menu-list a:hover{opacity:1;padding-left:18px;border-bottom-color:var(--red)}
+.menu-side h4{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted-2);margin-bottom:20px;font-weight:400}
+.menu-side p{font-size:13px;color:var(--muted);margin-bottom:10px}
+.menu-side .mcar{margin-top:34px;opacity:.9;filter:drop-shadow(0 20px 40px rgba(0,0,0,.6))}
+
+/* ============ scroll progress ============ */
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--red-deep),var(--red-bright));z-index:950;transition:width .1s linear}
+
+/* ============ hero ============ */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;overflow:hidden;padding:96px 0 104px}
+.grid-lines{
+  position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:88px 88px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 45%,#000 30%,transparent 78%);
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 45%,#000 30%,transparent 78%);
+}
+.deco{position:absolute;border-radius:3px;pointer-events:none;will-change:transform}
+.deco.d1{width:118px;height:118px;top:7%;left:4.5%;transform:rotate(45deg);background:linear-gradient(135deg,#AEB4BC,#33383F 55%,#0C0E11);opacity:.5;filter:blur(1.4px);box-shadow:0 30px 70px rgba(0,0,0,.7)}
+.deco.d2{width:104px;height:104px;top:36%;left:-1.5%;transform:rotate(35deg);background:linear-gradient(120deg,#8E0F20,#D3142E 45%,#2A0208);opacity:.6;filter:blur(1.6px)}
+.deco.d3{width:170px;height:170px;bottom:-12%;right:-2%;transform:rotate(28deg);background:linear-gradient(140deg,rgba(211,20,46,.45),rgba(20,22,26,.9) 60%);opacity:.35;filter:blur(4px)}
+.deco.d4{width:64px;height:64px;top:11%;right:20%;transform:rotate(52deg);background:linear-gradient(140deg,rgba(255,255,255,.4),rgba(255,255,255,.03));opacity:.35;filter:blur(1.5px)}
+.hero-glow{
+  position:absolute;left:50%;bottom:6%;width:78vw;height:52vh;transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(211,20,46,.15),transparent 66%);pointer-events:none;filter:blur(20px);
+}
+.ghost{
+  position:absolute;left:50%;top:13%;transform:translateX(-50%);
+  font-size:clamp(90px,20vw,300px);font-weight:700;letter-spacing:.02em;line-height:1;
+  background:linear-gradient(180deg,rgba(211,20,46,.4),rgba(211,20,46,.02) 76%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  pointer-events:none;user-select:none;white-space:nowrap;
+}
+.hero-inner{position:relative;z-index:3;width:100%;max-width:var(--maxw);margin:0 auto;padding:0 40px;text-align:center}
+.hero h1{
+  font-size:clamp(34px,6.6vw,108px);font-weight:200;letter-spacing:.08em;line-height:1;
+  margin:20px 0 0;text-transform:uppercase;
+}
+.hero h1 em{font-style:normal;color:var(--red-bright)}
+.hero .sub{
+  margin-top:16px;font-size:clamp(11px,.95vw,13.5px);letter-spacing:.18em;color:var(--muted);
+  text-transform:uppercase;display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.hero .sub i{width:4px;height:4px;background:var(--red);border-radius:50%;display:inline-block;font-style:normal}
+.car-stage{position:relative;margin-top:clamp(-26px,-1.6vh,0px);display:flex;justify-content:center}
+.car-wrap{
+  position:relative;width:clamp(330px,min(940px,74vw,calc((100vh - 350px) * 2.69)),940px);
+  transition:transform .5s var(--ease);
+  filter:drop-shadow(0 40px 70px rgba(0,0,0,.9));
+}
+.car{width:100%;height:auto;transition:filter .5s}
+.car-stage.rotating .car-wrap{transition:none}
+.car-stage.blueprint .car{filter:grayscale(1) brightness(1.25) contrast(1.15) hue-rotate(160deg)}
+
+/* hotspots */
+.hotspot{
+  position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--red-bright),var(--red-deep));
+  box-shadow:0 0 0 1px rgba(255,255,255,.18),0 6px 18px rgba(211,20,46,.5),0 0 22px rgba(211,20,46,.45);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;
+  transition:transform .3s var(--ease),opacity .3s;animation:pop .5s var(--ease) backwards;
+}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.hotspot::before{
+  content:'';position:absolute;inset:0;border-radius:50%;border:1px solid var(--red);
+  animation:ping 2.6s ease-out infinite;
+}
+@keyframes ping{0%{transform:scale(1);opacity:.85}70%,100%{transform:scale(2.6);opacity:0}}
+.hotspot svg{width:11px;height:11px;stroke:#fff;stroke-width:2.4;fill:none}
+.hotspot:hover{transform:scale(1.28);z-index:9}
+.hotspot.off{opacity:0;pointer-events:none;transform:scale(.4)}
+.hs-tip{
+  position:absolute;left:50%;bottom:calc(100% + 16px);transform:translate(-50%,6px);
+  width:224px;padding:16px 18px;background:rgba(10,12,15,.94);border:1px solid var(--line-2);
+  backdrop-filter:blur(14px);opacity:0;visibility:hidden;transition:.35s var(--ease);text-align:left;
+  z-index:20;pointer-events:none;
+}
+.hs-tip::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:7px solid transparent;border-top-color:rgba(10,12,15,.94)}
+.hotspot:hover .hs-tip,.hotspot.active .hs-tip{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.hs-tip b{display:block;font-size:13px;font-weight:500;letter-spacing:.04em;color:#fff;margin-bottom:7px}
+.hs-tip p{font-size:11.5px;line-height:1.6;color:var(--muted);margin:0}
+.hs-tip u{display:inline-block;margin-top:9px;font-size:11px;letter-spacing:.12em;color:var(--red-bright);text-decoration:none;border-top:1px solid var(--line);padding-top:8px;width:100%}
+
+/* lens */
+.lens{
+  position:absolute;left:0;top:0;width:180px;height:180px;border-radius:50%;overflow:hidden;
+  border:1px solid rgba(255,255,255,.22);box-shadow:0 0 0 1px rgba(0,0,0,.6),0 24px 60px rgba(0,0,0,.7);
+  pointer-events:none;opacity:0;visibility:hidden;transition:opacity .25s;z-index:30;background:#07080A;
+}
+.lens.on{opacity:1;visibility:visible}
+.lens::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 40px rgba(0,0,0,.9);border-radius:50%}
+.lens-inner{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+
+/* hero furniture */
+.rail{
+  position:absolute;left:26px;bottom:56px;z-index:6;display:flex;flex-direction:column;gap:20px;align-items:center;
+}
+.rail a{color:#63696F;transition:.3s}
+.rail a:hover{color:var(--red-bright);transform:translateY(-2px)}
+.rail svg{width:15px;height:15px}
+.rail::before,.rail::after{content:'';width:1px;height:38px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.18),transparent)}
+.stage-tools{
+  position:absolute;left:50%;bottom:40px;transform:translateX(-50%);z-index:6;
+  display:flex;gap:12px;padding:9px 12px;border:1px solid var(--line);border-radius:60px;
+  background:rgba(9,11,14,.7);backdrop-filter:blur(14px);
+}
+.tool{
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#7B8189;transition:.3s var(--ease);position:relative;
+}
+.tool:hover{color:#fff;background:rgba(255,255,255,.06)}
+.tool.active{color:#fff;background:var(--red);box-shadow:0 0 20px rgba(211,20,46,.55)}
+.tool svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tool::after{
+  content:attr(data-label);position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);
+  font-size:10px;letter-spacing:.16em;white-space:nowrap;color:var(--muted);
+  opacity:0;transition:.3s;pointer-events:none;
+}
+.tool:hover::after{opacity:1;bottom:calc(100% + 8px)}
+.hero-specs{
+  position:absolute;right:26px;bottom:56px;z-index:6;text-align:right;display:flex;flex-direction:column;gap:14px;
+}
+.hero-specs div{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2)}
+.hero-specs b{display:block;font-size:20px;font-weight:300;letter-spacing:.04em;color:#fff;margin-top:2px}
+.scroll-cue{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:9px;letter-spacing:.36em;color:var(--muted-2);text-transform:uppercase}
+
+/* ============ ticker ============ */
+.ticker{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:20px 0;overflow:hidden;white-space:nowrap;background:var(--bg-2);position:relative;
+}
+.ticker-track{display:inline-flex;gap:0;animation:marquee 34s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker span{
+  font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#7C828A;padding:0 30px;
+  display:inline-flex;align-items:center;gap:30px;
+}
+.ticker span::after{content:'';width:5px;height:5px;background:var(--red);border-radius:50%}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ============ sections ============ */
+section{position:relative}
+.sec{padding:104px 0}
+.sec-head{max-width:720px;margin-bottom:54px}
+.sec-head h2{
+  font-size:clamp(28px,3.6vw,56px);font-weight:200;letter-spacing:.04em;line-height:1.14;margin-top:22px;
+}
+.sec-head h2 strong{font-weight:400;color:var(--red-bright)}
+.sec-head p{margin-top:22px;color:var(--muted);font-size:14.5px;max-width:600px}
+.sec-title-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* design grid */
+.design-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.dcard{
+  background:var(--bg);padding:46px 40px 44px;position:relative;overflow:hidden;
+  border:1px solid var(--line);border-radius:3px;
+  transition:background .45s var(--ease),border-color .45s var(--ease),transform .45s var(--ease);
+}
+.dcard:hover{background:var(--panel);border-color:var(--line-2);transform:translateY(-6px)}
+.dcard::after{
+  content:'';position:absolute;left:0;top:0;height:2px;width:0;background:var(--red);transition:width .6s var(--ease);
+}
+.dcard:hover::after{width:100%}
+.dcard .num{display:flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.3em;color:var(--red);font-weight:500;
+  font-variant-numeric:tabular-nums;padding-right:84px}
+.dcard .num::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--red),transparent)}
+.dcard h3{font-size:20px;font-weight:300;letter-spacing:.06em;margin:30px 0 18px}
+.dcard p{font-size:13.5px;color:var(--muted);line-height:1.8}
+.dcard .fig{position:absolute;top:28px;right:30px;width:72px;height:72px;opacity:.5;z-index:1}
+.dcard .fig svg{width:100%;height:100%;fill:none;stroke:var(--red);stroke-width:1;opacity:.75}
+
+/* performance */
+.perf{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-bottom:64px}
+.stat{background:var(--bg);padding:30px 28px}
+.stat b{font-size:clamp(34px,4.4vw,58px);font-weight:200;letter-spacing:-.01em;line-height:1;display:flex;align-items:baseline;gap:6px}
+.stat b i{font-size:14px;font-style:normal;letter-spacing:.14em;color:var(--muted);font-weight:300}
+.stat span{display:block;margin-top:14px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2)}
+.stat em{color:var(--red-bright);font-style:normal}
+.chart-card{border:1px solid var(--line);padding:28px;background:var(--panel);position:relative}
+.chart-card h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted-2);font-weight:400;margin-bottom:6px}
+.legend{display:flex;gap:22px;margin-bottom:22px}
+.legend div{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.legend i{width:16px;height:2px;display:block}
+.chart{width:100%;height:auto;overflow:visible}
+.chart .gridline{stroke:rgba(255,255,255,.06);stroke-width:1}
+.chart text{fill:#5B6169;font-size:10px;letter-spacing:.1em;font-family:inherit}
+.chart .curve{fill:none;stroke-width:2;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;transition:stroke-dashoffset 2.2s var(--ease)}
+.reveal.in .chart .curve{stroke-dashoffset:0}
+.bars{margin-top:34px}
+.bar-row{display:grid;grid-template-columns:132px 1fr 72px;align-items:center;gap:16px;padding:15px 0;border-bottom:1px solid var(--line)}
+.bar-row:last-child{border-bottom:0}
+.bar-row span{font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.bar-row .track{height:4px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+.bar-row .track i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--red-deep),var(--red-bright));transition:width 1.4s var(--ease)}
+.bar-row.ours .track i{box-shadow:0 0 16px rgba(211,20,46,.6)}
+.reveal.in .bar-row .track i{width:var(--w)}
+.bar-row b{font-size:15px;font-weight:400;text-align:right;color:#fff}
+.bar-row.ours b{color:var(--red-bright)}
+.bar-row.dim{opacity:.55}
+
+/* color configurator */
+.configurator{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center}
+.cfg-stage{position:relative;padding:20px 0}
+.cfg-stage::before{
+  content:'';position:absolute;left:50%;top:50%;width:78%;height:78%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,var(--swatch-glow,rgba(211,20,46,.13)),transparent 68%);transition:background .6s;filter:blur(12px);
+}
+.swatches{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.sw{
+  border:1px solid var(--line);padding:16px 18px;display:flex;align-items:center;gap:14px;
+  transition:.35s var(--ease);text-align:left;background:var(--bg);
+}
+.sw:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.sw.active{border-color:var(--red);background:rgba(211,20,46,.07)}
+.sw i{width:26px;height:26px;border-radius:50%;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.sw u{text-decoration:none;font-size:13px;display:block;letter-spacing:.04em}
+.sw small{display:block;font-size:10.5px;color:var(--muted-2);letter-spacing:.16em;margin-top:3px}
+.cfg-info{border-top:1px solid var(--line);margin-top:34px;padding-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cfg-info div{font-size:11px;letter-spacing:.22em;color:var(--muted-2);text-transform:uppercase}
+.cfg-info b{display:block;margin-top:8px;font-size:14px;font-weight:300;letter-spacing:.04em;color:#fff;text-transform:none}
+
+/* variants */
+.variants{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.var{border:1px solid var(--line);padding:38px 32px 34px;position:relative;transition:.45s var(--ease);background:var(--bg)}
+.var:hover{border-color:var(--line-2);transform:translateY(-6px);background:var(--panel)}
+.var.hot{border-color:rgba(211,20,46,.5);background:linear-gradient(180deg,rgba(211,20,46,.07),transparent 55%)}
+.var .tag{
+  position:absolute;top:-11px;left:32px;background:var(--red);color:#fff;font-size:9.5px;letter-spacing:.24em;
+  padding:5px 12px;text-transform:uppercase;
+}
+.var h3{font-size:22px;font-weight:300;letter-spacing:.06em}
+.var .price{margin:18px 0 26px;font-size:34px;font-weight:200;letter-spacing:.01em}
+.var .price small{font-size:12px;letter-spacing:.2em;color:var(--muted-2);display:block;margin-top:6px;font-weight:300}
+.var ul{list-style:none;border-top:1px solid var(--line)}
+.var li{
+  font-size:13px;color:var(--muted);padding:12px 0;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:14px;
+}
+.var li b{color:#fff;font-weight:400;letter-spacing:.02em}
+.var .btn-line{width:100%;text-align:center;margin-top:28px;display:block}
+
+/* order */
+.order{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px}
+.stores{display:flex;flex-direction:column;gap:1px;background:var(--line);margin-top:34px}
+.store{background:var(--bg);padding:22px 24px;display:flex;justify-content:space-between;gap:20px;align-items:center;transition:.35s}
+.store:hover{background:var(--panel);padding-left:30px}
+.store b{font-size:14px;font-weight:400;letter-spacing:.08em}
+.store span{font-size:12px;color:var(--muted-2);display:block;margin-top:5px;letter-spacing:.02em}
+.store u{text-decoration:none;font-size:10.5px;letter-spacing:.2em;color:var(--red);text-transform:uppercase;white-space:nowrap}
+form{border:1px solid var(--line);padding:40px;background:var(--panel);position:relative;overflow:hidden}
+form::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--red),transparent)}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.field{margin-bottom:20px;position:relative}
+.field label{display:block;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted-2);margin-bottom:9px}
+.field input,.field select,.field textarea{
+  width:100%;background:transparent;border:0;border-bottom:1px solid var(--line-2);color:#fff;
+  padding:11px 2px;font-size:14px;font-family:inherit;transition:.3s;outline:none;
+}
+.field textarea{resize:vertical;min-height:74px}
+.field input:focus,.field select:focus,.field textarea:focus{border-bottom-color:var(--red)}
+.field select option{background:#0E1013}
+.field.err input,.field.err select{border-bottom-color:var(--red-bright)}
+.field .msg{font-size:10.5px;color:var(--red-bright);margin-top:6px;letter-spacing:.08em;min-height:14px}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:12px;color:var(--muted);margin:10px 0 26px;cursor:pointer}
+.check input{width:15px;height:15px;margin-top:3px;accent-color:var(--red);flex:0 0 auto}
+.check.err span{color:var(--red-bright)}
+.check.err input{outline:1px solid var(--red-bright);outline-offset:2px}
+.btn-solid{
+  width:100%;padding:17px;background:var(--red);color:#fff;font-size:12px;letter-spacing:.28em;text-transform:uppercase;
+  position:relative;overflow:hidden;transition:.4s var(--ease);
+}
+.btn-solid span{position:relative;z-index:2}
+.btn-solid::after{content:'';position:absolute;inset:0;background:var(--red-bright);transform:translateX(-101%);transition:transform .5s var(--ease)}
+.btn-solid:hover::after{transform:translateX(0)}
+.btn-solid:disabled{opacity:.6;cursor:not-allowed}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:80px 0 34px;background:var(--bg-2);position:relative;overflow:hidden}
+footer::before{
+  content:'';position:absolute;left:50%;top:-160px;width:900px;height:340px;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(211,20,46,.13),transparent 68%);pointer-events:none;
+}
+.f-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;position:relative}
+.f-brand p{color:var(--muted);font-size:13px;margin-top:22px;max-width:280px;line-height:1.8}
+.f-col h5{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2);font-weight:400;margin-bottom:22px}
+.f-col a{display:block;font-size:13px;color:var(--muted);padding:5px 0;transition:.3s}
+.f-col a:hover{color:var(--red-bright);padding-left:5px}
+.f-bot{
+  margin-top:64px;padding-top:26px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;
+}
+.f-bot p{font-size:11.5px;color:var(--muted-2);letter-spacing:.06em}
+.f-soc{display:flex;gap:16px}
+.f-soc a{color:#63696F;transition:.3s}
+.f-soc a:hover{color:var(--red-bright)}
+.f-soc svg{width:15px;height:15px}
+
+/* toast */
+#toast{
+  position:fixed;right:28px;bottom:28px;z-index:1000;background:rgba(12,14,17,.96);border:1px solid var(--line-2);
+  border-left:2px solid var(--red);padding:18px 24px;display:flex;gap:14px;align-items:center;
+  transform:translateX(calc(100% + 40px));transition:transform .6s var(--ease);backdrop-filter:blur(16px);max-width:340px;
+}
+#toast.show{transform:none}
+#toast b{font-size:13px;font-weight:400;display:block}
+#toast p{font-size:11.5px;color:var(--muted);margin-top:3px}
+#toast svg{width:20px;height:20px;stroke:var(--red-bright);fill:none;stroke-width:1.8;flex:0 0 auto}
+
+/* responsive */
+@media(max-width:1100px){
+  .nav-links{display:none}
+  .perf,.configurator,.order,.menu-grid{grid-template-columns:1fr;gap:46px}
+  .design-grid,.variants{grid-template-columns:1fr}
+  .f-top{grid-template-columns:1fr 1fr}
+  .hero-specs{display:none}
+  .deco.d3,.deco.d4{display:none}
+}
+@media(max-width:760px){
+  .wrap,.hero-inner{padding:0 22px}
+  .hotspot{width:22px;height:22px;margin:-11px 0 0 -11px}
+  .hs-tip{width:186px;padding:13px 14px}
+  .hs-tip b{font-size:12px}
+  .scroll-cue{display:none}
+  .hero{padding:92px 0 118px}
+  .hero .sub{font-size:11px;letter-spacing:.12em;gap:9px}
+  .ticker span{font-size:11px;padding:0 20px}
+  .var{padding:30px 24px 28px}
+  .sec-head h2{font-size:26px}
+  .sec{padding:88px 0}
+  .rail{left:14px;bottom:96px;gap:14px}
+  .rail::before,.rail::after{height:22px}
+  .stage-tools{bottom:26px;gap:4px;padding:7px 9px}
+  .tool{width:36px;height:36px}
+  .stats{grid-template-columns:1fr 1fr}
+  .f2,.cfg-info{grid-template-columns:1fr}
+  form{padding:28px 22px}
+  .f-top{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:104px 1fr 62px;gap:12px}
+  .ghost{top:22%}
+  #menu{padding:100px 24px 50px}
+}
+@media(max-width:520px){
+  .nav-right .btn-line{display:none}
+  .logo svg{width:98px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body data-page-node-id="DSSEKQ7upv88SbMDJSM9vi">
+
+<!-- ========== SVG ART LIBRARY ========== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" data-page-node-id="sJrd3260WRKzhNEBM5cmzj">
+  <defs data-page-node-id="H6W1wUF8QnxKMjoWoSdCMl">
+    <linearGradient id="bodyGrad" x1="0" y1="0" x2=".16" y2="1" data-page-node-id="bHhe971r3tyffBISFTXfrF">
+      <stop offset="0" stop-color="var(--body-a,#4A5259)" data-page-node-id="nIqLX6izfCgKTO1RGfAscJ"/>
+      <stop offset=".28" stop-color="var(--body-m,#2E353D)" data-page-node-id="hqP0EWkJJrXw0VIE19RDth"/>
+      <stop offset=".62" stop-color="var(--body-b,#1C2026)" data-page-node-id="DuYYriOFyMLuvMdnJ4GGIE"/>
+      <stop offset="1" stop-color="var(--body-c,#0A0C0F)" data-page-node-id="3pgDEdlPh3Z1prM5aImjvp"/>
+    </linearGradient>
+    <linearGradient id="glassGrad" x1="0" y1="0" x2=".35" y2="1" data-page-node-id="N5D2t8u06f8y7VBDbMqRpQ">
+      <stop offset="0" stop-color="#63717F" data-page-node-id="4gAj6AjTCJ0eniBIMmOLj5"/>
+      <stop offset=".5" stop-color="#2C343E" data-page-node-id="o5yIgoBStMdHcIvwqTYLbn"/>
+      <stop offset="1" stop-color="#141920" data-page-node-id="wdw4nWKItqjbpwChSW7gnH"/>
+    </linearGradient>
+    <linearGradient id="edgeGrad" x1="0" y1="0" x2="0" y2="1" data-page-node-id="uSxJBqKcAFD8U4JAjEDtKa">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".85" data-page-node-id="7fBnK9x4zRiEK5Zq7MV8st"/>
+      <stop offset=".4" stop-color="#FFFFFF" stop-opacity=".14" data-page-node-id="HLgEizacHDjFVVOpf0MWDs"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" data-page-node-id="HNkhC0X5tQS51nEgJnGH5w"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0" y1="0" x2="1" y2="0" data-page-node-id="eCn4c4KBin6SjSHIWiZl9S">
+      <stop offset="0" stop-color="#7C0A1B" data-page-node-id="05Qt3L87nA8ebkoHqt9wNP"/>
+      <stop offset=".55" stop-color="#D3142E" data-page-node-id="wBIm08ED3QMIBwoFZXJKxO"/>
+      <stop offset="1" stop-color="#FF2A45" data-page-node-id="2n8GzQlr3MvtZTntUoQUdo"/>
+    </linearGradient>
+    <linearGradient id="rimGrad" x1=".2" y1="0" x2=".8" y2="1" data-page-node-id="8ceS6J1x4uUHrUaMk0CIam">
+      <stop offset="0" stop-color="#5A6169" data-page-node-id="HwwppYOdjUuQ73QMwI2GWd"/>
+      <stop offset=".4" stop-color="#272C33" data-page-node-id="bfM0uLvaAnhH7dGtFcQVeB"/>
+      <stop offset=".7" stop-color="#464D55" data-page-node-id="BmPsnyRDVEYNm3r5mCdvdw"/>
+      <stop offset="1" stop-color="#181C21" data-page-node-id="Y6k7M4T9yUyitNwukmHdsG"/>
+    </linearGradient>
+    <radialGradient id="tireGrad" cx=".4" cy=".3" r=".85" data-page-node-id="aWBZuXY8aC67lzPLRSwpmP">
+      <stop offset="0" stop-color="#25292F" data-page-node-id="0w5INMafAOCHcPIVxECPC9"/>
+      <stop offset=".7" stop-color="#12151A" data-page-node-id="Av9MwjkMebWsPcnRM56811"/>
+      <stop offset="1" stop-color="#0A0C0F" data-page-node-id="qqcCXQevUfDLPIaWKUb8fJ"/>
+    </radialGradient>
+    <radialGradient id="groundGrad" cx=".5" cy=".5" r=".5" data-page-node-id="UBQFqaXavFpKAzhaM2yXGA">
+      <stop offset="0" stop-color="#D3142E" stop-opacity=".5" data-page-node-id="NhjGRCL3r14Gbmx5ZwajZa"/>
+      <stop offset=".55" stop-color="#D3142E" stop-opacity=".1" data-page-node-id="1TCCaNLkbV2Hrbhs9Jj5gz"/>
+      <stop offset="1" stop-color="#D3142E" stop-opacity="0" data-page-node-id="bLCHX21l2n00aN0BqOFfF6"/>
+    </radialGradient>
+    <linearGradient id="sideGrad" x1="0" y1="0" x2="0" y2="1" data-page-node-id="xJMrtz8bFLsipJGU07oyFD">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".2" data-page-node-id="mXbUjVDOWh78Vbh51WoySt"/>
+      <stop offset=".4" stop-color="#FFFFFF" stop-opacity=".07" data-page-node-id="YrwBpE46U2qkvHmtcaxG8F"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" data-page-node-id="ht4SzCyey4BAKebEtv1mup"/>
+    </linearGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%" data-page-node-id="CNYT0PZCCSaIfTyNCCDB68">
+      <feGaussianBlur stdDeviation="9" data-page-node-id="rCv0q85KSACcVDsnlSh8U9"/>
+    </filter>
+
+    <!-- wheels -->
+    <g id="wheelArt" data-page-node-id="6dEkzwF4oDOwLSfeFnnWXu">
+      <circle r="94" fill="#08090C" data-page-node-id="BLoFL2zTbkweFKibAIVZN9"/>
+      <circle r="92" fill="url(#tireGrad)" stroke="#262B31" stroke-width="1.2" data-page-node-id="8tP2N8jpuwt96HYG6Enrk0"/>
+      <circle r="78" fill="none" stroke="#191D22" stroke-width="3" data-page-node-id="BqH8hHl6JXHkz2MDgqtTou"/>
+      <circle r="74" fill="#0B0D10" stroke="#1E2329" stroke-width="1" data-page-node-id="u4DEAn2d45fWLfi2sLPBou"/>
+      <circle r="62" fill="url(#rimGrad)" data-page-node-id="rR9C9BGr4xmeTJJkTACB2C"/>
+      <g stroke="#8A9299" stroke-width="6.5" stroke-linecap="round" opacity=".9" data-page-node-id="CJontovPwwmkMIRdcxFyGX">
+        <line x1="0" y1="-17" x2="0" y2="-55" data-page-node-id="2oEdNv0XrlJJvCSu5fTRBp"/><line x1="0" y1="17" x2="0" y2="55" data-page-node-id="Gf4Fq2Hg3VP7voBbzVuKPx"/>
+        <line x1="-17" y1="0" x2="-55" y2="0" data-page-node-id="46rvs8lIcAPwRGOuuTpFNe"/><line x1="17" y1="0" x2="55" y2="0" data-page-node-id="ZK1RchaS08IZM5satKJf5u"/>
+        <line x1="-12" y1="-12" x2="-39" y2="-39" data-page-node-id="cqHDj0W1ASCjUJ2F3rS91L"/><line x1="12" y1="12" x2="39" y2="39" data-page-node-id="HTCCvCWlqMjptMS8wutvQw"/>
+        <line x1="-12" y1="12" x2="-39" y2="39" data-page-node-id="xQlijidJN1FpBQReDo53xH"/><line x1="12" y1="-12" x2="39" y2="-39" data-page-node-id="kwHzPS6UlSjt3fuxyU1rj7"/>
+      </g>
+      <g stroke="#2B3138" stroke-width="2.4" opacity=".9" data-page-node-id="q8yxj1p1wZplj14NOD1d1M">
+        <line x1="0" y1="-17" x2="0" y2="-55" data-page-node-id="V62gtFZqzgQzmiYwAXlMSc"/><line x1="0" y1="17" x2="0" y2="55" data-page-node-id="JPmjbvHDJ3gejAkhE5fzJ7"/>
+        <line x1="-17" y1="0" x2="-55" y2="0" data-page-node-id="JA9T4pwO1TGieSQxY9wjAn"/><line x1="17" y1="0" x2="55" y2="0" data-page-node-id="4cgAvbNl4LPDDrgKyZRFWp"/>
+        <line x1="-12" y1="-12" x2="-39" y2="-39" data-page-node-id="p6SFM3sUOvE42Pjv5RuMUj"/><line x1="12" y1="12" x2="39" y2="39" data-page-node-id="UVCmO0QEOeDZEuO9BDkMv9"/>
+        <line x1="-12" y1="12" x2="-39" y2="39" data-page-node-id="H75wuMKiLHPDbmkMtYqn0J"/><line x1="12" y1="-12" x2="39" y2="-39" data-page-node-id="8mslFXy2brmkUIzIsjHuDE"/>
+      </g>
+      <circle r="62" fill="none" stroke="#C3CAD2" stroke-width="1.6" opacity=".65" data-page-node-id="dzTGIAKsOuPEapDGd1IKtf"/>
+      <circle r="47" fill="none" stroke="#31373E" stroke-width="8" data-page-node-id="rMpbriGgsOyONN0pkjslx7"/>
+      <path d="M 33 -33 A 47 47 0 0 1 47 0" fill="none" stroke="#7C0A1B" stroke-width="10" stroke-linecap="round" data-page-node-id="ALfGLuRQKJgZRcBqJweYgA"/>
+      <path d="M 33 -33 A 47 47 0 0 1 47 0" fill="none" stroke="#FF2A45" stroke-width="4" stroke-linecap="round" data-page-node-id="ir5XkjxzHhpjUGPGsDeIfK"/>
+      <circle r="16" fill="#1A1F25" stroke="#4A5058" stroke-width="1.6" data-page-node-id="V3EvhBr5SEKwVoFjGUE8lQ"/>
+      <circle r="6" fill="#D3142E" data-page-node-id="wArBxc5hRJo5X04FhvlbUo"/>
+    </g>
+
+    <!-- the car -->
+    <symbol id="carArt" viewBox="0 0 1400 520" data-page-node-id="uML79q8svNdoSVq6zFE2pA">
+      <!-- ground -->
+      <ellipse cx="780" cy="474" rx="590" ry="24" fill="url(#groundGrad)" opacity=".5" data-page-node-id="yDdYrNk81ABfjVCo1ZoAxe"/>
+      <ellipse cx="780" cy="472" rx="450" ry="8" fill="#000" opacity=".8" data-page-node-id="pJibhpKJZcAXiHcJQAfKAC"/>
+
+      <!-- body -->
+      <path d="M 262 376 L 258 316 C 254 286 268 262 302 254 C 340 248 380 246 420 246
+               C 470 246 508 250 534 258 C 548 222 588 194 648 189 L 790 185
+               C 826 185 848 202 862 234 C 884 260 914 276 952 288
+               C 1014 292 1090 298 1150 304 L 1250 314
+               C 1288 318 1308 332 1308 352 L 1308 368 C 1308 374 1304 376 1296 376
+               L 1230 376 A 112 112 0 0 0 1006 376 L 512 376 A 112 112 0 0 0 288 376 Z"
+            fill="url(#bodyGrad)" stroke="rgba(255,255,255,.08)" stroke-width="1" data-page-node-id="pJZ1Q4NNSikYBfHszxRnhx"/>
+      <!-- top edge highlight -->
+      <path d="M 258 316 C 254 286 268 262 302 254 C 340 248 380 246 420 246
+               C 470 246 508 250 534 258 C 548 222 588 194 648 189 L 790 185
+               C 826 185 848 202 862 234 C 884 260 914 276 952 288
+               C 1014 292 1090 298 1150 304 L 1250 314 C 1288 318 1308 332 1308 352"
+            fill="none" stroke="url(#edgeGrad)" stroke-width="2.6" stroke-linecap="round" data-page-node-id="b23GYFAEd2WqCziHQtD7Tf"/>
+
+      <!-- greenhouse -->
+      <path d="M 534 258 C 548 222 588 194 648 189 L 790 185 C 826 185 848 202 862 234
+               C 884 260 914 276 952 288 Z"
+            fill="url(#glassGrad)" stroke="rgba(255,255,255,.2)" stroke-width="1.2" data-page-node-id="bewm55f8oNrN1qK5IdLZNJ"/>
+      <path d="M 534 258 L 952 288" stroke="rgba(255,255,255,.16)" stroke-width="1.4" data-page-node-id="5B9HjpyoaltWnJdokuTGpE"/>
+      <!-- pillars -->
+      <path d="M 862 234 C 884 260 914 276 952 288" fill="none" stroke="rgba(255,255,255,.42)" stroke-width="2" data-page-node-id="y474xG4OMXIICqyl04WYW1"/>
+      <path d="M 722 187 L 734 272" stroke="rgba(255,255,255,.20)" stroke-width="1.8" data-page-node-id="xPos0fXecl3OzRKURMgHzu"/>
+      <path d="M 566 240 C 600 214 644 194 706 190" fill="none" stroke="rgba(255,255,255,.32)" stroke-width="1.6" data-page-node-id="k4g1YaavVuHjS065RH2JQ7"/>
+      <path d="M 650 188 L 788 184" stroke="rgba(255,255,255,.34)" stroke-width="1.6" data-page-node-id="V7Yh84BgRSaA9iActD3gf1"/>
+
+      <!-- body surface lines -->
+      <path d="M 1090 310 C 940 304 760 304 600 310" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.4" data-page-node-id="fRC2RZLv6OIEzWGc4W817z"/>
+      <path d="M 1010 336 C 810 332 640 334 520 340" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1.2" data-page-node-id="0ULEfMdnyS3kAunXJDVvXj"/>
+      <path d="M 1002 268 C 1060 272 1120 280 1160 292" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1.2" data-page-node-id="p4MeOWWjpDxQvLeLWzfsA3"/>
+      <path d="M 300 300 C 520 292 880 290 1104 306 L 1100 336 C 880 318 520 318 302 328 Z"
+            fill="url(#sideGrad)" opacity=".75" data-page-node-id="DTtMQ1fiIC5Y6NHQWRowEr"/>
+      <path d="M 734 272 C 740 300 742 336 740 374" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1.2" data-page-node-id="1QDajJ8xPkGBZo3vDuEtGG"/>
+      <path d="M 900 292 C 906 320 906 348 902 372" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1.2" data-page-node-id="nh02GQQQu3x7yzpLa55PCm"/>
+      <path d="M 356 262 C 366 300 368 340 362 374" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1.2" data-page-node-id="sAPxsglgHNUTq1tsSMc13s"/>
+      <path d="M 1074 300 C 1084 330 1086 352 1080 372" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1.2" data-page-node-id="AMVX8VkyOLdNW6OUDcePKE"/>
+
+      <!-- side intake -->
+      <path d="M 968 300 C 1000 302 1024 308 1040 318 L 1036 340 C 1016 330 990 322 962 320 Z"
+            fill="#07080A" stroke="rgba(255,255,255,.12)" stroke-width="1" data-page-node-id="GqHQNHrmWYSeCxkLO8BQEF"/>
+      <path d="M 972 306 C 998 308 1018 313 1032 322" fill="none" stroke="url(#redGrad)" stroke-width="2" data-page-node-id="x0UJHLe732vCB8wnsGoxch"/>
+      <path d="M 1178 320 C 1210 326 1236 336 1252 348 L 1248 366 C 1230 354 1204 344 1172 338 Z"
+            fill="#07080A" stroke="rgba(255,255,255,.1)" stroke-width="1" data-page-node-id="bjbgK9uFLlzXd8HicXKHKi"/>
+      <path d="M 1182 328 C 1208 334 1230 342 1244 352" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.2" data-page-node-id="NY5ri4vQsKftMrmRamXRaC"/>
+
+      <!-- rear wing + mirror -->
+      <path d="M 258 232 L 344 224 L 350 242 L 264 250 Z" fill="#0D1013" stroke="rgba(255,255,255,.16)" stroke-width="1" data-page-node-id="M6u5XOsR8YXqiMGFJVS9va"/>
+      <path d="M 266 248 L 274 268" stroke="#1E2329" stroke-width="4" data-page-node-id="fhrgnx0EAC4N1jbOEeh8WZ"/>
+      <path d="M 880 238 L 926 230 L 930 246 L 884 252 Z" fill="#12161B" stroke="rgba(255,255,255,.24)" stroke-width="1" data-page-node-id="Gf2WEt6sR3OeaOOzDEBawE"/>
+
+      <!-- side accents -->
+      <path d="M 524 344 C 700 340 920 340 1096 348" fill="none" stroke="url(#redGrad)" stroke-width="3.6" stroke-linecap="round" opacity=".95" data-page-node-id="iYZwH1HEk3oU0nuKR9K0NL"/>
+      <path d="M 306 252 C 400 247 480 249 534 258" fill="none" stroke="url(#redGrad)" stroke-width="2.4" opacity=".5" data-page-node-id="V5PYVr8Es1P1vpjxheuvZ1"/>
+      <path d="M 880 322 L 930 320" stroke="rgba(255,255,255,.38)" stroke-width="2.6" stroke-linecap="round" data-page-node-id="LRqPLefuMum4GGFI5E82xI"/>
+
+      <!-- skirt / splitter / diffuser -->
+      <path d="M 512 376 L 1006 376 L 992 396 L 526 396 Z" fill="#090B0E" stroke="rgba(255,255,255,.08)" stroke-width="1" data-page-node-id="ye0Q4C04D0RihVM6kgTa64"/>
+      <path d="M 1230 376 L 1308 370 L 1308 394 L 1214 394 Z" fill="#0A0C0F" stroke="rgba(255,255,255,.1)" stroke-width="1" data-page-node-id="SOjeiSXfsyGLJ7C4POueEL"/>
+      <path d="M 288 376 L 258 378 L 262 400 L 308 398 Z" fill="#0A0C0F" stroke="rgba(255,255,255,.09)" stroke-width="1" data-page-node-id="xNBk2NOb3S6zc9PFvqD3Ve"/>
+      <g stroke="#20252B" stroke-width="3" data-page-node-id="ReNVn30axmqeJbUgBDsJI8">
+        <line x1="336" y1="378" x2="342" y2="398" data-page-node-id="WYiLruCRjjOrc5cDh1tNrC"/><line x1="386" y1="378" x2="390" y2="398" data-page-node-id="eDDCz1ZqhBgHEVESPJwgOA"/>
+        <line x1="436" y1="378" x2="440" y2="398" data-page-node-id="2BGop5UDww6ztfaJgEhOvr"/>
+      </g>
+
+      <!-- headlight -->
+      <path d="M 1240 302 L 1306 320 L 1306 336 L 1246 316 Z" fill="#DCE8F8" opacity=".85" filter="url(#soft)" data-page-node-id="qGUXGbRLeioWyyj2V04Vju"/>
+      <path d="M 1246 308 L 1304 324 L 1304 331 L 1250 315 Z" fill="#FFFFFF" data-page-node-id="N0wgylWFXzcABsxQVxJzwD"/>
+      <path d="M 1258 344 L 1310 356 L 1310 364 L 1262 352 Z" fill="#D3142E" opacity=".9" filter="url(#soft)" data-page-node-id="QSDyWjYkCzSBM5tJG7aXK3"/>
+      <path d="M 1262 348 L 1308 358 L 1308 361 L 1264 351 Z" fill="#FF2A45" data-page-node-id="MfE03BH3JquBgU7lHZQncq"/>
+
+      <!-- taillight -->
+      <path d="M 258 264 L 316 254 L 316 274 L 258 282 Z" fill="#D3142E" filter="url(#soft)" data-page-node-id="871IpYmdsZDL3wOHCQxkKZ"/>
+      <path d="M 262 269 L 312 260 L 312 268 L 262 276 Z" fill="#FF4D63" data-page-node-id="Yibaqvc83QbsrddOmKF3Zo"/>
+
+      <!-- fender + arch shading -->
+      <path d="M 1006 376 A 112 112 0 0 0 1230 376" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6" data-page-node-id="XUEZGr8v5poWdBXtyFcP1l"/>
+      <path d="M 288 376 A 112 112 0 0 0 512 376" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6" data-page-node-id="ihqzA1CKOd0qJgBGU4iaha"/>
+      <path d="M 946 284 C 1010 288 1090 294 1160 302" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1.2" data-page-node-id="BK8sDPF0WDI4qEklmhsHLs"/>
+
+      <!-- wheels -->
+      <use href="#wheelArt" transform="translate(400,378)" data-page-node-id="NMK83jCm6KG64GIFBwLUEh"/>
+      <use href="#wheelArt" transform="translate(1118,378)" data-page-node-id="DeTgDCPuA9GpNuPUO7PTs9"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ========== LOADER ========== -->
+<div id="loader" data-page-node-id="zbA11iHwfYgtUWakuzn7UD">
+  <div class="ld-logo" data-page-node-id="a0AvFD8EG5Ag5bJTXiDUUa">AXION</div>
+  <div class="ld-bar" data-page-node-id="bHANFznExEUMLat89OrwwI"><i id="ldBar" data-page-node-id="VlzkCpPXfnVGn159d0EJWy"></i></div>
+  <div class="ld-txt" data-page-node-id="FD5DxWNLy4IVd3519fK1fA">Initializing Drive System</div>
+</div>
+
+<div id="cursor" data-page-node-id="zMNMSZKLAPSmBKlMVC5Plh"></div>
+<div id="prog" data-page-node-id="TnWu93tKoECQQo816dozVP"></div>
+
+<!-- ========== HEADER ========== -->
+<header id="header" data-page-node-id="2YmOYwluaDhUCwYfAPP9EV">
+  <div class="wrap nav" data-page-node-id="Up80HABWK8FXsrCW7GWBu9">
+    <a href="#top" class="logo" aria-label="AXION" data-page-node-id="XesEFWtQFdEsjqGSjI1hLI">
+      <svg viewBox="0 0 200 46" fill="none" data-page-node-id="H6YmchOPrdrrihRpGwDQfv">
+        <path d="M4 42 L26 4 L34 18 L22 38 L16 28 L10 42 Z" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" data-page-node-id="VgXfCAXv8dnZvzBWnsjxfC"/>
+        <path d="M44 4 L60 42 M62 42 L78 4 M50 30 L72 30" stroke="#D3142E" stroke-width="2.6" stroke-linecap="round" data-page-node-id="dlmKJWIJEXYu6tPj0At4Ei"/>
+        <path d="M90 42 L90 4 L124 4 M90 22 L116 22" stroke="#fff" stroke-width="2.4" data-page-node-id="LeScNpiyfKGJoqDz1VrcDi"/>
+        <path d="M136 42 L136 4 L150 4 L150 42" stroke="#fff" stroke-width="2.4" data-page-node-id="K5iUw7nduQhqAefWBqbXzW"/>
+        <path d="M164 4 L164 42 L188 42" stroke="#fff" stroke-width="2.4" data-page-node-id="llZPqXmN88cDYZBbIIeUSU"/>
+      </svg>
+    </a>
+    <nav class="nav-links" data-page-node-id="Uf8MpJlonXoeWWCqrW1aJr">
+      <a href="#design" data-page-node-id="DZmR93EK13wBHWvrq6iSKX">设计</a>
+      <a href="#performance" data-page-node-id="CrMES7Hiayby5cOcBZtAfL">性能</a>
+      <a href="#color" data-page-node-id="R4wqiV01zAqAdbeqFlZx0q">定制</a>
+      <a href="#variants" data-page-node-id="0FCWs44RdOqFB2HOH4rT6H">版本</a>
+      <a href="#order" data-page-node-id="G2Eaw2WuYynqyeHOQqhzm0">试驾</a>
+    </nav>
+    <div class="nav-right" data-page-node-id="AhYGB3r9Cly65Xd9rL2Sy2">
+      <a href="#order" class="btn-line" data-page-node-id="GdDdTHRMQZtS83ByaQAwzo">预约试驾</a>
+      <button class="burger" id="burger" aria-label="菜单" data-page-node-id="bF37iMTHU0oanv0U8CivvT"><i data-page-node-id="TtWJv6YI4wUmmFHppSIYI9"></i><i data-page-node-id="yVUZDgLcgZwQGHDFbuJKF6"></i><i data-page-node-id="anDD5LbIvNmKu4t45ZbFA4"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- ========== MENU ========== -->
+<div id="menu" data-page-node-id="j4YHmawGar8Q1hpW0U8VHH">
+  <div class="menu-grid" data-page-node-id="RJAPaz5zf0x0HuatsM8DbO">
+    <div class="menu-list" data-page-node-id="QTYydGzb0MRDS3Y0A3Am3V">
+      <a href="#top" data-page-node-id="mD2fGolwG3WKyUreWTjQDf"><span data-page-node-id="FBJXzuBX4gAwIQGDatjuKx">01</span>首页</a>
+      <a href="#design" data-page-node-id="LJf3HZUgosGXpYII43IGTR"><span data-page-node-id="AC9aYodE8yRCmJL0BF1rV5">02</span>设计语言</a>
+      <a href="#performance" data-page-node-id="JACWCqbmoiB7np9LYLavem"><span data-page-node-id="8a3Je5tzY1qkHYo12YdLf9">03</span>性能数据</a>
+      <a href="#color" data-page-node-id="gdYk3MjgkFy0Zqcx5BQibf"><span data-page-node-id="3qnMcuPbcs70FrPtFfo7fs">04</span>个性定制</a>
+      <a href="#variants" data-page-node-id="ZwuwPfxJCH2iAPBPIAqMDZ"><span data-page-node-id="bjfNUnWwGEOUUMd6Lmz3cC">05</span>版本配置</a>
+      <a href="#order" data-page-node-id="nSJfpW9zGewEjkwZrOICCR"><span data-page-node-id="ajYGTPAV3WgF9dL2qQlaMj">06</span>预约试驾</a>
+    </div>
+    <div class="menu-side" data-page-node-id="k8Q8c6oR5DHQYHBFuylLJV">
+      <h4 data-page-node-id="1BDWLM6kT0zcReOLUvewkL">Contact</h4>
+      <p data-page-node-id="lYTN3ba0LZhF7hmmDF2Oey">400-828-1999</p>
+      <p data-page-node-id="ml4IOxW85DJ2D3DDWQpBCE">hello@axion-motors.com</p>
+      <p style="margin-top:18px" data-page-node-id="N5QgGTdp66uyioaqQzmlEW">浙江省杭州市余杭区仓前街道<br data-page-node-id="fxC4d0IDwZN6gfuFmGnKnr">良睦路 1399 号 · AXION 品牌中心</p>
+      <svg class="mcar" viewBox="0 0 1400 520" data-page-node-id="q7slSiHjOXfXJ1HmVWVyqE"><use href="#carArt" data-page-node-id="VFUTZmYjE2tAm5KjYDVu9E"/></svg>
+    </div>
+  </div>
+</div>
+
+<main data-page-node-id="wHIGbV9E5XOzdeh6VkWGwC">
+<!-- ========== HERO ========== -->
+<section class="hero" id="top" data-page-node-id="MH6G6biDwyLyAaDmwK9gDo">
+  <div class="grid-lines" data-page-node-id="MjUzJ3IA3ll92NLya3XwTU"></div>
+  <div class="deco d1" data-depth="14" data-page-node-id="aTn90yt45Bamcal2DM4TnZ"></div>
+  <div class="deco d2" data-depth="24" data-page-node-id="iOTQYMHPsu8FsyoiC3uD53"></div>
+  <div class="deco d3" data-depth="10" data-page-node-id="wLgZcou0AiTeYHn9wogW96"></div>
+  <div class="deco d4" data-depth="30" data-page-node-id="rA8ZbfpLAnIDLH0zqIDTHD"></div>
+  <div class="hero-glow" data-page-node-id="HA3pqPjD4ENkiN5vEOgHSH"></div>
+  <div class="ghost" data-page-node-id="qAjdA6gb3w9YVnSWxdan44">AXION</div>
+
+  <div class="hero-inner" data-page-node-id="xvU2b6Vfvq0HjQEjHadlbl">
+    <p class="eyebrow" style="justify-content:center" data-page-node-id="WiBfsgt2pgWsmNBt2M0Pli">2026 · All Electric Hypercar</p>
+    <h1 class="display" data-page-node-id="A6aK4pZLd6pYRyvJFS14IU">THE <em data-page-node-id="CSyaSqD5IBOCBtFZTj2d6Y">AXION</em> V1</h1>
+    <p class="sub" data-page-node-id="pIBmcKTVDJi1tg3ROAtVG3">四电机矢量驱动 <i data-page-node-id="xzMITPVOAuTdCHtkmZseqv"></i> 900V 高压平台 <i data-page-node-id="tMhlGjeVtaAQYFwRclKXJ1"></i> 0–100 km/h 1.9 秒</p>
+
+    <div class="car-stage" id="carStage" data-page-node-id="42D5eT5B3gMPEV2x3PYMXU">
+      <div class="car-wrap" id="carWrap" data-page-node-id="kSmpUzBWwiULmmRCVQbAB8">
+        <svg class="car" viewBox="0 0 1400 520" data-page-node-id="0Yce1HywQl8MpkYXgpL37g"><use href="#carArt" data-page-node-id="nDNs4sJtTFfU5FbEvNyu3V"/></svg>
+
+        <div class="hotspot" style="left:92.1%;top:61.5%" data-delay=".15" data-page-node-id="b9Dx7ixLvlh1LJY1p82dc6">
+          <svg viewBox="0 0 12 12" data-page-node-id="EIUQKFqUVgnkwQBaS6LBsy"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="eAlUJR2cFhY7DJk0ArzzG8"/></svg>
+          <div class="hs-tip" data-page-node-id="a7bu8npMrDZaSiAIj6eK6U"><b data-page-node-id="WzDJKuv46WgR25teiqU8j2">激光矩阵大灯</b><p data-page-node-id="AbhjcGOTtVlGkDk2SwNnme">120 万像素微镜投影，可随速域自动调节照射形态，夜间可视距离提升 42%。</p><u data-page-node-id="2cTbH7gTgQVGadGU1qRCSB">照射距离 620 m</u></div>
+        </div>
+        <div class="hotspot" style="left:89.3%;top:73.8%" data-delay=".24" data-page-node-id="2j2EUduqWQXEN0iNDzE6Z2">
+          <svg viewBox="0 0 12 12" data-page-node-id="NXsTWtuN4VebG6MESDCeit"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="jhaMhjWyMc6eM5THtDjJcr"/></svg>
+          <div class="hs-tip" data-page-node-id="yztnkLHioCl5NDemQeNiGt"><b data-page-node-id="SXSPVpwlRCaYnKdVrklVKB">主动式前唇</b><p data-page-node-id="71szkxIQuQhY5EJ2oQ7EVs">120 km/h 以上自动下探 40mm，风阻系数低至 Cd 0.197，前轴下压力 +28%。</p><u data-page-node-id="MCt5XDQ80zjR2ipaYNUbLd">下压力 +28%</u></div>
+        </div>
+        <div class="hotspot" style="left:50.7%;top:36.2%" data-delay=".33" data-page-node-id="Dq11zQ3HBBWOOoSFVQTZzg">
+          <svg viewBox="0 0 12 12" data-page-node-id="8LAjsdfYR7Vou4oIHrsPj3"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="EqPdE7Qk40mJAXqhFmZUSA"/></svg>
+          <div class="hs-tip" data-page-node-id="boxl0kRx8VDO5l7CENwQSu"><b data-page-node-id="kKgFzvbzeNxcuHXo5TZss6">一体式碳纤维车顶</b><p data-page-node-id="ORu9cebjnMJLIGhD1YWUY0">航天级 T800 碳纤维单体壳，车顶总成重量仅 6.8 kg，扭转刚性 46,000 N·m/deg。</p><u data-page-node-id="n9gVn3ZfKMnJzy702QTdOZ">减重 41%</u></div>
+        </div>
+        <div class="hotspot" style="left:64.6%;top:61.7%" data-delay=".42" data-page-node-id="dWFN3EKHNBaQ40ueS955Sq">
+          <svg viewBox="0 0 12 12" data-page-node-id="1SOGDcG0TozlEkcckAGNv9"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="B6xtwuumUwcIiq5ICSLU8N"/></svg>
+          <div class="hs-tip" data-page-node-id="lAvLevRfQ7ZjgOx2Eb7IN7"><b data-page-node-id="aSlSOquk32fKvZBV9hQsnz">隐藏式电吸门</b><p data-page-node-id="516SDK9RByQuHJU1SscCwM">无框玻璃 + 电动隐藏把手，靠近 1.5 m 自动弹出，风阻与视觉一并收干净。</p><u data-page-node-id="Jq5nYszuL3GbayBVylpSYR">靠近感应 1.5 m</u></div>
+        </div>
+        <div class="hotspot" style="left:44.3%;top:65.4%" data-delay=".51" data-page-node-id="6vcHinBXS4ug5JYI0se9zq">
+          <svg viewBox="0 0 12 12" data-page-node-id="AsWUjXjdsUolssSWefbGyf"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="eZ4TZUEnl2Wx6FB2VTHQx2"/></svg>
+          <div class="hs-tip" data-page-node-id="2RabnYWO5v6IgCemntKKjc"><b data-page-node-id="b4zwzm9MDHi1hsijMHaeKV">900V 结构电池包</b><p data-page-node-id="L6pXXgf0Oe6sFwakl3LqR0">118 kWh 麒麟电芯嵌入碳纤维地板，10%–80% 补能仅需 10 分钟。</p><u data-page-node-id="Tres7diPhjnXkBwooWMy5K">CLTC 720 km</u></div>
+        </div>
+        <div class="hotspot" style="left:21.4%;top:46.2%" data-delay=".6" data-page-node-id="1Se4hwyA2gODOtiEIUPvRZ">
+          <svg viewBox="0 0 12 12" data-page-node-id="rGl4LDwBkD4dc9BEAgVFC4"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="hnJMZ5ANzgzoWYAXuhWLBN"/></svg>
+          <div class="hs-tip" data-page-node-id="Di8mwxzfTekjS0WGCSOurJ"><b data-page-node-id="nCmwKzkBo0mURH43KVk2Tn">主动式尾翼</b><p data-page-node-id="hbtEGcSRxOsQRDvbsxsey3">三层可变形翼面，制动时展开至 68°，兼具空气刹车与视觉张力。</p><u data-page-node-id="5vjXq1HbXo3rye4Gnqbjyu">最大展开 68°</u></div>
+        </div>
+        <div class="hotspot" style="left:23.6%;top:75.0%" data-delay=".69" data-page-node-id="PWhJLhKobyYgJNtxHNCodj">
+          <svg viewBox="0 0 12 12" data-page-node-id="u5SNsNaISsipMSaXMUgQim"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="WnYj2koV2ExijbBPFulxvr"/></svg>
+          <div class="hs-tip" data-page-node-id="TqlXNJsmEfZGmgIeGNOuqV"><b data-page-node-id="9SCHWnxzCbxTHobkhx8IXN">碳纤维后扩散器</b><p data-page-node-id="zOyezby4dUttN5DP3hTrkf">五通道抽风结构配合主动悬架，高速状态下尾部升力趋近于零。</p><u data-page-node-id="0FkEFazTWw91k0hqGDwA7f">尾部升力 ≈ 0</u></div>
+        </div>
+        <div class="hotspot" style="left:79.9%;top:72.7%" data-delay=".78" data-page-node-id="GfAmWJua0viHzLYhjOSipX">
+          <svg viewBox="0 0 12 12" data-page-node-id="jzAHUtbnv4yYadTLsn2ILy"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="XuZLx6Qk4XZBRoKB7YCjA6"/></svg>
+          <div class="hs-tip" data-page-node-id="WaGsrHfw9RFNF2yBQQVljk"><b data-page-node-id="VBLyxarbrXjkQALyqFGC7Z">锻造轮毂 + 碳陶卡钳</b><p data-page-node-id="pFq0nHyfjZfHCTfZjcc5Zo">21 寸一体化锻造轮毂，配 420mm 碳陶复合制动盘，100–0 km/h 制动 29.6 m。</p><u data-page-node-id="2aQBFuHbAhjXRCaevWSvsI">制动 29.6 m</u></div>
+        </div>
+        <div class="hotspot" style="left:63.6%;top:47.3%" data-delay=".87" data-page-node-id="aL0TIeCcpTpQ1NR42TGpWf">
+          <svg viewBox="0 0 12 12" data-page-node-id="OlkZd2WvN0ydDP09JpOvdF"><path d="M6 1.5v9M1.5 6h9" data-page-node-id="HREq9k6N3xSJuzfjZ9508F"/></svg>
+          <div class="hs-tip" data-page-node-id="w8bAAgEFhiRUos4TAycYEY"><b data-page-node-id="qb3q490rOAsh4x0kVBHe2D">电子外后视镜</b><p data-page-node-id="RG4OxRbQA4vnbGunJLt6Um">4K 摄像头 + 车内 7 寸屏，视野比传统镜面宽 38%，同时降低风噪。</p><u data-page-node-id="T3iaKy7s0exOiDrvYaHYSO">视野 +38%</u></div>
+        </div>
+      </div>
+      <div class="lens" id="lens" data-page-node-id="NA8BqeBrAiNERazjJFfFCm"><div class="lens-inner" id="lensInner" data-page-node-id="FNeiHw0ndhUWvetSKzkk9N"></div></div>
+    </div>
+  </div>
+
+  <div class="rail" data-page-node-id="bQnG80hVNS1DnugxZ0zn46">
+    <a href="#" aria-label="X" data-page-node-id="iRyvmaqfEDDCHa2DPeheoo"><svg viewBox="0 0 24 24" fill="currentColor" data-page-node-id="DmQ4s5m6CtomXncqbNw6yD"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.5l-5-6.6L5.6 22H2.5l7.3-8.3L1.5 2h6.7l4.7 6.2L18.9 2Zm-1.1 18h1.8L7.3 3.9H5.4L17.8 20Z" data-page-node-id="IICOtDEz91BKnlrqkoo44m"/></svg></a>
+    <a href="#" aria-label="Weibo" data-page-node-id="2baiIhSelR78yeRU6qffAK"><svg viewBox="0 0 24 24" fill="currentColor" data-page-node-id="8bSJP6R8D7HyDYaouJ7MZn"><path d="M9.8 20.4c-4.1 0-7.4-1.9-7.4-4.3 0-1.2.8-2.6 2.1-3.8 1.8-1.6 3.9-2.4 5.4-2.1.7.2 1.2.6 1.5 1.3.3.6.1 1.3-.2 1.9-.2.4.1.6.4.5 1.2-.4 2.6-.5 3.4.6.4.6.5 1.4.2 2.4-.7 2.2-3.3 3.5-5.4 3.5Zm-.2-1.6c2 0 3.7-1.2 3.7-2.6 0-1.4-1.7-2.2-3.7-2.2s-3.6 1-3.6 2.4c0 1.4 1.6 2.4 3.6 2.4Zm8.9-8.9c-.4 0-.7-.3-.7-.7 0-1.9-1.6-3.5-3.5-3.5-.4 0-.7-.3-.7-.7s.3-.7.7-.7c2.7 0 4.9 2.2 4.9 4.9 0 .4-.3.7-.7.7Zm-2.1 0c-.4 0-.7-.3-.7-.7 0-.8-.6-1.4-1.4-1.4-.4 0-.7-.3-.7-.7s.3-.7.7-.7c1.5 0 2.8 1.3 2.8 2.8 0 .4-.3.7-.7.7Z" data-page-node-id="STYXT88CBUKeDDu2ZhMDt2"/></svg></a>
+    <a href="#" aria-label="Instagram" data-page-node-id="B3goXJaACKLf0ss3H2U6Mz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" data-page-node-id="lRC8wwxVmLru9GHk0DR6El"><rect x="3" y="3" width="18" height="18" rx="5" data-page-node-id="ETWEKG5dhF9eldhWweuZvw"/><circle cx="12" cy="12" r="4" data-page-node-id="xkrMFmlYaF1abTLehJi5qy"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" data-page-node-id="KEVGZR50GPh6avoeaNmg8a"/></svg></a>
+    <a href="#" aria-label="YouTube" data-page-node-id="xLqhSCuRMhmWnplR0A7m9B"><svg viewBox="0 0 24 24" fill="currentColor" data-page-node-id="phq9nvIJlwUunHjuh7CzkP"><path d="M22 12s0-3.4-.4-5c-.2-.9-1-1.6-1.9-1.8C18 4.8 12 4.8 12 4.8s-6 0-7.7.4c-.9.2-1.7.9-1.9 1.8C2 8.6 2 12 2 12s0 3.4.4 5c.2.9 1 1.6 1.9 1.8 1.7.4 7.7.4 7.7.4s6 0 7.7-.4c.9-.2 1.7-.9 1.9-1.8.4-1.6.4-5 .4-5Zm-12 3.2V8.8L15.5 12 10 15.2Z" data-page-node-id="BMDMYC0tSXVHNEvOpBSyW6"/></svg></a>
+  </div>
+
+  <div class="stage-tools" data-page-node-id="rBzayxzZFwIFTIPg9U1qIW">
+    <button class="tool" id="tRotate" data-label="360° 环绕" aria-label="环绕" data-page-node-id="DM9LdATtdVVXvIrFW0nrkY">
+      <svg viewBox="0 0 24 24" data-page-node-id="DycdTC9SwgTne062GS5I9M"><path d="M21 12a9 9 0 1 1-3.3-7" data-page-node-id="M1SvMaZPy8u8TMwGvubNFX"/><path d="M21 4v5h-5" data-page-node-id="tya8LLQq8X1kXqoq04VgQ5"/></svg>
+    </button>
+    <button class="tool" id="tLens" data-label="细节放大" aria-label="放大" data-page-node-id="f74Bbz10sLRLTfRd97ymX9">
+      <svg viewBox="0 0 24 24" data-page-node-id="MA1GsWmXp93idPHuMVTOBU"><circle cx="11" cy="11" r="7" data-page-node-id="gExu81MAHKzz6Vvti0LGSt"/><path d="M20 20l-3.5-3.5M11 8v6M8 11h6" data-page-node-id="8wFBO3Cqskb5ab36W7TKd8"/></svg>
+    </button>
+    <button class="tool active" id="tDots" data-label="热区标注" aria-label="热区" data-page-node-id="Jdpg4t7NrlqhQfDT8m5A5B">
+      <svg viewBox="0 0 24 24" data-page-node-id="gCeHqWV0puTh8BLOPofech"><circle cx="12" cy="12" r="3" data-page-node-id="ziHHnuCCQvI389PCZw0PMS"/><circle cx="12" cy="12" r="9" data-page-node-id="HOMJ5ZIwpuJsiWoQh5Uz0Z"/></svg>
+    </button>
+    <button class="tool" id="tFull" data-label="全屏观看" aria-label="全屏" data-page-node-id="y8uSLpY4OPxB6JpEVBe9Ws">
+      <svg viewBox="0 0 24 24" data-page-node-id="i7RHM0hN13EsmV5JxwG0Tl"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" data-page-node-id="o9qpqHUkVRBxL79FA1IazT"/></svg>
+    </button>
+  </div>
+
+  <div class="hero-specs" data-page-node-id="aEbgDtwnrsgbSh1WolUg0N">
+    <div data-page-node-id="7F9zPn92nZBc5ptWDufaQh">Max Power<b class="mono" data-page-node-id="yLp3j5PToPCSDO6KXgqTZv">1,320 <i style="font-size:11px;font-style:normal;color:#8A9099" data-page-node-id="SNQRgrB6UojTyKNRrLmxMG">kW</i></b></div>
+    <div data-page-node-id="YJbqc7x41opHopnRPauwY5">Peak Torque<b class="mono" data-page-node-id="RjXQ5OE6upoEkZd4zsSHFJ">1,680 <i style="font-size:11px;font-style:normal;color:#8A9099" data-page-node-id="gx1tvOr15SbQ1Hc7m0hT0t">N·m</i></b></div>
+    <div data-page-node-id="4elSF80byoEzp7NY67BvA1">Top Speed<b class="mono" data-page-node-id="u4VWxN3tbvtgiLl71D3SEJ">352 <i style="font-size:11px;font-style:normal;color:#8A9099" data-page-node-id="s09PscvzISoj6SQJ8Dz6K6">km/h</i></b></div>
+  </div>
+  <div class="scroll-cue" data-page-node-id="EPJaTL3icWEDTUDHbHlvSJ">Scroll to explore</div>
+</section>
+
+<!-- ========== TICKER ========== -->
+<div class="ticker" data-page-node-id="wwtJAY39z2mnpEySRhdnyu">
+  <div class="ticker-track" id="ticker" data-page-node-id="3ApzDCjtkkmEXxBkZArXoG">
+    <span data-page-node-id="ytgvZEUHCVdA2JcEwrCiAg">0–100 km/h · 1.9 s</span><span data-page-node-id="Zd0BPNcGpFCu25EG2v4LqB">900V 高压平台</span><span data-page-node-id="HRiEp5O5XBzbObhCbSrrBf">CLTC 续航 720 km</span><span data-page-node-id="i3krwxqtIl5mDckHBqdpBW">四电机矢量控制</span>
+    <span data-page-node-id="hnqh5b55c1N2yg0FsQGZUL">10 分钟补能 400 km</span><span data-page-node-id="d6qxqBZxsjeEKZ5iLet8us">碳纤维单体壳</span><span data-page-node-id="C6GsbwpoJaztUli3nfzYMi">风阻 Cd 0.197</span><span data-page-node-id="JuDGnj1L8AEyMincqbeCru">主动空气动力学</span>
+    <span data-page-node-id="8qhYbEmH60VNXMtErI9FtU">0–100 km/h · 1.9 s</span><span data-page-node-id="7Dv6gLa6viynOV4ThF8MFz">900V 高压平台</span><span data-page-node-id="XfcZ7bxNtCLZeSQgAyHnts">CLTC 续航 720 km</span><span data-page-node-id="m6QwmcFDhBJ72bdvBD6xX0">四电机矢量控制</span>
+    <span data-page-node-id="OueotmpVy3jlIkJSwNvhiV">10 分钟补能 400 km</span><span data-page-node-id="DBdNOVGloPsi7MhgqRDUOs">碳纤维单体壳</span><span data-page-node-id="qkL1idiy2STkR9xQ5pdo1M">风阻 Cd 0.197</span><span data-page-node-id="AnWAIxGkg0hUlkPJt4kxMt">主动空气动力学</span>
+  </div>
+</div>
+
+<!-- ========== DESIGN ========== -->
+<section class="sec" id="design" data-page-node-id="FuYtjlbvY9OUxO90U8VwOf">
+  <div class="wrap" data-page-node-id="oFwRlK0bwcEnoAwS8pGdvX">
+    <div class="sec-head reveal" data-page-node-id="S6l0sCK9hGvZXOajC9U6sT">
+      <p class="eyebrow" data-page-node-id="4sxpNTChmpM1Yaufp04fc3">Design Language</p>
+      <h2 data-page-node-id="Sv8qKQG0AxgPix41bPY4mb">克制的线条，<strong data-page-node-id="HFIObweArt5LyaFhrAfBvM">不克制的力量</strong>。</h2>
+      <p data-page-node-id="ScBBQktGpqFtHRft8SDTkD">V1 的每一根曲线都服从于气流。我们删掉了所有装饰性的折面，让功能本身成为造型——低趴、宽体、短悬，静止时也像在向前冲。</p>
+    </div>
+
+    <div class="design-grid reveal" data-page-node-id="sc2a1iGnEUEFil7ORtGknq">
+      <div class="dcard" data-page-node-id="LYIBYCoEJBPCagTSuNLFf7">
+        <span class="num" data-page-node-id="3hwIZlbzArykK55eK7SyCh">01</span>
+        <div class="fig" data-page-node-id="4OzOHM1LIoopBQ1nSCFqTL"><svg viewBox="0 0 80 80" data-page-node-id="s01qyAFyYxSYg5GVjWh5S1"><circle cx="40" cy="40" r="30" data-page-node-id="wp8SIR0IFgMPYcL1adQns7"/><path d="M10 40h60M40 10v60" data-page-node-id="DIfv4R4UCOdwY2wF9PFltf"/></svg></div>
+        <h3 data-page-node-id="VgZfzOs3lSNVg6DXrx8e3W">气流即造型</h3>
+        <p data-page-node-id="M2v9udJ6PbRa82tvzp26HE">整车 11 处主动空气动力学部件联动，高速下压力 520 kg，尾翼、前唇、扩散器随速度与制动状态实时变形。</p>
+      </div>
+      <div class="dcard" data-page-node-id="EXkvIL2TUijvbPx2T3W1rh">
+        <span class="num" data-page-node-id="Um7PN84BS86trGHt3SFjhI">02</span>
+        <div class="fig" data-page-node-id="JIRHBUp3ocSkNm06wvkGAB"><svg viewBox="0 0 80 80" data-page-node-id="idTEm8CQhiYLli7TLzog8I"><path d="M8 56 L40 16 L72 56 Z" data-page-node-id="H3fRnj4NMSiCqe4c3mMazu"/><path d="M26 40h28" data-page-node-id="W9PIjsyuCXFLMi3HNMMBqo"/></svg></div>
+        <h3 data-page-node-id="8QDJKCSaqesjhK5GVvAoL5">碳纤维单体壳</h3>
+        <p data-page-node-id="J0xIptQISQyGeL3wU35WAs">与航空供应商共研的第二代单体壳，整备质量 1,890 kg，其中动力总成占比不到 22%，重心高度仅 396 mm。</p>
+      </div>
+      <div class="dcard" data-page-node-id="uaGEBVHNM2DJ3HGfntWhAm">
+        <span class="num" data-page-node-id="pgZ1cCxENzMTv7rj4XXRSj">03</span>
+        <div class="fig" data-page-node-id="eGqnmDjSN2Ar2jx0wlgzQS"><svg viewBox="0 0 80 80" data-page-node-id="rHMbUxflIoCsB5wv0olwVa"><rect x="12" y="12" width="56" height="56" rx="6" data-page-node-id="RI4qKtTVtghAfhPYUycE5H"/><path d="M12 40h56M40 12v56" data-page-node-id="1kdzvBE5lyEBBQokZ7qlfl"/></svg></div>
+        <h3 data-page-node-id="UoeglBeX4eb9Pk5ElCcxUh">驾驶舱偏置</h3>
+        <p data-page-node-id="qwIl3PB5ejPXOae0YOr3Re">以驾驶者为中心的非对称布局，所有物理按键回归触手可及的位置，屏幕只负责它该负责的事。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PERFORMANCE ========== -->
+<section class="sec" id="performance" style="padding-top:20px" data-page-node-id="S7EZ8PrwhgKih3AsS71wf3">
+  <div class="wrap" data-page-node-id="ANajiS3myVG7UqJYNhJZ9Z">
+    <div class="sec-head reveal" data-page-node-id="fTFEjlJcyD8L3ZI2DJwOW2">
+      <p class="eyebrow" data-page-node-id="TYsTO0LoE2aOwSuiznUoWo">Performance</p>
+      <h2 data-page-node-id="eI09WwOKWutuDHFtYPi7Tc">电，本该<strong data-page-node-id="97RpQdlh5nmjpJWpLDVbYg">更快</strong>。</h2>
+    </div>
+
+    <div class="stats reveal" data-page-node-id="QYi00F7NmMjXChx9aSC2RH">
+          <div class="stat" data-page-node-id="JvFiNtKkOEU57AL8kAHqUV"><b class="mono" data-count="1.9" data-dec="1" data-page-node-id="c8BZVaF3tFiOxq4uHHUANu">0.0<i data-page-node-id="UU3TVE6ugexjfJYtXf59vD">秒</i></b><span data-page-node-id="3ZUU6A5lkin84WuYBGCkM1">0–100 km/h</span></div>
+          <div class="stat" data-page-node-id="AtDYBk9510JsDE9FAi3Rhp"><b class="mono" data-count="352" data-dec="0" data-page-node-id="yrTUJE5lHQDGkcbUuwlOml">0<i data-page-node-id="vaYHPiwccY8SEyCHJAXUsc">km/h</i></b><span data-page-node-id="qYIUDOah5DnIF7CcYGUFew">最高时速</span></div>
+          <div class="stat" data-page-node-id="AmHrUlT4XJGItmXaeTGYh7"><b class="mono" data-count="720" data-dec="0" data-page-node-id="DN8JQoYrXsnAs14zJOC54M">0<i data-page-node-id="AL8177AB4dGEIs00pAvoHU">km</i></b><span data-page-node-id="XCFkt1TUAiY9KVXrYXGLn1">CLTC 续航</span></div>
+          <div class="stat" data-page-node-id="SY2cdxd05AEzkLj9rcBAOe"><b class="mono" data-count="1320" data-dec="0" data-page-node-id="9ZlOcuINH8oV98eVs6fsN1">0<i data-page-node-id="uc38G5iIVyf5h016ri6XIk">kW</i></b><span data-page-node-id="J1qXrX4eveKBSFAqCj4PNO">系统最大功率</span></div>
+    </div>
+
+    <div class="perf" data-page-node-id="jZruP14MwXyi93aj0ARmhZ">
+      <div class="reveal" data-page-node-id="KCYLSTkqux7lKQA42Eq3xc">
+        <div class="bars" data-page-node-id="eYbfAhBVciRzQUPDDWN1bu">
+          <div class="bar-row ours" data-page-node-id="pU29FfFFsIfG6OlaXXvBx6"><span data-page-node-id="DRpNzyLk1lFxkwsAhTawxp">AXION V1</span><div class="track" data-page-node-id="jbpNX5ywraVw2ZkMpgVjst"><i style="--w:100%" data-page-node-id="YGka2lnvVzdTYZJqqIuEtM"></i></div><b class="mono" data-page-node-id="tPB2RtegykauAuXb2aDAYT">1.9 s</b></div>
+          <div class="bar-row dim" data-page-node-id="ZBH3mhE3aYieAqfnEoZBjo"><span data-page-node-id="g6I8IjHmpJuA48XUYRAGzE">同级纯电双门</span><div class="track" data-page-node-id="8GRnm5GWkdFKn5WYshEt2J"><i style="--w:63%" data-page-node-id="t7MfAryz7vExxK7Bq75g0B"></i></div><b class="mono" data-page-node-id="RJigDPabrFKW6WdRKkY0Oe">2.6 s</b></div>
+          <div class="bar-row dim" data-page-node-id="GfA1nNtRY2pA66EDbNJOG4"><span data-page-node-id="gcJOPHH4D17JF70aquYsFM">传统燃油超跑</span><div class="track" data-page-node-id="M9N3wfyNZHyzyUIjQRhlXz"><i style="--w:47%" data-page-node-id="qibUNCa7s5t4E8tyDA8fhb"></i></div><b class="mono" data-page-node-id="rN4AQIrxKHcD4efgAOynVJ">3.2 s</b></div>
+          <div class="bar-row dim" data-page-node-id="eOIlFrqJ4oBCO1cW9nXkwb"><span data-page-node-id="It5NhIyXNqMmFEatR75yfK">高性能四门轿车</span><div class="track" data-page-node-id="IFL6W6CmC13ZU3ZSUQZANp"><i style="--w:38%" data-page-node-id="gNB8MtmRnhmxXvG5n3ok04"></i></div><b class="mono" data-page-node-id="mc1kPe6TxbXaIM5GGkZ1ne">3.9 s</b></div>
+        </div>
+      </div>
+
+      <div class="chart-card reveal" data-page-node-id="clf6jniGa14KqCEtirPrS4">
+        <h4 data-page-node-id="oBQrF4jSfDtr2RSMVbwUdL">功率 / 扭矩输出曲线</h4>
+        <div class="legend" data-page-node-id="RtYSL7rIzfxII5DNDugPvb">
+          <div data-page-node-id="kcYnOw1AWviRTHkVIfXeDA"><i style="background:linear-gradient(90deg,#7C0A1B,#FF2A45)" data-page-node-id="tOhMxBR3cEWLpI2bfMiE3i"></i>功率 kW</div>
+          <div data-page-node-id="WlehcNVoyypNoBXiExEBlh"><i style="background:linear-gradient(90deg,#3A4048,#9AA1A8)" data-page-node-id="ydESLKZKqjivyORQH3wMTP"></i>扭矩 N·m</div>
+        </div>
+        <svg class="chart" viewBox="0 0 520 300" data-page-node-id="bwRQfgvvBRriAF75qEmSch">
+          <g class="gridline" data-page-node-id="dUv8wBNBCNLoRtIvk7ObIZ">
+            <line x1="42" y1="30" x2="500" y2="30" data-page-node-id="jrbG0V2RaUMukhUX8Is2RH"/><line x1="42" y1="90" x2="500" y2="90" data-page-node-id="BEgwAIZHDbaX8RiPZpwzQl"/>
+            <line x1="42" y1="150" x2="500" y2="150" data-page-node-id="wOqPSVISnaFijLGdUc4pDf"/><line x1="42" y1="210" x2="500" y2="210" data-page-node-id="lF4f04Y9CFFPpzB2G43DaM"/>
+            <line x1="42" y1="256" x2="500" y2="256" data-page-node-id="xN3H4gYooi3SzHyd9ooxHB"/>
+          </g>
+          <g data-page-node-id="s1tBR1oNe5XMtxDd75CX3b">
+            <text x="14" y="34" data-page-node-id="ZXi2dwKkRH59vEswKG77ez">1500</text><text x="14" y="94" data-page-node-id="fjfydGRn64GCupLVih9M7R">1000</text>
+            <text x="20" y="154" data-page-node-id="0AEPc1VMT2zImH6QaxR3Pq">500</text><text x="30" y="214" data-page-node-id="AWAUEm7UzGvZCG7jzrXwMS">0</text>
+            <text x="46" y="278" data-page-node-id="na2J8zOt1KY51mKVdC8IJh">0</text><text x="180" y="278" data-page-node-id="Fawx6GFDyU7oaFoFGAilud">4,000</text>
+            <text x="330" y="278" data-page-node-id="OWI5cDPSHFj8agLD4P0OrM">8,000</text><text x="462" y="278" data-page-node-id="jxLOMFRiGWQAFQjqIdT4U5">12,000</text>
+            <text x="470" y="294" data-page-node-id="pCf8X9m2dCPMeiP0FmELmO">rpm</text>
+          </g>
+          <path class="curve" d="M46 250 C 120 246 150 220 190 176 C 230 132 270 68 340 48 C 400 32 450 34 500 34"
+                stroke="url(#redGrad)" stroke-width="2.4" data-page-node-id="FqWOSWusU1sUKvb0DCFLE8"/>
+          <path class="curve" style="transition-delay:.25s"
+                d="M46 110 C 96 60 140 44 196 44 C 260 44 320 62 380 96 C 430 124 470 166 500 196"
+                stroke="#8B9299" stroke-width="1.8" opacity=".75" data-page-node-id="ArzzqFMSfoRa82sbbxYmqj"/>
+          <circle cx="340" cy="48" r="4" fill="#FF2A45" data-page-node-id="8DOF2lMUMeehdh2zxf9rT9"/>
+          <text x="352" y="44" fill="#FF2A45" data-page-node-id="qxs33N32PHPnY1eBbQNFzw">峰值 1,320 kW</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COLOR ========== -->
+<section class="sec" id="color" data-page-node-id="16eGpJAoj2BSfyv0nt3Hhn">
+  <div class="wrap" data-page-node-id="5mOwr07vcserDzNjeLm3ms">
+    <div class="sec-head reveal" data-page-node-id="5ZK1jhl2194CllbEeDxRIh">
+      <p class="eyebrow" data-page-node-id="3Hvge4AxaKdCkYie1nh41v">Atelier</p>
+      <h2 data-page-node-id="ZkWvFZ0N3I1zemkuWxLRgm">选一种属于你的<strong data-page-node-id="7xDFBTJI5RB5qvaqPkdjT2">暗</strong>。</h2>
+      <p data-page-node-id="mdh4yxZRqSkbmFgrc24DJl">六款原厂车漆，均为多层纳米陶瓷工艺。选择后整车预览会实时更新。</p>
+    </div>
+
+    <div class="configurator" data-page-node-id="pBut1AE4vlmCvkSFWh2WN2">
+      <div class="cfg-stage reveal" data-page-node-id="toPphMACfgwAkM6R0dmtjQ">
+        <svg class="car" id="cfgCar" viewBox="0 0 1400 520" data-page-node-id="mNb8vS452b9Ch5tpV9dVdw"><use href="#carArt" data-page-node-id="znz0SbFkRXYUWH6JRIA1ZF"/></svg>
+      </div>
+      <div class="reveal" data-page-node-id="iNclpIpGKKCsMnw0f7JTRw">
+        <div class="swatches" id="swatches" data-page-node-id="tu5S1tSXj06wc4MfxIU0Yx">
+          <button class="sw active" data-a="#4A5259" data-m="#2E353D" data-b="#1C2026" data-c="#0A0C0F" data-glow="rgba(160,168,178,.16)" data-page-node-id="JZhEQKUUNvpMwQHwmLuT7t">
+            <i style="background:linear-gradient(135deg,#4A5259,#101317)" data-page-node-id="HvBW832qsrmNnsGS4IHj5p"></i><span data-page-node-id="XleXLkyyLG8caN3GnIYnGP"><u data-page-node-id="ATkJThNcaHXY0TzB4Zrbev">曜石黑</u><small data-page-node-id="MOng2qGxFnJ7liLjEb0D3J">OBSIDIAN</small></span>
+          </button>
+          <button class="sw" data-a="#F4F6F9" data-m="#CBD1D9" data-b="#C4CAD2" data-c="#4C525A" data-glow="rgba(255,255,255,.15)" data-page-node-id="ASgZvRAMWBwCNgMnVD6m7R">
+            <i style="background:linear-gradient(135deg,#FFFFFF,#A8AFB8)" data-page-node-id="rCeLwMwgZE3PsB0Nzfw5Lg"></i><span data-page-node-id="0Zt5hwZRc4lAFxfAD8U5pI"><u data-page-node-id="FmMi92brq5k85c9lhVj7e9">极光白</u><small data-page-node-id="ezOjkkjikM48GCZ9of9kcR">GLACIER</small></span>
+          </button>
+          <button class="sw" data-a="#E8404F" data-m="#8E0F20" data-b="#8E0F20" data-c="#2A0308" data-glow="rgba(211,20,46,.28)" data-page-node-id="AXxez2t8IrFOhlyvbOScmj">
+            <i style="background:linear-gradient(135deg,#FF2A45,#7C0A1B)" data-page-node-id="7bw16V6Qc3xpyubJiSY33V"></i><span data-page-node-id="VlPWpBFQ1KCPrVAAtx9Bnk"><u data-page-node-id="4OIEJfrPio2P1K6IgONDtv">熔岩红</u><small data-page-node-id="Rb3faPcYlolqHIyNUApLNG">LAVA</small></span>
+          </button>
+          <button class="sw" data-a="#5A8BE8" data-m="#2A4A8F" data-b="#1E3A7A" data-c="#060B18" data-glow="rgba(90,139,232,.24)" data-page-node-id="HrvcauyiPL66ZZje7N7z1J">
+            <i style="background:linear-gradient(135deg,#6E9BFF,#14235A)" data-page-node-id="oCmelWjNEHIZoBhMJYf5LB"></i><span data-page-node-id="CkGN5KI2vV7YscFDgjE1W4"><u data-page-node-id="YnCMLL28nCUvHrPOgU97CW">星云蓝</u><small data-page-node-id="Tg6WMVISNfVqBjleTjwUGB">NEBULA</small></span>
+          </button>
+          <button class="sw" data-a="#C3C8D0" data-m="#787E86" data-b="#6E747C" data-c="#22262B" data-glow="rgba(190,196,204,.16)" data-page-node-id="S6BRxJVYZ6aEYGa8QKH7r0">
+            <i style="background:linear-gradient(135deg,#D6DAE0,#585E66)" data-page-node-id="9kAKZZJQL8fW6UxgXR8SOO"></i><span data-page-node-id="XcmghLiV7gQEQe0G1Gf5TJ"><u data-page-node-id="8OBEaXMs4oMQvnp76yO4Lc">钛银</u><small data-page-node-id="7x11lx8pE5g9ibqBFDhVqR">TITANIUM</small></span>
+          </button>
+          <button class="sw" data-a="#5C8A72" data-m="#2A4736" data-b="#1F3A2C" data-c="#060D0A" data-glow="rgba(92,138,114,.22)" data-page-node-id="Hf2QhBMfMundn5GeTurI3O">
+            <i style="background:linear-gradient(135deg,#78AC8F,#16301F)" data-page-node-id="lRPKDbPjnLWUC9VyfD4DNr"></i><span data-page-node-id="HgOnRdrOsy0OMYVmQ8dC3g"><u data-page-node-id="qOqG9LIWDBpZwEqHL0MVzd">森野绿</u><small data-page-node-id="FRZCzFO4UhndlhTfReyCei">FOREST</small></span>
+          </button>
+        </div>
+        <div class="cfg-info" data-page-node-id="UcLkkr3qgSK5r6kD89ybr2">
+          <div data-page-node-id="P67OnFD0CsHKi9USkb65Xa">当前车漆<b id="cfgName" data-page-node-id="2addBHXtKriAxCDki7NZnx">曜石黑 / OBSIDIAN</b></div>
+          <div data-page-node-id="jIuKICwgKQxrFcJv2RrSrl">工艺<b data-page-node-id="vq6ouKlGUC9MKNjb47yHLL">多层纳米陶瓷漆</b></div>
+          <div data-page-node-id="ZcUTAhJJQUblWIDCirR2oN">轮毂<b data-page-node-id="7TEU59dLfAkqStnoqmlBYX">21″ 一体化锻造</b></div>
+          <div data-page-node-id="Hhaig2XGFP1QSIy7YzxaMB">卡钳<b data-page-node-id="nacaGtV3g1i0yG9tqIMpHk">碳陶 · 熔岩红</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== VARIANTS ========== -->
+<section class="sec" id="variants" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)" data-page-node-id="1DBJuv82cwKDNVIK017vgA">
+  <div class="wrap" data-page-node-id="2XuPIPAsTOEBuCS6Km6dW9">
+    <div class="sec-head reveal" data-page-node-id="Qb4jMsWuLblMcjJYcak4X4">
+      <p class="eyebrow" data-page-node-id="3QRkPg8XlCNR0iqmyd0O56">Versions</p>
+      <h2 data-page-node-id="znQCBooV41YSgzpbIAmrUI">三个版本，<strong data-page-node-id="NvXULdt4EcHLsE53Ig4pTT">同一种执念</strong>。</h2>
+    </div>
+    <div class="variants reveal" data-page-node-id="j7WmzSazCeNg10lsRiXmSf">
+      <div class="var" data-page-node-id="X0SiJAKuUVCJgn7Hp4e0EW">
+        <h3 data-page-node-id="yoD2KnCZnQvBEf7JUaATSE">V1</h3>
+        <p style="color:var(--muted);font-size:13px;margin-top:10px" data-page-node-id="7jG6az2GuFFXiZdfJVZqLD">纯粹，日常可用。</p>
+        <div class="price" data-page-node-id="ywPCFAxmjNHyZQ801xzGd7">¥1,286,000<small data-page-node-id="HFamVLEdCSjN2i0zGsgc60">起 · 含税</small></div>
+        <ul data-page-node-id="VfDIxxreVg5yZNDLLAEd9o">
+          <li data-page-node-id="ipAQXbR4zNRq9FEo3Op8ba">系统功率<b data-page-node-id="XUIBd8cnpXy2VI1TPZhCLR">880 kW</b></li>
+          <li data-page-node-id="liFdAOCbvAbun3eBo9eyXf">0–100 km/h<b data-page-node-id="0aUgoYQrXK7NApl5yeXWmu">2.4 s</b></li>
+          <li data-page-node-id="qSKxDdHSpD1I0enam4rr7s">CLTC 续航<b data-page-node-id="JrMDOMzSH3ISYybDPHjyf2">720 km</b></li>
+          <li data-page-node-id="p6uRnLscQf20CWYTX3Crhh">悬架<b data-page-node-id="AEFxvFE9IXNWK3mwEr043d">自适应空气悬架</b></li>
+          <li data-page-node-id="ixmJsVxsneBLYmuGivJFNB">轮毂<b data-page-node-id="22lVFtF4ao2m5owHDwOCdu">20″ 锻造</b></li>
+        </ul>
+        <a href="#order" class="btn-line" data-page-node-id="ds56yNQgynNheu796AAgsC">预约试驾</a>
+      </div>
+      <div class="var hot" data-page-node-id="ZkdwSErJaXrTsLowDbglt5">
+        <span class="tag" data-page-node-id="TqSmFXGTKvMfmMB5NQL8uk">推荐</span>
+        <h3 data-page-node-id="PMXL01SWRmsWUl0gVkZz45">V1 Performance</h3>
+        <p style="color:var(--muted);font-size:13px;margin-top:10px" data-page-node-id="7M9JB7yJv825MXCytmdhAm">你看到的那台。</p>
+        <div class="price" data-page-node-id="IPFufVgJbVIUcvyY8yVsMK">¥1,686,000<small data-page-node-id="zxLZ0CYbHrU2WywTvpEEFW">起 · 含税</small></div>
+        <ul data-page-node-id="lBdYET0NXNt6Hql0ieGz9D">
+          <li data-page-node-id="iHNCPWVkivF0nObCEzlFhA">系统功率<b data-page-node-id="Oc4AeeHkJkEenZdv54VGdk">1,320 kW</b></li>
+          <li data-page-node-id="lCygIEjWLyXa3jdPGYlO7C">0–100 km/h<b data-page-node-id="5vJBACCN9o3UUU4h7UG0oz">1.9 s</b></li>
+          <li data-page-node-id="RaZfN4XGUFNd0qrQC8cX4f">CLTC 续航<b data-page-node-id="NsSrfHV7y1a7CHxsCCHz6D">660 km</b></li>
+          <li data-page-node-id="W3sHXnsxeZgMQZ8iUVpZgr">悬架<b data-page-node-id="gjg3y5AQlwviBl6pOcbnti">主动液压悬架</b></li>
+          <li data-page-node-id="bHKq1QlAJhyrKIKrreZIJG">轮毂<b data-page-node-id="q46FCLYpEAOtG3kTBVMa8q">21″ 锻造 + 碳陶</b></li>
+        </ul>
+        <a href="#order" class="btn-line" data-page-node-id="BC5sra3Nlywg7olOKc1xfT">预约试驾</a>
+      </div>
+      <div class="var" data-page-node-id="TLOlwFOeG9NAtAuo71moJn">
+        <h3 data-page-node-id="IPOPFzP55OXttfzUZRtXFa">V1 Track</h3>
+        <p style="color:var(--muted);font-size:13px;margin-top:10px" data-page-node-id="xr5uFQtB8f21IDqldS3Cuc">为圈速而生。</p>
+        <div class="price" data-page-node-id="sya6izPMFWakZ1NlRPgmcN">¥2,380,000<small data-page-node-id="SQHrzCYyvGD5gpRLJlEp5X">起 · 含税</small></div>
+        <ul data-page-node-id="8g3oEh5xOCrcpDDNYgzbDy">
+          <li data-page-node-id="8PQiXe5GNhrm6xSzmKN8gE">系统功率<b data-page-node-id="3S648bdTo4h8mCAKZW3uEB">1,480 kW</b></li>
+          <li data-page-node-id="EjenWLL8IxY9P48RsEyCDx">0–100 km/h<b data-page-node-id="OhBUf84LGG2F9q3vFfAPGE">1.7 s</b></li>
+          <li data-page-node-id="g4HvYMgixYHMVq8lIIFSeW">CLTC 续航<b data-page-node-id="glDOrkmze5RD5q4Gw3d6AF">520 km</b></li>
+          <li data-page-node-id="5rcG7Kh3cKRPLkQTG3ReMe">悬架<b data-page-node-id="evvJxfnmVgtEkxJswcdv4g">赛用可调绞牙</b></li>
+          <li data-page-node-id="v9BY32gxgpRchmZwHrsGYc">轮毂<b data-page-node-id="T0luY6oSSj76xakkVaXxuv">21″ 镁合金</b></li>
+        </ul>
+        <a href="#order" class="btn-line" data-page-node-id="6ffW1HIV7Mexm4D4lO4B8J">预约试驾</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ORDER ========== -->
+<section class="sec" id="order" data-page-node-id="aDash0onBuy0UtEE1AnkSj">
+  <div class="wrap order" data-page-node-id="xiZ50fawyAC5RSHt3SBMCX">
+    <div class="reveal" data-page-node-id="S1qNC0VI7vIovlZs1XLwgP">
+      <p class="eyebrow" data-page-node-id="R5zIojuavze48ETAVGsl6Q">Test Drive</p>
+      <h2 style="font-size:clamp(26px,3.2vw,46px);font-weight:200;letter-spacing:.04em;margin-top:22px;line-height:1.2" data-page-node-id="DR7qHCK8kzLE9jhXCvxVoi">
+        先开一圈，<br data-page-node-id="a6pTG356MstPgqIGjaCEnM">再谈别的。
+      </h2>
+      <p style="color:var(--muted);font-size:14px;margin-top:22px;max-width:420px" data-page-node-id="n9eEXR0VUMwwZpO3Duqfiu">
+        我们在全国 12 座城市设有品牌体验中心，提供 48 小时深度试驾。提交信息后，专属顾问会在 24 小时内与你联系。
+      </p>
+      <div class="stores" data-page-node-id="i2e3S6aHt31KDupr971MqG">
+        <div class="store" data-page-node-id="Dp7SqHpWPqPJVfQfgxXs5h"><span data-page-node-id="Hc09TIkKtHVJMu2RNnF3be"><b data-page-node-id="hxUnCp3YLclEaJ2m9httet">杭州 · 品牌中心</b><span data-page-node-id="sIzFxusRUWbjGwoEf718Ps">余杭区仓前街道良睦路 1399 号</span></span><u data-page-node-id="qQBBzX10sEfUVH9VCG90sm">试驾中</u></div>
+        <div class="store" data-page-node-id="zTCEvA8u7wTznHX0CJxsBr"><span data-page-node-id="ps6uvoSDX3uPUuDJDPfdS4"><b data-page-node-id="rI1jahLsDO5mxc2H5Muhjg">上海 · 新天地</b><span data-page-node-id="iht5cdmdwmtW3LgBVNSeyr">黄浦区马当路 245 号</span></span><u data-page-node-id="KPfQqDejkFOosu7G8h1a8M">试驾中</u></div>
+        <div class="store" data-page-node-id="dr1S6XzsN2WOJt26iSYDTe"><span data-page-node-id="MeLIOEvGX5yJSJEybKDxwn"><b data-page-node-id="ja7piYSbYBRUAb75SIpcWw">深圳 · 湾厦</b><span data-page-node-id="L9yJKUkvN4UyNBTDQgF42R">南山区科苑南路 2888 号</span></span><u data-page-node-id="F6BPFCbvvza4lwwFenEK52">预约中</u></div>
+        <div class="store" data-page-node-id="gBgDM7WGM6rwxodMfcwBV1"><span data-page-node-id="OwwV0RgwnRLrLiuONJCxCf"><b data-page-node-id="DqNHE4gC8ZZ6Fj7I5ZE8mC">成都 · 太古里</b><span data-page-node-id="qBeQJAZ4E44CzArkAERipC">锦江区中纱帽街 8 号</span></span><u data-page-node-id="8TfmKKLx4tVCfKTwUIf4au">预约中</u></div>
+      </div>
+    </div>
+
+    <form id="bookForm" class="reveal" novalidate data-page-node-id="v2Ez3SAomUlZpT4deE6s3W">
+      <div class="f2" data-page-node-id="GmBvKwYVapPleN7IgFuFsN">
+        <div class="field" data-page-node-id="BjXTuhdA0eJ3s28w51W6yk"><label for="fName" data-page-node-id="5ejCfLzaRhfsIP6FNYwadJ">姓名</label><input id="fName" name="name" type="text" placeholder="请输入姓名" autocomplete="name" data-page-node-id="QcYvlMPuD4YxWQTAIzN51R"><div class="msg" data-page-node-id="yD6FOpQicYDCw6yamVlvdo"></div></div>
+        <div class="field" data-page-node-id="VGB3CccCV8uniO58PdOQK8"><label for="fPhone" data-page-node-id="zGbsqnwxjlShVDrgUdvYKl">手机号</label><input id="fPhone" name="phone" type="tel" placeholder="11 位手机号码" inputmode="numeric" autocomplete="tel" data-page-node-id="HthpnAOEPMPB1f1NCU0xxH"><div class="msg" data-page-node-id="uWLCvVnix7BrlJzLN0nAPI"></div></div>
+      </div>
+      <div class="f2" data-page-node-id="BNmHXIr9BNRLBtAZrWIOIv">
+        <div class="field" data-page-node-id="OUulA2Ads1GkJOaFJCIzKs"><label for="fCity" data-page-node-id="gUEyPwJeikOiz2jiX3yh6A">意向城市</label>
+          <select id="fCity" name="city" data-page-node-id="y50wHXm5UFx4ub35rD5Tn4">
+            <option value="" data-page-node-id="zkN9sqwVRv0x5xxHQEyoGD">请选择城市</option>
+            <option data-page-node-id="OBjBEhvP6nxGXUvdv7CWZY">杭州</option><option data-page-node-id="RXgPeUdwGcst1PCuc9osiV">上海</option><option data-page-node-id="VbazN6ROWzDoFy5TNPwKSB">深圳</option><option data-page-node-id="0q0FJqHlp50pEkhhnFOdqR">成都</option>
+            <option data-page-node-id="AFsAQg7bByCyFwSFIDTY1Y">北京</option><option data-page-node-id="LoRXdiPfrRewCfmGwNg1DS">广州</option><option data-page-node-id="MFJiidp15i1DsuwAAVAy5D">其他城市</option>
+          </select><div class="msg" data-page-node-id="nkYZefNF6hOJ3mwKSky94X"></div>
+        </div>
+        <div class="field" data-page-node-id="hARfGMLfMxaFCE8yKjAf9V"><label for="fVer" data-page-node-id="Cb9U8yhLSYZSAtEmwnco8M">意向版本</label>
+          <select id="fVer" name="version" data-page-node-id="DRwnxGMovA2nKdEcbMHmMY">
+            <option data-page-node-id="xE52sD6E1Y3TjfluuPWY9u">V1</option><option selected data-page-node-id="A4CP5SXxbNhZKF1iFK8fvx">V1 Performance</option><option data-page-node-id="EiQDwBTPlLs9zymqEdr3bg">V1 Track</option>
+          </select><div class="msg" data-page-node-id="Hf1SlZyUnTy0QGXOAu81dg"></div>
+        </div>
+      </div>
+      <div class="field" data-page-node-id="Nn7evx33YAkfiISSZm7HXt"><label for="fMsg" data-page-node-id="BEz3wICnJm6q1zGipFn3bK">留言（选填）</label><textarea id="fMsg" name="message" placeholder="想了解配置、金融方案，或指定试驾路线……"></textarea><div class="msg" data-page-node-id="PVzDMFBVFZBqKzrbcfLGgV"></div></div>
+      <label class="check" id="checkWrap" data-page-node-id="ntMnOwER32Fuy4lmYhdvqj"><input type="checkbox" id="fAgree" data-page-node-id="OKSb231Lxm542AF9d6WlmI"><span data-page-node-id="fZVGNou36kJfjitp8zm9Nx">我已阅读并同意《隐私政策》，允许 AXION 通过电话或短信与我联系。</span></label>
+      <button type="submit" class="btn-solid" id="submitBtn" data-page-node-id="ltuBNRi0HOXn2eeYIDYVCu"><span data-page-node-id="ntDLRgeRCL5PixWswfdwOA">提交预约</span></button>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer data-page-node-id="Bq3billMCA412VglqS7W6l">
+  <div class="wrap" data-page-node-id="QtC8q7ccC4rFEDQFToysWb">
+    <div class="f-top" data-page-node-id="YNt8aK7YpLEAmMsvwnLlQg">
+      <div class="f-brand" data-page-node-id="kW64AxAh02iCNw2xNcukyT">
+        <svg viewBox="0 0 200 46" fill="none" style="width:132px" data-page-node-id="7ALeyl0EJc3Xclh93JqDRl">
+          <path d="M4 42 L26 4 L34 18 L22 38 L16 28 L10 42 Z" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" data-page-node-id="S3LL1Eqa1umxSeIHE0HhY0"/>
+          <path d="M44 4 L60 42 M62 42 L78 4 M50 30 L72 30" stroke="#D3142E" stroke-width="2.6" stroke-linecap="round" data-page-node-id="FgvpJ8Fkuq4A5lztuFBqhC"/>
+          <path d="M90 42 L90 4 L124 4 M90 22 L116 22" stroke="#fff" stroke-width="2.4" data-page-node-id="ZVtBu9HxqbwG4suRAgZG8Y"/>
+          <path d="M136 42 L136 4 L150 4 L150 42" stroke="#fff" stroke-width="2.4" data-page-node-id="JXkXCjIXEaWTQF9ZhgOJTf"/>
+          <path d="M164 4 L164 42 L188 42" stroke="#fff" stroke-width="2.4" data-page-node-id="AMFJ2pkl2cQofksxo8eWJy"/>
+        </svg>
+        <p data-page-node-id="c9JQn93BN70Mz8dV9zzW4G">AXION MOTORS · 专注纯电高性能驾驶机器。我们相信速度可以清洁、安静，并且依然让人心跳加速。</p>
+      </div>
+      <div class="f-col" data-page-node-id="lQItaAJesfut6BaFCqYzup">
+        <h5 data-page-node-id="BwxTua4vJ4tXjmOPCWIUN2">车型</h5>
+        <a href="#top" data-page-node-id="aIDxckr4MD8LvGceZKbbrg">V1</a><a href="#top" data-page-node-id="O8xCF6BIWePKDKW1BAnqqT">V1 Performance</a><a href="#top" data-page-node-id="90r0w6TtRi51ZkLTNWDLyS">V1 Track</a><a href="#color" data-page-node-id="y5XWStLVMJ1nRKbaqHilbk">个性定制</a>
+      </div>
+      <div class="f-col" data-page-node-id="XsC6fh3iIpUgJGvrFAQY3m">
+        <h5 data-page-node-id="KRlJJp81JfEBKigXw9YL8r">服务</h5>
+        <a href="#order" data-page-node-id="BGoouaF2ICFoKLXjrWlEq1">预约试驾</a><a href="#order" data-page-node-id="L6eZusBT6pnXadgmNW7F7B">金融方案</a><a href="#order" data-page-node-id="prEHDW9jEZujJYe0hDF9tm">充电网络</a><a href="#order" data-page-node-id="MZ0ZHS1yGy2oMZGyOd7iTQ">售后与保养</a>
+      </div>
+      <div class="f-col" data-page-node-id="GjASczGRflHloFmuctfh74">
+        <h5 data-page-node-id="J2UkBJrR8y4DcV5hrvYpSG">关于</h5>
+        <a href="#design" data-page-node-id="No0tCBWuUSGowMUNeHWs45">品牌故事</a><a href="#design" data-page-node-id="vYCtDi57kckcTE0Ie1YF0p">设计语言</a><a href="#" data-page-node-id="qIrdEDzxU2veyxZJqoYaHL">加入我们</a><a href="#" data-page-node-id="ijzT5TFPwCxCLREDOvRka8">媒体中心</a>
+      </div>
+    </div>
+    <div class="f-bot" data-page-node-id="UlmthNmWXhEGcF850NvDHi">
+      <p data-page-node-id="78qcwh7cfFlVOfOfnrbYmt">© 2026 AXION MOTORS CO., LTD. 保留所有权利 · 浙ICP备XXXXXXXX号</p>
+      <div class="f-soc" data-page-node-id="oElc67UeXnMEUaTWvacZdw">
+        <a href="#" aria-label="X" data-page-node-id="larCpGCz70jfOQqS3XJVq9"><svg viewBox="0 0 24 24" fill="currentColor" data-page-node-id="CVL8DTcuBoZYHm8mClQX0s"><path d="M18.9 2H22l-6.8 7.8L23 22h-6.5l-5-6.6L5.6 22H2.5l7.3-8.3L1.5 2h6.7l4.7 6.2L18.9 2Zm-1.1 18h1.8L7.3 3.9H5.4L17.8 20Z" data-page-node-id="j49uY0RhLTrFP0I6F5S4h0"/></svg></a>
+        <a href="#" aria-label="Weibo" data-page-node-id="sPnJHU8G5F9VA9utPWYDFT"><svg viewBox="0 0 24 24" fill="currentColor" data-page-node-id="LRsJRm9lGZQAq9grtQ03ai"><path d="M9.8 20.4c-4.1 0-7.4-1.9-7.4-4.3 0-1.2.8-2.6 2.1-3.8 1.8-1.6 3.9-2.4 5.4-2.1.7.2 1.2.6 1.5 1.3.3.6.1 1.3-.2 1.9-.2.4.1.6.4.5 1.2-.4 2.6-.5 3.4.6.4.6.5 1.4.2 2.4-.7 2.2-3.3 3.5-5.4 3.5Zm8.7-10.5c-.4 0-.7-.3-.7-.7 0-1.9-1.6-3.5-3.5-3.5-.4 0-.7-.3-.7-.7s.3-.7.7-.7c2.7 0 4.9 2.2 4.9 4.9 0 .4-.3.7-.7.7Z" data-page-node-id="HAYVIL3TwRlth931FGilUb"/></svg></a>
+        <a href="#" aria-label="Instagram" data-page-node-id="knziFWfwuKmuz1fy9LzWfO"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" data-page-node-id="1PV7BIDU7PsGm7zW5SYsgr"><rect x="3" y="3" width="18" height="18" rx="5" data-page-node-id="9VEPMsGYTvyAfTQJZYfnTH"/><circle cx="12" cy="12" r="4" data-page-node-id="qyGRsxLOvUYj7b8BPNquGo"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" data-page-node-id="UmmZ8Mjpvpgj7B8KmQzE3l"/></svg></a>
+        <a href="#" aria-label="YouTube" data-page-node-id="zJxNyM0ox4yuGNsOcezlog"><svg viewBox="0 0 24 24" fill="currentColor" data-page-node-id="OJ9kwCwV8cjvbeNl4IzZhA"><path d="M22 12s0-3.4-.4-5c-.2-.9-1-1.6-1.9-1.8C18 4.8 12 4.8 12 4.8s-6 0-7.7.4c-.9.2-1.7.9-1.9 1.8C2 8.6 2 12 2 12s0 3.4.4 5c.2.9 1 1.6 1.9 1.8 1.7.4 7.7.4 7.7.4s6 0 7.7-.4c.9-.2 1.7-.9 1.9-1.8.4-1.6.4-5 .4-5Zm-12 3.2V8.8L15.5 12 10 15.2Z" data-page-node-id="KTovfE5YZxJBqzTUsHP7fa"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" data-page-node-id="vEKuKqudaHYzMl5Rg5apga">
+  <svg viewBox="0 0 24 24" data-page-node-id="xQKoiJzzFoUrQVn9IsZMq4"><path d="M20 6L9 17l-5-5" data-page-node-id="gE9G5uNiOLfkKr5xXbsT7b"/></svg>
+  <div data-page-node-id="HsKAaD8Tc29NhAxW6ajV9P"><b id="toastTitle" data-page-node-id="EjDYmKp5hHBIukWnAVegGk">预约已提交</b><p id="toastDesc" data-page-node-id="V9PRImnbsNkKbEbOWkaRPf">顾问将在 24 小时内与你联系。</p></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var $  = function(s,c){return (c||document).querySelector(s)};
+  var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+
+  /* ---------- loader ---------- */
+  var bar = $('#ldBar'), p = 0;
+  var tick = setInterval(function(){
+    p = Math.min(100, p + Math.random()*22 + 8);
+    bar.style.width = p + '%';
+    if(p >= 100){
+      clearInterval(tick);
+      setTimeout(function(){
+        $('#loader').classList.add('done');
+        document.body.classList.remove('locked');
+        revealCheck();
+      }, 260);
+    }
+  }, 130);
+  document.body.classList.add('locked');
+
+  /* ---------- cursor ---------- */
+  var cur = $('#cursor'), curX = 0, curY = 0, tX = 0, tY = 0;
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    cur.classList.add('on');
+    window.addEventListener('mousemove', function(e){
+      tX = e.clientX; tY = e.clientY;
+    });
+    (function loop(){
+      curX += (tX - curX) * 0.18;
+      curY += (tY - curY) * 0.18;
+      cur.style.left = curX + 'px';
+      cur.style.top  = curY + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.addEventListener('mouseover', function(e){
+      var hit = e.target.closest('a,button,.sw,.tool,.hotspot,.store,input,textarea,select');
+      cur.classList.toggle('big', !!hit);
+    });
+  }
+
+  /* ---------- header / progress ---------- */
+  var header = $('#header'), prog = $('#prog');
+  function onScroll(){
+    var y = window.scrollY;
+    header.classList.toggle('scrolled', y > 40);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---------- menu ---------- */
+  var burger = $('#burger'), menu = $('#menu');
+  function toggleMenu(){
+    var open = menu.classList.toggle('open');
+    document.body.classList.toggle('locked', open);
+    burger.setAttribute('aria-expanded', open);
+  }
+  burger.addEventListener('click', toggleMenu);
+  $$('#menu a').forEach(function(a){ a.addEventListener('click', function(){ if(menu.classList.contains('open')) toggleMenu(); }); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && menu.classList.contains('open')) toggleMenu(); });
+
+  /* ---------- reveal ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, {threshold:.16, rootMargin:'0px 0px -8% 0px'});
+  function revealCheck(){ $$('.reveal:not(.in)').forEach(function(el){ io.observe(el); }); }
+  revealCheck();
+
+  /* ---------- counters ---------- */
+  var counted = false;
+  var ioCount = new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting && !counted){
+        counted = true;
+        $$('[data-count]').forEach(function(el){
+          var target = parseFloat(el.dataset.count), dec = parseInt(el.dataset.dec || 0, 10);
+          var unit = el.querySelector('i'), txt = unit ? unit.outerHTML : '';
+          var t0 = performance.now(), dur = 1600;
+          (function step(now){
+            var k = Math.min(1, (now - t0) / dur);
+            var e = 1 - Math.pow(1 - k, 3);
+            var v = target * e;
+            var shown = dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-US');
+            el.innerHTML = shown + txt;
+            if(k < 1) requestAnimationFrame(step);
+          })(t0);
+        });
+        ioCount.disconnect();
+      }
+    });
+  }, {threshold:.4});
+  var statEl = $('.stats');
+  if(statEl) ioCount.observe(statEl);
+
+  /* ---------- hotspots ---------- */
+  $$('.hotspot').forEach(function(hs, i){
+    hs.style.animationDelay = (hs.dataset.delay || (i*0.08)) + 's';
+    hs.addEventListener('click', function(e){
+      e.stopPropagation();
+      var was = hs.classList.contains('active');
+      $$('.hotspot').forEach(function(h){ h.classList.remove('active'); });
+      if(!was) hs.classList.add('active');
+    });
+  });
+  document.addEventListener('click', function(){ $$('.hotspot').forEach(function(h){ h.classList.remove('active'); }); });
+
+  /* ---------- design deco parallax ---------- */
+  var decos = $$('.deco');
+  if(decos.length && window.matchMedia('(hover:hover)').matches){
+    var raf = null, mx = 0, my = 0;
+    window.addEventListener('mousemove', function(e){
+      mx = (e.clientX / window.innerWidth - .5) * 2;
+      my = (e.clientY / window.innerHeight - .5) * 2;
+      if(!raf) raf = requestAnimationFrame(function(){
+        decos.forEach(function(d){
+          var dp = parseFloat(d.dataset.depth || 10);
+          d.style.transform = 'translate3d(' + (mx*dp) + 'px,' + (my*dp) + 'px,0) rotate(' + (45 - mx*4) + 'deg)';
+        });
+        raf = null;
+      });
+    });
+  }
+
+  /* ---------- hero: rotate / lens / dots / fullscreen ---------- */
+  var stage = $('#carStage'), wrapEl = $('#carWrap');
+  var bRot = $('#tRotate'), bLens = $('#tLens'), bDots = $('#tDots'), bFull = $('#tFull');
+  var lens = $('#lens'), lensInner = $('#lensInner');
+
+  /* rotate by drag */
+  var rotMode = false, dragging = false, startX = 0, startRot = 0, rot = 0;
+  bRot.addEventListener('click', function(){
+    rotMode = !rotMode;
+    bRot.classList.toggle('active', rotMode);
+    stage.classList.toggle('rotating', rotMode);
+    if(!rotMode){ rot = 0; applyRot(); }
+    toast(rotMode ? '环绕模式' : '已退出环绕', rotMode ? '左右拖动车身，360° 查看。' : '视角已复位。');
+  });
+  function applyRot(){
+    wrapEl.style.transform = 'perspective(1600px) rotateY(' + rot + 'deg) scale(' + (1 - Math.abs(rot)/1200) + ')';
+  }
+  wrapEl.addEventListener('mousedown', function(e){
+    if(!rotMode) return;
+    dragging = true; startX = e.clientX; startRot = rot; wrapEl.style.cursor = 'grabbing'; e.preventDefault();
+  });
+  window.addEventListener('mousemove', function(e){
+    if(!dragging) return;
+    rot = Math.max(-70, Math.min(70, startRot + (e.clientX - startX) * 0.35));
+    applyRot();
+  });
+  window.addEventListener('mouseup', function(){
+    if(dragging){ dragging = false; wrapEl.style.cursor = ''; }
+  });
+  wrapEl.addEventListener('touchstart', function(e){
+    if(!rotMode) return;
+    dragging = true; startX = e.touches[0].clientX; startRot = rot;
+  }, {passive:true});
+  wrapEl.addEventListener('touchmove', function(e){
+    if(!dragging) return;
+    rot = Math.max(-70, Math.min(70, startRot + (e.touches[0].clientX - startX) * 0.35));
+    applyRot();
+  }, {passive:true});
+  wrapEl.addEventListener('touchend', function(){ dragging = false; });
+
+  /* lens */
+  var lensMode = false;
+  var lensCar = document.createElement('div');
+  lensCar.style.cssText = 'position:absolute;left:0;top:0;';
+  lensInner.appendChild(lensCar);
+  function layoutLens(){
+    var wr = wrapEl.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+    lensCar.style.width = wr.width + 'px';
+    lensCar.style.height = wr.height + 'px';
+    lensCar.style.left = (wr.left - sr.left) + 'px';
+    lensCar.style.top  = (wr.top  - sr.top ) + 'px';
+    lensCar.innerHTML = '<svg viewBox="0 0 1400 520" style="width:'+wr.width+'px;height:'+wr.height+'px"><use href="#carArt"/></svg>';
+  }
+  bLens.addEventListener('click', function(){
+    lensMode = !lensMode;
+    bLens.classList.toggle('active', lensMode);
+    if(lensMode){ layoutLens(); lens.classList.add('on'); }
+    else lens.classList.remove('on');
+    toast(lensMode ? '细节放大已开启' : '细节放大已关闭', lensMode ? '把鼠标移到车身上查看细节。' : '');
+  });
+  window.addEventListener('resize', function(){ if(lensMode) layoutLens(); });
+  wrapEl.addEventListener('mousemove', function(e){
+    if(!lensMode) return;
+    var st = stage.getBoundingClientRect();
+    var x = e.clientX - st.left, y = e.clientY - st.top, R = 90, S = 2;
+    lens.style.left = (x - R) + 'px';
+    lens.style.top  = (y - R) + 'px';
+    lensInner.style.transform = 'translate(' + (R - S*x) + 'px,' + (R - S*y) + 'px) scale(' + S + ')';
+  });
+  wrapEl.addEventListener('mouseleave', function(){ lens.classList.remove('on'); });
+  wrapEl.addEventListener('mouseenter', function(){ if(lensMode) lens.classList.add('on'); });
+
+  /* dots toggle */
+  bDots.addEventListener('click', function(){
+    var off = bDots.classList.toggle('active');
+    $$('.hotspot').forEach(function(h){ h.classList.toggle('off', !off); });
+  });
+
+  /* fullscreen */
+  bFull.addEventListener('click', function(){
+    var el = document.querySelector('.hero');
+    if(!document.fullscreenElement){
+      (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  /* ---------- color configurator ---------- */
+  $$('#swatches .sw').forEach(function(sw){
+    sw.addEventListener('click', function(){
+      $$('#swatches .sw').forEach(function(s){ s.classList.remove('active'); });
+      sw.classList.add('active');
+      var r = document.documentElement.style;
+      r.setProperty('--body-a', sw.dataset.a);
+      r.setProperty('--body-m', sw.dataset.m);
+      r.setProperty('--body-b', sw.dataset.b);
+      r.setProperty('--body-c', sw.dataset.c);
+      var stageEl = $('.cfg-stage');
+      if(stageEl) stageEl.style.setProperty('--swatch-glow', sw.dataset.glow);
+      var name = sw.querySelector('u').textContent + ' / ' + sw.querySelector('small').textContent;
+      $('#cfgName').textContent = name;
+    });
+  });
+
+  /* ---------- form ---------- */
+  var form = $('#bookForm'), toastEl = $('#toast');
+  var toastTimer = null;
+  function toast(title, desc){
+    $('#toastTitle').textContent = title;
+    $('#toastDesc').textContent = desc || '';
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 3600);
+  }
+  function setErr(input, msg){
+    var f = input.closest('.field');
+    f.classList.toggle('err', !!msg);
+    var m = $('.msg', f);
+    if(m) m.textContent = msg || '';
+  }
+  var fName = $('#fName'), fPhone = $('#fPhone'), fCity = $('#fCity'), fAgree = $('#fAgree');
+  [fName, fPhone, fCity].forEach(function(el){
+    el.addEventListener('input', function(){ setErr(el, ''); });
+  });
+  fAgree.addEventListener('change', function(){ $('#checkWrap').classList.remove('err'); });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var ok = true;
+    if(!fName.value.trim()){ setErr(fName, '请填写姓名'); ok = false; }
+    if(!/^1[3-9]\d{9}$/.test(fPhone.value.trim())){ setErr(fPhone, '请填写有效的 11 位手机号'); ok = false; }
+    if(!fCity.value){ setErr(fCity, '请选择意向城市'); ok = false; }
+    if(!fAgree.checked){ $('#checkWrap').classList.add('err'); ok = false; }
+    if(!ok){ toast('信息还不完整', '请检查标红项后重新提交。'); return; }
+
+    var btn = $('#submitBtn');
+    btn.disabled = true;
+    $('span', btn).textContent = '提交中…';
+    setTimeout(function(){
+      btn.disabled = false;
+      $('span', btn).textContent = '提交预约';
+      toast('预约已提交', fName.value.trim() + '，' + fCity.value + '门店顾问将在 24 小时内联系你。');
+      form.reset();
+      $$('.field').forEach(function(f){ f.classList.remove('err'); var m = $('.msg', f); if(m) m.textContent=''; });
+      $('#checkWrap').classList.remove('err');
+    }, 900);
+  });
+
+  /* ---------- settle anchors ---------- */
+  $$('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href');
+      if(id.length < 2) return;
+      var t = document.querySelector(id);
+      if(!t) return;
+      e.preventDefault();
+      var top = t.getBoundingClientRect().top + window.scrollY - 20;
+      window.scrollTo({top:top, behavior:'smooth'});
+    });
+  });
+})();
+</script>
+</body>
+</html>
